@@ -1,0 +1,32 @@
+# Archivos de configuración sensibles
+**/application-*.properties
+**/application-*.yml
+**/application-*.yaml
+!**/src/main/resources/application.properties
+
+# Archivos de entorno
+.env
+*.env
+
+# Archivos de IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Archivos compilados
+target/
+build/
+bin/
+
+# Archivos de configuración local
+**/src/main/resources/application-local.properties
+**/src/main/resources/application-dev.properties
+**/src/main/resources/application-prod.properties
