@@ -3,7 +3,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.violentometro.app',
   appName: 'Violentómetro',
-  webDir: 'www/browser',  // RUTA CORRECTA
+  webDir: 'www/browser',
   server: {
     androidScheme: 'https'
   }
