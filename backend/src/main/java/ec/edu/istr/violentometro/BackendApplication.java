@@ -1,4 +1,4 @@
-package edu.ec.istr.backend;
+package ec.edu.istr.violentometro;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
