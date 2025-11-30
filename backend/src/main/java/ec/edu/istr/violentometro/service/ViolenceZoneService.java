@@ -1,58 +1,55 @@
 package ec.edu.istr.violentometro.service;
 
-import ec.edu.istr.violentometro.dto.QuestionDTO;
+import ec.edu.istr.violentometro.components.ViolenceZoneMapper;
+import ec.edu.istr.violentometro.dto.ViolenceZoneDTO;
 import ec.edu.istr.violentometro.model.ViolenceZone;
 import ec.edu.istr.violentometro.repository.ViolenceZoneRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class ViolenceZoneService implements BaseService<ViolenceZone> {
+@RequiredArgsConstructor // Inyección limpia
+public class ViolenceZoneService {
 
-    private ViolenceZoneRepository violenceZoneRepository;
+    private final ViolenceZoneRepository violenceZoneRepository;
+    private final ViolenceZoneMapper violenceZoneMapper;
 
-    public ViolenceZoneService(ViolenceZoneRepository violenceZoneRepository) {
-        this.violenceZoneRepository = violenceZoneRepository;
+    public ViolenceZoneDTO save(ViolenceZoneDTO dto) {
+        ViolenceZone newZone = violenceZoneMapper.toEntity(dto);
+        return violenceZoneMapper.toDto(violenceZoneRepository.save(newZone));
     }
 
-    @Override
-    public ViolenceZone save(ViolenceZone entity) throws Exception {
-     return violenceZoneRepository.save(entity);
+    public List<ViolenceZoneDTO> findAll() {
+        return violenceZoneMapper.toDto(violenceZoneRepository.findAll());
     }
 
-    @Override
-    public List<ViolenceZone> findAll() throws Exception {
-        return  violenceZoneRepository.findAll();
+    public ViolenceZoneDTO findById(Integer id) {
+        ViolenceZone zone = violenceZoneRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Zona de violencia no encontrada con ID: " + id));
+        return violenceZoneMapper.toDto(zone);
     }
 
-    @Override
-    public Optional<ViolenceZone> findById(Integer id) throws Exception {
-        return violenceZoneRepository.findById(id);
+    @Transactional
+    public ViolenceZoneDTO updateOne(Integer id, ViolenceZoneDTO dto) {
+        // 1. Obtener la entidad existente
+        ViolenceZone existingZone = violenceZoneRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Zona de violencia no encontrada con ID: " + id));
+
+        // 2. Mapeo seguro: Solo actualiza campos non-null
+        violenceZoneMapper.updateEntityFromDto(dto, existingZone);
+
+        // 3. Guardar y devolver DTO
+        return violenceZoneMapper.toDto(violenceZoneRepository.save(existingZone));
     }
 
-    @Override
-    public ViolenceZone updateOne(ViolenceZone entity, Integer id) throws Exception {
-        ViolenceZone existingViolenceZone = violenceZoneRepository.findById(id)
-                .orElseThrow(() -> new Exception("ViolenceZone not found with id " + id));
-
-        existingViolenceZone.setName(entity.getName());
-        existingViolenceZone.setDescription(entity.getDescription());
-        existingViolenceZone.setColor(entity.getColor());
-        existingViolenceZone.setSeverity(entity.getSeverity());
-
-        return violenceZoneRepository.save(existingViolenceZone);
-    }
-
-    @Override
-    public boolean deleteById(Integer id) throws Exception {
+    public void deleteById(Integer id) {
         if (!violenceZoneRepository.existsById(id)) {
-            throw new Exception("ViolenceZone not found with id " + id);
+            throw new EntityNotFoundException("Zona de violencia no encontrada con ID: " + id);
         }
         violenceZoneRepository.deleteById(id);
-        return true;
     }
-
-
 }

@@ -1,66 +1,54 @@
 package ec.edu.istr.violentometro.controller;
 
-import ec.edu.istr.violentometro.model.Institute;
-
+import ec.edu.istr.violentometro.dto.InstituteDTO;
 import ec.edu.istr.violentometro.service.InstituteService;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/violentometro")
+@RequestMapping("/api/v1/institutes")
+@RequiredArgsConstructor // Inyección limpia con Lombok
 class InstituteController {
 
     private final InstituteService instituteService;
 
-    public InstituteController(InstituteService instituteService) {
-        this.instituteService = instituteService;
-    }
-
-    @GetMapping("/institute")
-    public ResponseEntity<List<Institute>> getAllInstitute() throws Exception {
-        List<Institute> institutes = instituteService.findAll();
+    @GetMapping
+    public ResponseEntity<List<InstituteDTO>> getAll() {
+        // Usa el DTO de salida
+        List<InstituteDTO> institutes = instituteService.findAll();
         return ResponseEntity.ok(institutes);
     }
 
-    @PostMapping("/institute")
-    public ResponseEntity<Institute> addInstitute(@RequestBody Institute institute) throws Exception {
-        Institute savedInstitute = instituteService.save(institute);
-        return ResponseEntity.status(201).body(savedInstitute);
+    @GetMapping("/{id}")
+    public ResponseEntity<InstituteDTO> getById(@PathVariable Integer id) {
+        // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
+        return ResponseEntity.ok(instituteService.findById(id));
     }
 
-    @GetMapping("/institute/{id}")
-    public ResponseEntity<?> getInstituteById(@PathVariable Integer id) throws Exception {
-        Optional<Institute> institute = instituteService.findById(id);
-        if (institute.isPresent()) {
-            return ResponseEntity.ok(institute.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PostMapping
+    public ResponseEntity<InstituteDTO> create(@RequestBody @Valid InstituteDTO instituteDTO) {
+        // Usa DTO de entrada y salida
+        InstituteDTO savedInstitute = instituteService.save(instituteDTO);
+        return new ResponseEntity<>(savedInstitute, HttpStatus.CREATED);
     }
 
-    @PutMapping("/institute/{id} ")
-    public ResponseEntity<?> updateInstitute(@PathVariable Integer id, @RequestBody Institute institute) throws Exception {
-        try {
-            Institute updatedInstitute = instituteService.updateOne(institute, id);
-            return ResponseEntity.ok(updatedInstitute);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-
+    // Nota: Es mejor usar @PatchMapping para actualizaciones parciales, pero mantenemos PUT por ahora
+    @PutMapping("/{id}")
+    public ResponseEntity<InstituteDTO> update(@PathVariable Integer id, @RequestBody @Valid InstituteDTO instituteDTO) {
+        // El Service maneja la lógica de actualización segura y lanza 404 si no existe
+        InstituteDTO updatedInstitute = instituteService.updateOne(id, instituteDTO);
+        return ResponseEntity.ok(updatedInstitute);
     }
 
-    @DeleteMapping("/institute/{id}")
-    public ResponseEntity<Void> deleteInstitute(@PathVariable Integer id) {
-        try {
-            instituteService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        // El Service maneja la lógica de validación y lanza 404 si no existe
+        instituteService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
-
 }

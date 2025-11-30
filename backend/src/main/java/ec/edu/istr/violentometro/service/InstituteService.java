@@ -1,53 +1,55 @@
 package ec.edu.istr.violentometro.service;
 
+import ec.edu.istr.violentometro.components.InstituteMapper;
+import ec.edu.istr.violentometro.dto.InstituteDTO;
 import ec.edu.istr.violentometro.model.Institute;
 import ec.edu.istr.violentometro.repository.InstituteRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class InstituteService implements BaseService<Institute>{
+@RequiredArgsConstructor // Inyección limpia con Lombok
+public class InstituteService {
 
-    private InstituteRepository instituteRepository;
-    public InstituteService(InstituteRepository instituteRepository) {
-        this.instituteRepository = instituteRepository;
+    private final InstituteRepository instituteRepository;
+    private final InstituteMapper instituteMapper;
+
+    public InstituteDTO save(InstituteDTO dto) {
+        Institute newInstitute = instituteMapper.toEntity(dto);
+        return instituteMapper.toDto(instituteRepository.save(newInstitute));
     }
 
-    @Override
-    public Institute save(Institute entity) throws Exception {
-     return instituteRepository.save(entity);
+    public List<InstituteDTO> findAll() {
+        return instituteMapper.toDto(instituteRepository.findAll());
     }
 
-    @Override
-    public List<Institute> findAll() throws Exception {
-        return instituteRepository.findAll();
+    public InstituteDTO findById(Integer id) {
+        Institute institute = instituteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Instituto no encontrado con ID: " + id));
+        return instituteMapper.toDto(institute);
     }
 
-    @Override
-    public Optional<Institute> findById(Integer id) throws Exception {
-        return instituteRepository.findById(id);
-    }
-
-    @Override
-    public Institute updateOne(Institute entity, Integer id) throws Exception {
+    @Transactional
+    public InstituteDTO updateOne(Integer id, InstituteDTO dto) {
+        // 1. Obtener la entidad existente (lanza 404 si no existe)
         Institute existingInstitute = instituteRepository.findById(id)
-                .orElseThrow(() -> new Exception("Institute not found with id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Instituto no encontrado con ID: " + id));
 
-        existingInstitute.setName(entity.getName());
-        existingInstitute.setAddress(entity.getAddress());
-        existingInstitute.setPhone(entity.getPhone());
+        // 2. Mapeo seguro: Solo actualiza campos non-null
+        instituteMapper.updateEntityFromDto(dto, existingInstitute);
 
-        return instituteRepository.save(existingInstitute);
+        // 3. Guardar y devolver DTO
+        return instituteMapper.toDto(instituteRepository.save(existingInstitute));
     }
 
-    @Override
-    public boolean deleteById(Integer id) throws Exception {
+    public void deleteById(Integer id) {
         if (!instituteRepository.existsById(id)) {
-            throw new Exception("Institute not found with id " + id);
+            throw new EntityNotFoundException("Instituto no encontrado con ID: " + id);
         }
         instituteRepository.deleteById(id);
-        return true;
     }
 }

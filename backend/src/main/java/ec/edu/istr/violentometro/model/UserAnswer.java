@@ -21,8 +21,9 @@ public class UserAnswer {
     @Column(name = "id_answer", nullable = false)
     private Integer id;
 
-    @Column(name = "id_app_user")
-    private Integer idAppUser;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_app_user")
+    private AppUser idAppUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_question")

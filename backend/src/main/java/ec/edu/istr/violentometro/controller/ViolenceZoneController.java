@@ -1,64 +1,51 @@
 package ec.edu.istr.violentometro.controller;
 
-import ec.edu.istr.violentometro.model.ViolenceZone;
+import ec.edu.istr.violentometro.dto.ViolenceZoneDTO;
 import ec.edu.istr.violentometro.service.ViolenceZoneService;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/violentometro")
+@RequestMapping("/api/v1/violence-zones")
+@RequiredArgsConstructor
 class ViolenceZoneController {
+
     private final ViolenceZoneService violenceZoneService;
 
-    ViolenceZoneController(ViolenceZoneService violenceZoneService) {
-        this.violenceZoneService = violenceZoneService;
-    }
-
-
-    @GetMapping("/violence")
-    public ResponseEntity<List<ViolenceZone>> getAllQuestions() throws Exception {
-        List<ViolenceZone> violenceZones = violenceZoneService.findAll();
+    @GetMapping
+    public ResponseEntity<List<ViolenceZoneDTO>> getAll() {
+        List<ViolenceZoneDTO> violenceZones = violenceZoneService.findAll();
         return ResponseEntity.ok(violenceZones);
     }
 
-    @PostMapping("/violence")
-    public ResponseEntity<ViolenceZone> addQuestion(@RequestBody ViolenceZone violenceZone) throws Exception {
-        ViolenceZone savedViolenceZone = violenceZoneService.save(violenceZone);
-        return ResponseEntity.status(201).body(savedViolenceZone);
+    @GetMapping("/{id}")
+    public ResponseEntity<ViolenceZoneDTO> getById(@PathVariable Integer id) {
+        // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
+        return ResponseEntity.ok(violenceZoneService.findById(id));
     }
 
-    @GetMapping("/violence/{id}")
-    public ResponseEntity<?> getQuestionById(@PathVariable Integer id) throws Exception {
-        Optional<ViolenceZone> violenceZone = violenceZoneService.findById(id);
-        if (violenceZone.isPresent()) {
-            return ResponseEntity.ok(violenceZone.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PostMapping
+    public ResponseEntity<ViolenceZoneDTO> create(@RequestBody @Valid ViolenceZoneDTO violenceZoneDTO) {
+        ViolenceZoneDTO savedViolenceZone = violenceZoneService.save(violenceZoneDTO);
+        return new ResponseEntity<>(savedViolenceZone, HttpStatus.CREATED);
     }
 
-    @PutMapping("/violence/{id}")
-    public ResponseEntity<?> updateQuestion(@PathVariable Integer id, @RequestBody ViolenceZone violenceZone) throws  Exception {
-        try {
-            ViolenceZone updatedViolenceZone = violenceZoneService.updateOne(violenceZone, id);
-            return ResponseEntity.ok(updatedViolenceZone);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-
+    @PutMapping("/{id}")
+    public ResponseEntity<ViolenceZoneDTO> update(@PathVariable Integer id, @RequestBody @Valid ViolenceZoneDTO violenceZoneDTO) {
+        // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
+        ViolenceZoneDTO updatedViolenceZone = violenceZoneService.updateOne(id, violenceZoneDTO);
+        return ResponseEntity.ok(updatedViolenceZone);
     }
 
-    @DeleteMapping("/violence/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Integer id) {
-        try {
-            violenceZoneService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
+        violenceZoneService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

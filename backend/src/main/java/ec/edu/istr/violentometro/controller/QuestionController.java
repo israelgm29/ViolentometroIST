@@ -1,66 +1,52 @@
 package ec.edu.istr.violentometro.controller;
 
-import ec.edu.istr.violentometro.model.Question;
-import ec.edu.istr.violentometro.repository.QuestionRepository;
+import ec.edu.istr.violentometro.dto.QuestionDTO;
 import ec.edu.istr.violentometro.service.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/violentometro")
+@RequestMapping("/api/v1/questions") // Nombre plural, ¡perfecto!
+@RequiredArgsConstructor
 class QuestionController {
 
     private final QuestionService questionService;
 
-    QuestionController(QuestionService questionService) {
-        this.questionService = questionService;
+    @GetMapping
+    public ResponseEntity<List<QuestionDTO>> getAllQuestions() {
+
+        return ResponseEntity.ok(questionService.findAll());
     }
 
-
-    @GetMapping("/question")
-    public ResponseEntity<List<Question>> getAllQuestions() throws Exception {
-        List<Question> questions = questionService.findAll();
-        return ResponseEntity.ok(questions);
+    @PostMapping
+    public ResponseEntity<QuestionDTO> addQuestion(@RequestBody @Validated QuestionDTO questionDTO) {
+        QuestionDTO savedQuestion = questionService.save(questionDTO);
+        return new ResponseEntity<>(savedQuestion, HttpStatus.CREATED);
     }
 
-    @PostMapping("/question")
-    public ResponseEntity<Question> addQuestion(@RequestBody Question question) throws Exception {
-        Question savedQuestion = questionService.save(question);
-        return ResponseEntity.status(201).body(savedQuestion);
+    @GetMapping("/{id}")
+    public ResponseEntity<QuestionDTO> getQuestionById(@PathVariable Integer id) {
 
+        QuestionDTO questionDTO = questionService.findById(id);
+        return ResponseEntity.ok(questionDTO);
     }
 
-    @GetMapping("/question/{id}")
-    public ResponseEntity<?> getQuestionById(@PathVariable Integer id) throws Exception {
-        Optional<Question> question = questionService.findById(id);
-        if (question.isPresent()) {
-            return ResponseEntity.ok(question.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<QuestionDTO> updateQuestion(@PathVariable Integer id, @RequestBody @Validated QuestionDTO questionDTO) {
+
+        QuestionDTO updatedQuestion = questionService.update(id, questionDTO);
+        return ResponseEntity.ok(updatedQuestion);
     }
 
-    @PutMapping("/question/{id}")
-    public ResponseEntity<?> updateQuestion(@PathVariable Integer id, @RequestBody Question question) {
-        try {
-            Question updatedQuestion = questionService.updateOne(question, id);
-            return ResponseEntity.ok(updatedQuestion);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/question/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Integer id) {
-        try {
-            questionService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+
+        questionService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
