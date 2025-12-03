@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user-answers")
-@RequiredArgsConstructor // Inyección limpia
+@RequiredArgsConstructor
 class UserAnswerController {
 
     private final UserAnswerService userAnswerService;

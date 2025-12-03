@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor // Lombok genera el constructor automáticamente
+@RequiredArgsConstructor
 public class AppUserService {
 
     private final AppUserRepository appUserRepository;
@@ -34,7 +34,7 @@ public class AppUserService {
         return appUserMapper.toDto(appUser);
     }
 
-    @Transactional // Importante para asegurar integridad de datos
+    @Transactional
     public AppUserDTO create(AppUserDTO appUserDTO) {
         Institute institute = instituteRepository.findById(appUserDTO.getIdInstitute())
                 .orElseThrow(() -> new EntityNotFoundException("Instituto no encontrado"));

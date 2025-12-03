@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor // Inyección limpia
+@RequiredArgsConstructor
 public class ViolenceZoneService {
 
     private final ViolenceZoneRepository violenceZoneRepository;
@@ -35,14 +35,14 @@ public class ViolenceZoneService {
 
     @Transactional
     public ViolenceZoneDTO updateOne(Integer id, ViolenceZoneDTO dto) {
-        // 1. Obtener la entidad existente
+        // Obtener la entidad existente
         ViolenceZone existingZone = violenceZoneRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Zona de violencia no encontrada con ID: " + id));
 
-        // 2. Mapeo seguro: Solo actualiza campos non-null
+        // Actualiza campos non-null
         violenceZoneMapper.updateEntityFromDto(dto, existingZone);
 
-        // 3. Guardar y devolver DTO
+        // Guardar
         return violenceZoneMapper.toDto(violenceZoneRepository.save(existingZone));
     }
 

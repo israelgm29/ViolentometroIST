@@ -37,7 +37,7 @@ class InstituteController {
         return new ResponseEntity<>(savedInstitute, HttpStatus.CREATED);
     }
 
-    // Nota: Es mejor usar @PatchMapping para actualizaciones parciales, pero mantenemos PUT por ahora
+
     @PutMapping("/{id}")
     public ResponseEntity<InstituteDTO> update(@PathVariable Integer id, @RequestBody @Valid InstituteDTO instituteDTO) {
         // El Service maneja la lógica de actualización segura y lanza 404 si no existe

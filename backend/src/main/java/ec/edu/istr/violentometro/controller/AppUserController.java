@@ -22,7 +22,7 @@ class AppUserController {
         return ResponseEntity.ok(appUserService.findAll());
     }
 
-    @GetMapping("/{dni}") // Ya no necesitamos decir "app_user" otra vez en la URL
+    @GetMapping("/{dni}")
     public ResponseEntity<AppUserDTO> getAppUserByDni(@PathVariable String dni) {
         return ResponseEntity.ok(appUserService.findByDni(dni));
     }

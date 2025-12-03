@@ -20,7 +20,6 @@ class SysRoleController {
     @GetMapping
     public ResponseEntity<List<SysRoleDTO>> getAll() {
         List<SysRoleDTO> roles = sysRoleService.findAll();
-        // Ya no verificamos si está vacío; si lo está, devolvemos 200 OK con lista vacía.
         return ResponseEntity.ok(roles);
     }
 

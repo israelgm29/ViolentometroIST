@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 @Data
 @NoArgsConstructor
 public class AppUserDTO {
-    private Integer id; // Añadido para responder con el ID creado
+    private Integer id;
 
     @NotNull("El DNI no puede ser nulo")
     private String dni;
