@@ -1,0 +1,129 @@
+<div class="dialog-wrapper">
+    <header class="dialog-header">
+        <div>
+            <h2>{{ data ? 'Editar Publicación' : 'Nueva Publicación' }}</h2>
+            <p>Organiza el contenido visual y descriptivo de la campaña</p>
+        </div>
+        <button mat-icon-button (click)="close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </header>
+
+    <mat-dialog-content class="dialog-content">
+        <form [formGroup]="form" id="campaignForm" (ngSubmit)="save()">
+            <div class="main-layout">
+
+                <div class="side-panel">
+                    <div class="image-preview-container">
+                        @if (form.get('imageUrl')?.value) {
+                            <img [src]="form.get('imageUrl')?.value" alt="Preview">
+                        } @else {
+                            <div class="placeholder">
+                                <mat-icon>image</mat-icon>
+                                <span>Vista previa de imagen</span>
+                            </div>
+                        }
+                    </div>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>URL de la imagen</mat-label>
+                        <input matInput formControlName="imageUrl" placeholder="https://...">
+                        <mat-icon matSuffix>image</mat-icon>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Enlace externo (Página Institucional)</mat-label>
+                        <input matInput formControlName="externalUrl" placeholder="https://...">
+                        <mat-icon matSuffix>link</mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-body">
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Título</mat-label>
+                        <input matInput formControlName="title">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Categoría</mat-label>
+                        <mat-select formControlName="categoryId">
+                            @for (cat of categories(); track cat.id) {
+                                <mat-option [value]="cat.id">
+                                    <mat-icon [style.color]="cat.color">{{ cat.icon }}</mat-icon>
+                                    {{ cat.name }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div class="date-group">
+                        <span class="group-label">Programación y Evento</span>
+
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Fecha de Publicación (Visible desde)</mat-label>
+                            <input matInput [matDatepicker]="pubPicker" formControlName="publishDate">
+                            <mat-datepicker-toggle matSuffix [for]="pubPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #pubPicker></mat-datepicker>
+                        </mat-form-field>
+
+                        <div class="date-row">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Fecha Inicio (Evento)</mat-label>
+                                <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #startPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Fecha Fin (Expiración)</mat-label>
+                                <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+                                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #endPicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Resumen (Excerpt)</mat-label>
+                        <textarea matInput rows="3" formControlName="excerpt"></textarea>
+                    </mat-form-field>
+
+                    <div class="settings-card">
+                        <div class="toggle-item">
+                            <div class="toggle-text">
+                                <span>Destacar campaña</span>
+                                <small>Visible en el banner principal</small>
+                            </div>
+                            <mat-slide-toggle formControlName="featured" color="primary"></mat-slide-toggle>
+                        </div>
+
+                        <div class="toggle-item">
+                            <div class="toggle-text">
+                                <span>Estado Activo</span>
+                                <small>Visible para los estudiantes</small>
+                            </div>
+                            <mat-slide-toggle formControlName="status" color="primary"></mat-slide-toggle>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="dialog-footer">
+        <button mat-button (click)="close()">Cancelar</button>
+        <button mat-flat-button color="primary"
+                type="submit"
+                form="campaignForm"
+                [disabled]="form.invalid || loading()">
+            @if (loading()) {
+                <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+                <mat-icon>save</mat-icon>
+            }
+            <span>{{ data ? 'Actualizar' : 'Guardar' }}</span>
+        </button>
+    </mat-dialog-actions>
+</div>

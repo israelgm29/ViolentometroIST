@@ -1,0 +1,190 @@
+<div class="report-container">
+
+    <!-- LOADING -->
+    @if (isLoading()) {
+        <div class="loading-state">
+            <mat-spinner diameter="36"></mat-spinner>
+            <p>Cargando casos críticos...</p>
+        </div>
+    }
+
+    @if (!isLoading() && report()) {
+
+        <!-- CONTADORES -->
+        <div class="counters-row">
+            <div class="counter c-total">
+                <div class="counter-icon"><mat-icon>assignment_late</mat-icon></div>
+                <div class="counter-body">
+                    <span class="counter-num">{{ report()!.totalCritical }}</span>
+                    <span class="counter-lbl">Total casos</span>
+                </div>
+            </div>
+            <div class="counter c-critico">
+                <div class="counter-icon"><mat-icon>crisis_alert</mat-icon></div>
+                <div class="counter-body">
+                    <span class="counter-num">{{ filteredCases | criticalCount:'CRÍTICO' }}</span>
+                    <span class="counter-lbl">Crítico</span>
+                </div>
+            </div>
+            <div class="counter c-alto">
+                <div class="counter-icon"><mat-icon>warning</mat-icon></div>
+                <div class="counter-body">
+                    <span class="counter-num">{{ filteredCases | criticalCount:'ALTO' }}</span>
+                    <span class="counter-lbl">Alto</span>
+                </div>
+            </div>
+            <div class="counter c-score">
+                <div class="counter-icon"><mat-icon>analytics</mat-icon></div>
+                <div class="counter-body">
+                    <span class="counter-num">{{ filteredCases | avgScore }}</span>
+                    <span class="counter-lbl">Puntaje promedio</span>
+                </div>
+            </div>
+
+            <!-- Exportar PDF al lado de los contadores -->
+            <div class="counter-actions">
+                <button mat-stroked-button (click)="previewPDF()" [disabled]="isExporting()">
+                    <mat-icon>visibility</mat-icon> Vista previa
+                </button>
+                <button mat-flat-button color="warn" (click)="exportPDF()" [disabled]="isExporting()">
+                    <mat-icon>picture_as_pdf</mat-icon>
+                    {{ isExporting() ? 'Generando...' : 'Exportar PDF' }}
+                </button>
+            </div>
+        </div>
+
+        <!-- TABLA -->
+        @if (filteredCases.length === 0) {
+            <div class="empty-state">
+                <mat-icon>check_circle_outline</mat-icon>
+                <p>No hay casos para los filtros seleccionados</p>
+            </div>
+        } @else {
+            <div class="table-wrapper">
+                <table mat-table [dataSource]="filteredCases" matSort class="cases-table">
+
+                    <!-- Caso -->
+                    <ng-container matColumnDef="victimName">
+                        <th mat-header-cell *matHeaderCellDef>Caso</th>
+                        <td mat-cell *matCellDef="let c">
+                            <div class="victim-cell">
+                                <div class="avatar" [class]="getGenderClass(c.gender)">
+                                    <mat-icon>{{ getGenderIcon(c.gender) }}</mat-icon>
+                                </div>
+                                <div>
+                                    <span class="case-id">#{{ c.userId }}</span>
+                                    <span class="case-sub">
+                                        {{ c.gender ?? 'N/E' }}
+                                        @if (c.age) { · {{ c.age }} años }
+                                        @if (c.ethnicity) { · {{ c.ethnicity }} }
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- Fecha -->
+                    <ng-container matColumnDef="registeredAt">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+                        <td mat-cell *matCellDef="let c">
+                            <span class="date-main">{{ c.registeredAt | date:'dd/MM/yyyy' }}</span>
+                            <span class="date-time">{{ c.registeredAt | date:'HH:mm' }}</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Nivel de riesgo -->
+                    <ng-container matColumnDef="riskScore">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nivel</th>
+                        <td mat-cell *matCellDef="let c">
+                            <div class="risk-cell">
+                                <span class="risk-badge" [class]="getRiskBadgeClass(c.riskLevel)">
+                                    <mat-icon>{{ getRiskIcon(c.riskLevel) }}</mat-icon>
+                                    {{ c.riskLevel }}
+                                </span>
+                                <div class="score-row">
+                                    <div class="score-track">
+                                        <div class="score-fill"
+                                             [style.width.%]="c.riskScore * 10"
+                                             [style.background]="getRiskColor(c.riskLevel)">
+                                        </div>
+                                    </div>
+                                    <span class="score-txt">{{ c.riskScore }}/10</span>
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- Alertas -->
+                    <ng-container matColumnDef="alertCount">
+                        <th mat-header-cell *matHeaderCellDef>Alertas</th>
+                        <td mat-cell *matCellDef="let c">
+                            <span class="alert-badge">
+                                <mat-icon>warning</mat-icon>
+                                {{ c.alertSignals?.length ?? 0 }}
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Señales -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Señales detectadas</th>
+                        <td mat-cell *matCellDef="let c">
+                            <mat-expansion-panel class="signals-panel">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        {{ c.alertSignals?.length ?? 0 }} señal{{ (c.alertSignals?.length ?? 0) !== 1 ? 'es' : '' }}
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div class="signals-list">
+                                    @for (signal of c.alertSignals; track signal.questionId) {
+                                        <div class="signal-item">
+                                            <mat-icon>report_problem</mat-icon>
+                                            <span>{{ signal.questionText }}</span>
+                                        </div>
+                                    }
+                                </div>
+                            </mat-expansion-panel>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                        [class.row-critico]="row.riskLevel === 'CRÍTICO'"
+                        [class.row-alto]="row.riskLevel === 'ALTO'">
+                    </tr>
+                </table>
+            </div>
+        }
+    }
+
+    <!-- SIN SURVEY -->
+    @if (!isLoading() && !report()) {
+        <div class="empty-state">
+            <mat-icon>assignment_late</mat-icon>
+            <p>Selecciona un cuestionario para ver los casos críticos</p>
+        </div>
+    }
+
+    <!-- MODAL PREVIEW PDF -->
+    @if (isPreviewOpen()) {
+        <div class="pdf-overlay">
+            <div class="pdf-modal">
+                <div class="pdf-modal-header">
+                    <span>Vista previa — Reporte de casos críticos</span>
+                    <div>
+                        <button mat-icon-button (click)="downloadPDF()" matTooltip="Descargar">
+                            <mat-icon style="color:#fff">download</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="closePreview()" matTooltip="Cerrar">
+                            <mat-icon style="color:#fff">close</mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="pdf-modal-body">
+                    <iframe [src]="safePdfUrl()!"></iframe>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

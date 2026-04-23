@@ -1,0 +1,80 @@
+<div class="header-detail">
+    <div class="avatar-circle">
+        {{ user.firstname.charAt(0) }}{{ user.firstLastname.charAt(0) }}
+    </div>
+    <div class="header-text" style="padding: 10px;">
+        <h3>{{ user.firstname }} {{ user.firstLastname }}</h3>
+        <span class="role-badge">{{ user.role.name }}</span>
+        <p>Ultima modificacion: {{ user.updatedAt | date:'dd/MM/yyyy' }}</p>
+    </div>
+</div>
+<mat-dialog-content class="mat-typography">
+
+    <mat-divider></mat-divider>
+
+    <div class="detail-grid">
+        <div class="detail-column">
+            <h4>
+                <mat-icon inline>person</mat-icon>
+                Datos Personales
+            </h4>
+            <mat-list>
+                <mat-list-item>
+                    <span matListItemTitle>Nombre Segundo</span>
+                    <span matListItemLine>{{ user.secondname || '---' }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Apellido Segundo</span>
+                    <span matListItemLine>{{ user.secondLastname || '---' }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>DNI / Cédula</span>
+                    <span matListItemLine>{{ user.dni }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Direccion Domiciliaria</span>
+                    <span matListItemLine>{{ user.address }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Correo Electrónico</span>
+                    <span matListItemLine style="color: #3f51b5; font-weight: 500;">
+                {{ user.email || 'Sin correo registrado' }}
+            </span>
+                </mat-list-item>
+            </mat-list>
+        </div>
+
+        <div class="detail-column">
+            <h4>
+                <mat-icon inline>contact_mail</mat-icon>
+                Contacto y Sistema
+            </h4>
+            <mat-list>
+                <mat-list-item>
+                    <span matListItemTitle>Teléfono</span>
+                    <span matListItemLine>{{ user.phone || 'No registrado' }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Instituto</span>
+                    <span matListItemLine>{{ user.institute.name }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Estado</span>
+                    <span matListItemLine [style.color]="user.status ? 'green' : 'red'">
+                        {{ user.status ? 'Cuenta Activa' : 'Cuenta Inactiva' }}
+                    </span>
+                </mat-list-item>
+                <mat-list-item>
+                    <span matListItemTitle>Fecha de Registro</span>
+                    <span matListItemLine>{{ user.createdAt | date:'shortDate' }}</span>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

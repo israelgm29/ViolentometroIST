@@ -1,0 +1,98 @@
+
+@use 'theme-variables';
+@use 'mixins' as m;
+
+.main-container {
+  height:     100vh;
+  background: var(--bg-main);
+}
+
+.user-sidebar {
+  width:        280px;
+  background:   transparent !important;
+  border-right: none !important;
+  box-shadow:   var(--shadow-xl) !important;
+  overflow:     hidden;
+}
+.top-navbar {
+  position:    sticky;
+  top:         0;
+  z-index:     var(--z-overlay);
+  display:     flex;
+  align-items: center;
+  padding:     0 var(--space-lg);
+  height:      64px; // Un poco más alto para mayor elegancia
+  background:  rgba(var(--bg-main-rgb), 0.8);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.nav-menu-btn {
+  @include m.flex-center;
+  width:         44px;
+  height:        44px;
+  border-radius: 12px; // Bordes más suaves
+  border:        1px solid var(--border-color);
+  background:    #ffffff;
+  color:         var(--color-primary);
+  box-shadow:    0 2px 6px rgba(0,0,0,0.04);
+  cursor:        pointer;
+  transition:    all var(--transition-fast);
+
+  mat-icon {
+    font-size: 24px;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    background: var(--color-primary);
+    color:      #ffffff;
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.2);
+  }
+
+  &.is-open {
+    background: var(--bg-subtle);
+    color:      var(--color-primary);
+    mat-icon { transform: rotate(180deg); }
+  }
+}
+
+.nav-spacer { flex: 1; }
+
+.safe-badge {
+  display:       flex;
+  align-items:   center;
+  gap:           8px;
+  padding:       6px 14px;
+  background:    rgba(var(--color-success-rgb), 0.08); // Tono verde sutil
+  border:        1px solid rgba(var(--color-success-rgb), 0.2);
+  border-radius: 100px;
+  color:         var(--color-success);
+  font-size:     0.85rem;
+  font-weight:   600;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+  @media (max-width: 600px) {
+    span { display: none; } // Solo icono en móvil
+    padding: 8px;
+  }
+}
+.user-sidebar {
+  width:        280px;
+  background:   transparent !important;
+  border-right: none !important;
+  box-shadow:   var(--shadow-xl) !important;
+  overflow:     hidden;
+
+  // Forzamos que el sidebar móvil esté siempre por encima de otros elementos
+  z-index: 1001 !important;
+}
+
+// El contenedor de los overlays (donde viven los modales)
+::ng-deep .cdk-overlay-container {
+  // Lo mantenemos justo por debajo del sidebar móvil si es necesario
+  z-index: 1000 !important;
+}

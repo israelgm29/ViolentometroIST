@@ -1,0 +1,86 @@
+<h2 mat-dialog-title class="dialog-header">
+    <mat-icon color="primary">{{ isEdit ? 'edit' : 'add_business' }}</mat-icon>
+    {{ isEdit ? 'Editar' : 'Registrar Nuevo' }} Instituto
+</h2>
+
+<mat-dialog-content [formGroup]="form" class="form-container">
+    <div class="form-grid">
+
+        <mat-form-field appearance="outline" class="col-6">
+            <mat-label>Código</mat-label>
+            <mat-icon matPrefix>qr_code</mat-icon>
+            <input matInput formControlName="code" placeholder="Ej: INST001">
+            <mat-error *ngIf="form.get('code')?.invalid">Requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-6">
+            <mat-label>Nombre Corto / Siglas</mat-label>
+            <mat-icon matPrefix>label</mat-icon>
+            <input matInput formControlName="shortName" placeholder="Ej: ITSM">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Nombre Completo del Instituto</mat-label>
+            <mat-icon matPrefix>business</mat-icon>
+            <input matInput formControlName="name" placeholder="Ej: Instituto Superior Tecnológico...">
+            <mat-error *ngIf="form.get('name')?.invalid">El nombre es obligatorio</mat-error>
+        </mat-form-field>
+
+        <div class="section-title col-12">
+            <mat-icon inline>location_on</mat-icon> Ubicación Geográfica
+        </div>
+
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Dirección Exacta</mat-label>
+            <input matInput formControlName="address">
+            <mat-error *ngIf="form.get('address')?.invalid">Requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-4">
+            <mat-label>País</mat-label>
+            <input matInput formControlName="country">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-4">
+            <mat-label>Provincia</mat-label>
+            <input matInput formControlName="province">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-4">
+            <mat-label>Ciudad</mat-label>
+            <input matInput formControlName="city">
+        </mat-form-field>
+
+        <div class="section-title col-12">
+            <mat-icon inline>contact_mail</mat-icon> Información de Contacto
+        </div>
+
+        <mat-form-field appearance="outline" class="col-6">
+            <mat-label>Teléfono</mat-label>
+            <mat-icon matPrefix>phone</mat-icon>
+            <input matInput formControlName="phone" placeholder="Ej: 022345678">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-6">
+            <mat-label>Email Institucional</mat-label>
+            <mat-icon matPrefix>alternate_email</mat-icon>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngIf="form.get('email')?.hasError('email')">Formato inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="col-12">
+            <mat-label>Sitio Web (URL)</mat-label>
+            <mat-icon matPrefix>language</mat-icon>
+            <input matInput formControlName="web_url" placeholder="https://www.ejemplo.edu.ec">
+        </mat-form-field>
+
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button (click)="close()">Cancelar</button>
+    <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="save()">
+        <mat-icon>{{ isEdit ? 'save' : 'add_circle' }}</mat-icon>
+        {{ isEdit ? 'Actualizar Instituto' : 'Guardar Instituto' }}
+    </button>
+</mat-dialog-actions>

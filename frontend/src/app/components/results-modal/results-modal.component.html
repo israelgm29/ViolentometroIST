@@ -1,0 +1,70 @@
+@if (show) {
+    <div class="modal-overlay" @fadeIn>
+        <div class="modal-container" [@slideIn] [ngClass]="resultData.colorClass">
+
+            <div class="modal-top-bar"></div>
+
+            <button class="close-btn" (click)="closeModal()" aria-label="Cerrar">
+                <mat-icon>close</mat-icon>
+            </button>
+
+            <div class="modal-hero">
+                <div class="level-badge">
+                    @if (resultData.image) {
+                        <img [src]="resultData.image" [alt]="resultData.titulo">
+                    } @else {
+                        <mat-icon>{{ resultData.icon }}</mat-icon>
+                    }
+                </div>
+                <span class="result-eyebrow">Resultado del análisis</span>
+                <h2 class="modal-title">{{ resultData.titulo }}</h2>
+            </div>
+
+            <div class="modal-body">
+                <div class="message-card">
+                    <mat-icon class="message-card-icon">info</mat-icon>
+                    <p>{{ resultData.mensaje }}</p>
+                </div>
+
+                @if (resultData.recomendaciones.length > 0) {
+                    <div class="recommendations">
+                        <span class="recommendations-title">
+                            <mat-icon>checklist</mat-icon>
+                            Pasos a seguir sugeridos:
+                        </span>
+                        <ul class="recommendations-list">
+                            @for (rec of resultData.recomendaciones; track $index) {
+                                <li class="recommendation-item">
+                                    <mat-icon class="check-icon">check_circle</mat-icon>
+                                    <span>{{ rec }}</span>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <div class="action-grid">
+                    <button class="action-btn action-btn--whatsapp" (click)="openWhatsapp()">
+                        <mat-icon>support_agent</mat-icon>
+                        <span>Ayuda WhatsApp</span>
+                    </button>
+                    <button class="action-btn action-btn--form" (click)="openGoogleForm()">
+                        <mat-icon>description</mat-icon>
+                        <span>Reportar caso</span>
+                    </button>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-ghost" (click)="startNewQuiz()">
+                        <mat-icon>refresh</mat-icon>
+                        Nueva encuesta
+                    </button>
+                    <button class="btn-primary" (click)="navigateToContact()">
+                        Ir a Bienestar
+                        <mat-icon>chevron_right</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

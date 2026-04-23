@@ -1,0 +1,113 @@
+/* Heredando tus estilos de .dialog-wrapper, .dialog-header, etc. del global */
+
+.dialog-wrapper {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    padding: 0;
+}
+
+.dialog-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.dialog-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.dialog-sub {
+    margin: 2px 0 0;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.dialog-content {
+    padding: 24px;
+}
+
+.form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* --- SOLUCIÓN DEL OVERLAP --- */
+/* Fila de Color e Icono con Flexbox */
+.row-inputs {
+    display: flex;
+    gap: 16px; /* Espacio fijo entre los dos campos */
+    align-items: flex-start; /* Alineación superior */
+    width: 100%;
+}
+
+/* Ancho específico para el selector de color */
+.color-field {
+    flex: 0 0 100px; /* Ancho fijo de 100px, no crece, no encoge */
+}
+
+/* Ancho específico para el campo de icono (toma el resto del espacio) */
+.icon-field {
+    flex: 1;
+}
+
+/* Estilo para el input de color nativo dentro de Material */
+input[type="color"] {
+    border: none;
+    width: 100%;
+    height: 40px;
+    cursor: pointer;
+    background: transparent;
+    padding: 0;
+}
+
+/* Ocultar el texto de ayuda predeterminado de Material para ganar espacio */
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* Card para el estado (Toggle) */
+.status-card {
+    background: #fdfdff;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid #f1f5f9;
+}
+
+.toggle-desc {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin: 4px 0 0 40px; /* Alineado con el switch */
+}
+
+/* Footer (Siguiendo tu global.css si usas .dialog-footer) */
+.dialog-footer {
+    padding: 16px 24px;
+    background: #f8fafc;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Botones con tu estilo púrpura institucional */
+::ng-deep .btn-primary {
+    background-color: #6d28d9 !important; /* Tu Púrpura */
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+}
+
+::ng-deep .btn-cancel {
+    border-radius: 10px !important;
+    color: #64748b !important;
+}

@@ -1,0 +1,201 @@
+<div class="campaigns-container">
+    <!-- Progress bar para carga -->
+    @if (loading()) {
+        <mat-progress-bar mode="indeterminate" class="loading-bar"></mat-progress-bar>
+    }
+
+    <!-- Hero Section Mejorada -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-eyebrow">Bienestar Institucional</span>
+            <h1 class="hero-title">
+                Campañas y
+                <span class="gradient-text">Publicaciones</span>
+            </h1>
+            <p class="hero-description">
+                Descubre nuestras iniciativas de bienestar, programas de salud y actividades diseñadas para tu desarrollo integral.
+            </p>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-number">{{ campaigns().length }}</span>
+                <span class="stat-label">Campañas activas</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-number">{{ categories().length }}</span>
+                <span class="stat-label">Categorías</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Card Rediseñada con Material -->
+    @if (featuredCampaign(); as featured) {
+        <section class="featured-section" @fadeIn>
+            <mat-card class="featured-card" [style.--category-color]="getCategoryColor(featured.categoryName)">
+                <div class="featured-image-container">
+                    @if (featured.imageUrl) {
+                        <img [src]="featured.imageUrl" [alt]="featured.title" class="featured-image">
+                    } @else {
+                        <div class="featured-image-placeholder" [style.background]="getCategoryColor(featured.categoryName) + '20'">
+                            <mat-icon [style.color]="getCategoryColor(featured.categoryName)">
+                                {{ getCategoryIcon(featured.categoryName) }}
+                            </mat-icon>
+                        </div>
+                    }
+                    <div class="featured-badge">
+                        <mat-icon>star</mat-icon>
+                        <span>Destacada</span>
+                    </div>
+                </div>
+
+                <div class="featured-content">
+                    <div class="featured-header">
+                        <mat-chip-set>
+                            <mat-chip [style.--mdc-chip-container-color]="getCategoryColor(featured.categoryName) + '20'"
+                                      [style.--mdc-chip-label-text-color]="getCategoryColor(featured.categoryName)">
+                                <mat-icon matChipAvatar>{{ getCategoryIcon(featured.categoryName) }}</mat-icon>
+                                {{ featured.categoryName }}
+                            </mat-chip>
+                        </mat-chip-set>
+                        <span class="featured-date">
+                            <mat-icon>calendar_today</mat-icon>
+                            {{ formatDate(featured.publishDate) }}
+                        </span>
+                    </div>
+
+                    <h2 class="featured-title">{{ featured.title }}</h2>
+                    <p class="featured-excerpt">{{ featured.excerpt }}</p>
+
+                    <div class="featured-actions">
+                        <button mat-flat-button
+                                class="btn-primary-action"
+                                [style.--mdc-filled-button-container-color]="getCategoryColor(featured.categoryName)"
+                                (click)="openCampaign(featured)">
+                            Ver campaña
+                            <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+                        </button>
+                        @if (featured.externalUrl) {
+                            <a mat-stroked-button
+                               [href]="featured.externalUrl"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="btn-secondary-action">
+                                <mat-icon>open_in_new</mat-icon>
+                                Más información
+                            </a>
+                        }
+                    </div>
+                </div>
+            </mat-card>
+        </section>
+    }
+
+    <!-- Filtros con Chips de Material -->
+    <section class="filters-section">
+        <div class="filters-container">
+            <span class="filters-label">
+                <mat-icon>filter_list</mat-icon>
+                Filtrar por categoría:
+            </span>
+            <mat-chip-listbox class="filters-chips" [value]="activeCategory()">
+                @for (cat of categoryNames(); track cat) {
+                    <mat-chip-option [value]="cat"
+                                     [selected]="activeCategory() === cat"
+                                     (selectionChange)="setCategory(cat)">
+                        {{ cat }}
+                    </mat-chip-option>
+                }
+            </mat-chip-listbox>
+        </div>
+    </section>
+
+    <!-- Grid de Campañas con Material Cards -->
+    <section class="campaigns-grid-section">
+        @if (regularCampaigns().length > 0) {
+            <div class="campaigns-grid">
+                @for (campaign of regularCampaigns(); track campaign.id; let i = $index) {
+                    <mat-card class="campaign-card"
+                              [style.--category-color]="getCategoryColor(campaign.categoryName)"
+                              [style.animation-delay]="i * 50 + 'ms'"
+                              @cardEnter>
+
+                        <div class="card-image-wrapper">
+                            @if (campaign.imageUrl) {
+                                <img [src]="campaign.imageUrl" [alt]="campaign.title" class="card-image">
+                            } @else {
+                                <div class="card-image-placeholder" [style.background]="getCategoryColor(campaign.categoryName) + '15'">
+                                    <mat-icon [style.color]="getCategoryColor(campaign.categoryName)">
+                                        {{ getCategoryIcon(campaign.categoryName) }}
+                                    </mat-icon>
+                                </div>
+                            }
+                            <div class="card-overlay">
+                                <button mat-icon-button
+                                        class="btn-quick-view"
+                                        (click)="openCampaign(campaign)"
+                                        matTooltip="Vista rápida">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <mat-card-content class="card-content">
+                            <div class="card-meta">
+                                <mat-chip-set>
+                                    <mat-chip class="category-chip"
+                                              [style.--mdc-chip-container-color]="getCategoryColor(campaign.categoryName) + '15'"
+                                              [style.--mdc-chip-label-text-color]="getCategoryColor(campaign.categoryName)">
+                                        {{ campaign.categoryName }}
+                                    </mat-chip>
+                                </mat-chip-set>
+                                <span class="card-date">
+                                    <mat-icon>schedule</mat-icon>
+                                    {{ formatDate(campaign.publishDate) }}
+                                </span>
+                            </div>
+
+                            <h3 class="card-title">{{ campaign.title }}</h3>
+                            <p class="card-excerpt">{{ campaign.excerpt }}</p>
+                        </mat-card-content>
+
+                        <mat-card-actions class="card-actions">
+                            <a mat-flat-button
+                               class="btn-action-main"
+                               [href]="campaign.externalUrl"
+                               target="_blank"
+                               [style.background-color]="getCategoryColor(campaign.categoryName)">
+                                <mat-icon>open_in_new</mat-icon>
+                                {{ campaign.externalUrl ? 'Ver publicación oficial' : 'Ver detalles' }}
+                            </a>
+                        </mat-card-actions>
+                    </mat-card>
+                }
+            </div>
+        } @else {
+            <div class="empty-state" @fadeIn>
+                <div class="empty-icon">
+                    <mat-icon>search_off</mat-icon>
+                </div>
+                <h3>No hay campañas en esta categoría</h3>
+                <p>Prueba seleccionando otra categoría o vuelve más tarde.</p>
+                <button mat-stroked-button (click)="setCategory('Todos')">
+                    <mat-icon>refresh</mat-icon>
+                    Ver todas
+                </button>
+            </div>
+        }
+    </section>
+
+    <!-- Paginación o Cargar más -->
+    @if (regularCampaigns().length > 0) {
+        <section class="load-more-section">
+            <mat-divider></mat-divider>
+            <p class="results-count">
+                Mostrando {{ regularCampaigns().length }} de {{ campaigns().length }} campañas
+            </p>
+        </section>
+    }
+</div>
+
+<app-footer></app-footer>

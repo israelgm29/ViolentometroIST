@@ -1,0 +1,46 @@
+.dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #f8f9fa;
+    margin: 0 !important;
+    padding: 20px 24px !important;
+}
+
+.form-container {
+    padding: 24px !important;
+    max-height: 70vh;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 8px 16px;
+}
+
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #5f6368;
+    margin: 15px 0 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+/* Clases de utilidad para el ancho de columnas */
+.col-12 { grid-column: span 12; }
+.col-8  { grid-column: span 8; }
+.col-6  { grid-column: span 6; }
+.col-4  { grid-column: span 4; }
+
+.dialog-actions {
+    padding: 16px 24px !important;
+    border-top: 1px solid #eee;
+}
+
+mat-form-field {
+    width: 100%;
+}

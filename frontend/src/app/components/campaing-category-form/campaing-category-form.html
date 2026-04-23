@@ -1,0 +1,61 @@
+<div class="dialog-wrapper">
+    <header class="dialog-header">
+        <div class="header-info">
+            <h2 class="dialog-title">{{ data ? 'Actualizar Categoría' : 'Nueva Categoría' }}</h2>
+            <p class="dialog-sub">Define el estilo visual distintivo para este grupo de campañas</p>
+        </div>
+        <button mat-icon-button (click)="close()" class="btn-close">
+            <mat-icon>close</mat-icon>
+        </button>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="dialog-content">
+        <div class="form-grid">
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nombre de la categoría</mat-label>
+                <input matInput formControlName="name" placeholder="Ej: Prevención, Salud Mental, Deporte">
+                <mat-icon matSuffix>label</mat-icon>
+            </mat-form-field>
+
+            <div class="row-inputs">
+                <mat-form-field appearance="outline" class="color-field">
+                    <mat-label>Color</mat-label>
+                    <input matInput formControlName="color" type="color">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="icon-field">
+                    <mat-label>Icono (Nombre Material)</mat-label>
+                    <input matInput formControlName="icon" placeholder="Ej: health_and_safety">
+                    <mat-icon matSuffix [style.color]="form.get('color')?.value">
+                        {{ form.get('icon')?.value || 'category' }}
+                    </mat-icon>
+                </mat-form-field>
+            </div>
+
+            <div class="status-card">
+                <div class="toggle-group">
+                    <mat-slide-toggle formControlName="status" color="primary">
+                        {{ form.get('status')?.value ? 'Categoría Activa' : 'Categoría Inactiva' }}
+                    </mat-slide-toggle>
+                    <p class="toggle-desc">Si se desactiva, no podrá seleccionarse en nuevas campañas.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="dialog-footer">
+            <button type="button" mat-button (click)="close()">
+                Cancelar
+            </button>
+            <button type="submit" mat-flat-button color="primary" [disabled]="form.invalid || loading()">
+                @if (loading()) {
+                    <mat-spinner diameter="20" style="margin-right: 8px;"></mat-spinner>
+                    Guardando...
+                } @else {
+                    <mat-icon>save</mat-icon>
+                }
+                    Guardar
+            </button>
+        </footer>
+    </form>
+</div>

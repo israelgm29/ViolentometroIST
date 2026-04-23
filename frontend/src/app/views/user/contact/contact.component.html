@@ -1,0 +1,113 @@
+<div class="contact-container">
+    <!-- Panic Button (Discrete Exit) 
+    <button class="panic-button" (click)="activatePanicButton()" title="Salir rápido">
+        <mat-icon>exit_to_app</mat-icon>
+    </button>
+    -->
+
+    <div class="content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-header">
+                <mat-icon class="hero-icon">support_agent</mat-icon>
+                <div class="hero-text">
+                    <h1 class="hero-title">Bienestar Institucional</h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Indicators - REMOVED -->
+
+        <!-- Educational Institutes Section -->
+        <div class="educational-section">
+            <div class="section-header-row">
+                <div class="header-titles">
+                    <h3 class="section-title">
+                        <mat-icon>school</mat-icon>
+                        Institutos Participantes
+                    </h3>
+                    <p class="section-subtitle">Instituciones de Educación Superior que implementan el Violentómetro</p>
+                </div>
+
+                <!-- Compact Search Bar -->
+                <div class="compact-search-container">
+                    <div class="search-box">
+                        <mat-icon class="search-icon">search</mat-icon>
+                        <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()"
+                            placeholder="Buscar..." />
+                        <button *ngIf="searchTerm" (click)="searchTerm = ''; onSearchChange()" class="clear-btn">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar REMOVED from here -->
+
+            <!-- City Filters (Restored & Improved) -->
+            <div class="filter-bar">
+                <div class="chips-scroll-container" style="flex-wrap: wrap; overflow-x: visible;">
+                    <button *ngFor="let city of cityFilters" class="category-chip"
+                        [class.selected]="selectedCity === city.name" (click)="selectCity(city.name)">
+                        {{ city.name }}
+                        <span class="chip-count">{{ city.count }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="educational-grid">
+                <div class="edu-card" *ngFor="let edu of paginatedEducationalInstitutes; let i = index"
+                    [style.animation-delay.ms]="i * 50">
+                    <div class="edu-icon">
+                        <mat-icon>account_balance</mat-icon>
+                    </div>
+                    <div class="edu-content">
+                        <div class="edu-header">
+                            <span class="edu-id">COD: {{edu.id}}</span>
+                            <span class="edu-province">{{edu.province}}</span>
+                        </div>
+                        <h4 class="edu-name">{{edu.name}}</h4>
+                        <div class="edu-footer">
+                            <mat-icon>location_on</mat-icon>
+                            <span>{{edu.city}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Results State -->
+            <div *ngIf="paginatedEducationalInstitutes.length === 0" class="no-results">
+                <mat-icon>search_off</mat-icon>
+                <p>No se encontraron institutos que coincidan con "{{searchTerm}}"</p>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-controls" *ngIf="totalPages > 1">
+                <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1" class="page-btn nav-btn">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+
+                <div class="page-numbers">
+                    <button *ngFor="let page of getPagesArray()" (click)="setPage(page)"
+                        [class.active]="currentPage === page" class="page-btn number-btn">
+                        {{ page }}
+                    </button>
+                </div>
+
+                <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages"
+                    class="page-btn nav-btn">
+                    <mat-icon>chevron_right</mat-icon>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <app-footer></app-footer>
+
+    <!-- Results Modal -->
+    <app-results-modal [show]="showResultsModal()"
+                       [resultData]="resultData()"
+                       (close)="closeResultsModal()">
+    </app-results-modal>
+</div>

@@ -1,0 +1,182 @@
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h1 class="mat-headline-5">Zonas de Violencia</h1>
+        <span class="text-muted">Gestiona los niveles de gravedad y colores del test</span>
+    </header>
+
+    <div class="widgets-grid">
+        <mat-card class="widget-card border-left-blue">
+            <mat-card-content >
+                <div class="widget-icon bg-light-blue">
+                    <mat-icon color="primary">layers</mat-icon>
+                </div>
+                <div class="widget-info">
+                    <span class="stat-label">Niveles Definidos</span>
+                    <div class="stat-row">
+                        <span class="widget-value">{{ zones.length }}</span>
+                        <span class="widget-label">Total</span>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="widget-card border-left-green">
+            <mat-card-content>
+                <div class="widget-icon bg-light-green">
+                    <mat-icon style="color: #2e7d32;">task_alt</mat-icon>
+                </div>
+                <div class="widget-info">
+                    <span class="stat-label">Disponibilidad</span>
+                    <div class="stat-row">
+                        <span class="widget-value">{{ getActivationRate() }}%</span>
+                        <span class="widget-label">{{ getActiveZoneCount() }} / {{ zones.length }} Activas</span>
+                    </div>
+                    <div class="progress-container mt-2">
+                        <mat-progress-bar mode="determinate" [value]="getActivationRate()"></mat-progress-bar>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="widget-card border-left-red">
+            <mat-card-content>
+                <div class="widget-icon bg-light-red">
+                    <mat-icon style="color: #d32f2f;">warning</mat-icon>
+                </div>
+                <div class="widget-info">
+                    <span class="stat-label">Nivel Crítico</span>
+                    <div class="widget-label">
+          <span [matTooltip]="getMaxSeverityZone()">
+            {{ getMaxSeverityZone() }}
+          </span>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+
+    <mat-card class="table-card mat-elevation-z2">
+        <div class="table-toolbar">
+            <div class="search-box">
+                <mat-icon>search</mat-icon>
+                <input type="text" (keyup)="applyFilter($event)" placeholder="Buscar zonas..." #input>
+            </div>
+
+            <div class="toolbar-actions">
+                <button mat-icon-button matTooltip="Nueva Zona" color="primary" (click)="openDialog()">
+                    <mat-icon>add_circle</mat-icon>
+                </button>
+
+                <button mat-icon-button [matMenuTriggerFor]="statusMenu" matTooltip="Filtrar por estado">
+                    <mat-icon>filter_list</mat-icon>
+                </button>
+
+                <mat-menu #statusMenu="matMenu">
+                    <button mat-menu-item (click)="filterByStatus('all')">
+                        <mat-icon>list</mat-icon>
+                        <span>Mostrar todas</span>
+                    </button>
+                    <button mat-menu-item (click)="filterByStatus('true')">
+                        <mat-icon class="text-success">check_circle</mat-icon>
+                        <span>Solo Activas</span>
+                    </button>
+                    <button mat-menu-item (click)="filterByStatus('false')">
+                        <mat-icon class="text-danger">cancel</mat-icon>
+                        <span>Solo Inactivas</span>
+                    </button>
+                </mat-menu>
+
+                <button mat-icon-button (click)="exportToExcel()" matTooltip="Exportar a Excel">
+                    @if (!isExporting) {
+                        <mat-icon style="color: #2e7d32;">grid_on</mat-icon>
+                    } @else {
+                        <mat-icon class="spin-animation">sync</mat-icon>
+                    }
+
+                </button>
+            </div>
+        </div>
+        <mat-card-content class="p-0 d-flex flex-column h-100">
+            <table mat-table [dataSource]="dataSource" class="w-100">
+
+                <ng-container matColumnDef="indicator">
+                    <th mat-header-cell *matHeaderCellDef ></th>
+                    <td mat-cell *matCellDef="let zone">
+                        <div class="color-pillar" [style.background-color]="zone.color"></div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="info">
+                    <th mat-header-cell *matHeaderCellDef>Definición de Nivel</th>
+                    <td mat-cell *matCellDef="let zone">
+                        <div class="zone-info-cell">
+                            <p class="zone-name">{{ zone.name }}</p>
+                            <p class="zone-description">{{ zone.description }}</p>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="severity">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">Gravedad</th>
+                    <td mat-cell *matCellDef="let zone" class="text-center">
+                        <span class="severity-tag">Nivel {{ zone.severity }}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">Estado</th>
+                    <td mat-cell *matCellDef="let zone" class="text-center">
+                        <span class="severity-tag">{{ zone.status === true ? 'Activo':'Inactivo' }}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef >Acciones</th>
+                    <td mat-cell *matCellDef="let zone" class="text-end">
+                        <button mat-icon-button
+                                style="color: #0d47a1;"
+                                matTooltip="Ver detalles de la zona"
+                                (click)="viewDetail(zone)">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+
+                        <button mat-icon-button
+                                style="color: #ff8f00;"
+                                matTooltip="Editar configuración"
+                                (click)="openDialog(zone)">
+                            <mat-icon>edit_note</mat-icon>
+                        </button>
+
+                        <button mat-icon-button
+                                style="color: #b71c1c;"
+                                matTooltip="Eliminar zona"
+                                (click)="deleteZone(zone.id)">
+                            <mat-icon>delete_forever</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="['indicator', 'info', 'severity', 'status', 'actions']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['indicator', 'info', 'severity', 'status', 'actions'];"
+                    class="settings-row"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center p-5" colspan="5">
+                        <div class="no-results-container">
+                            <mat-icon>search_off</mat-icon>
+                            <p>No se encontraron resultados para los filtros aplicados.</p>
+                            <button mat-stroked-button color="warn" (click)="resetFilters()">
+                                Limpiar Filtros
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </mat-card-content>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+    </mat-card>
+
+
+</div>

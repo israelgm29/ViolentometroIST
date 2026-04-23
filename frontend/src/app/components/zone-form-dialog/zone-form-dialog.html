@@ -1,0 +1,195 @@
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon class="title-icon" [style.color]="isEdit ? '#f59e0b' : '#10b981'">
+        {{ isEdit ? 'edit' : 'add_circle' }}
+    </mat-icon>
+    <span>{{ isEdit ? 'Editar Zona de Riesgo' : 'Nueva Zona de Riesgo' }}</span>
+</h2>
+
+<mat-dialog-content [formGroup]="form" class="dialog-content">
+    <div class="form-grid">
+
+        <!-- Información básica -->
+        <div class="info-card full-width">
+            <div class="card-header">
+                <mat-icon class="header-icon">info</mat-icon>
+                <span class="header-title">Información de la Zona</span>
+            </div>
+
+            <div class="card-content">
+                <!-- Nombre de la Zona - con margen inferior -->
+                <div class="input-wrapper">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Nombre de la Zona</mat-label>
+                        <input matInput formControlName="name" placeholder="Ej: ZONA ROJA - PELIGRO">
+                        <mat-icon matSuffix>badge</mat-icon>
+                        @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+                            <mat-error>El nombre es obligatorio</mat-error>
+                        }
+                        @if (form.get('name')?.hasError('minlength')) {
+                            <mat-error>Mínimo 3 caracteres</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <!-- Descripción - con margen inferior -->
+                <div class="input-wrapper">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Descripción y Protocolo</mat-label>
+                        <textarea matInput formControlName="description" rows="3"
+                                  placeholder="Describe la zona, riesgos y protocolo de actuación..."></textarea>
+                        <mat-icon matSuffix>description</mat-icon>
+                        @if (form.get('description')?.hasError('required') && form.get('description')?.touched) {
+                            <mat-error>La descripción es obligatoria</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <!-- Color y Severidad - con separación entre ellos -->
+                <div class="two-columns">
+                    <div class="input-wrapper">
+                        <mat-form-field appearance="outline" class="color-field">
+                            <mat-label>Color Identificador</mat-label>
+                            <input matInput
+                                   formControlName="color"
+                                   [colorPicker]="form.get('color')?.value"
+                                   (colorPickerChange)="form.get('color')?.setValue($event)"
+                                   [cpPosition]="'top'"
+                                   [cpOutputFormat]="'hex'"
+                                   [cpDialogDisplay]="'popup'"
+                                   [cpAddColorButton]="true"
+                                   [cpOKButton]="true"
+                                   [cpSaveClickOutside]="false"
+                                   [cpOKButtonText]="'Confirmar'"
+                                   readonly
+                                   class="color-input">
+                            <div class="color-preview"
+                                 [style.background-color]="form.get('color')?.value || '#ffffff'"
+                                 matPrefix></div>
+                            <mat-icon matSuffix class="color-icon">palette</mat-icon>
+                            @if (form.get('color')?.hasError('required') && form.get('color')?.touched) {
+                                <mat-error>Selecciona un color</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+
+                    <div class="input-wrapper">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Nivel de Severidad</mat-label>
+                            <input matInput type="number" formControlName="severity" min="1" max="10">
+                            <mat-icon matSuffix>warning</mat-icon>
+                            @if (form.get('severity')?.hasError('required') && form.get('severity')?.touched) {
+                                <mat-error>Requerido</mat-error>
+                            }
+                            @if (form.get('severity')?.hasError('min')) {
+                                <mat-error>Mínimo 1</mat-error>
+                            }
+                            @if (form.get('severity')?.hasError('max')) {
+                                <mat-error>Máximo 10</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de resultado del quiz -->
+        <div class="section-divider full-width">
+            <mat-icon class="section-icon">quiz</mat-icon>
+            <span class="section-title">Configuración del Resultado</span>
+            <span class="section-badge">Opcional</span>
+        </div>
+
+        <div class="result-card full-width">
+            <div class="card-content">
+                <!-- Título del Resultado - con margen inferior -->
+                <div class="input-wrapper">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Título del Resultado</mat-label>
+                        <input matInput formControlName="resultTitle"
+                               placeholder="Ej: Alerta Crítica - Riesgo Alto">
+                        <mat-icon matSuffix>title</mat-icon>
+                        <mat-hint>Título que verá el usuario al finalizar</mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <!-- Mensaje del Resultado -->
+                <div class="input-wrapper">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Mensaje del Resultado</mat-label>
+                        <textarea matInput formControlName="resultMessage" rows="3"
+                                  placeholder="Explicación detallada del resultado y acciones a tomar..."></textarea>
+                        <mat-icon matSuffix>message</mat-icon>
+                        <mat-hint>Mensaje explicativo según el nivel de riesgo</mat-hint>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recomendaciones dinámicas -->
+        <div class="recommendations-section full-width">
+            <div class="section-divider">
+                <mat-icon class="section-icon">lightbulb</mat-icon>
+                <span class="section-title">Recomendaciones</span>
+                <span class="section-badge">{{ recommendations.length }} items</span>
+            </div>
+
+            <div class="recommendations-container">
+                <div class="recommendations-header">
+                    <span class="recommendations-hint">
+                        <mat-icon>info</mat-icon>
+                        Agrega recomendaciones personalizadas
+                    </span>
+                    <button mat-raised-button type="button" class="add-rec-btn" (click)="addRecommendation()">
+                        <mat-icon>add</mat-icon>
+                        Nueva Recomendación
+                    </button>
+                </div>
+
+                @if (recommendations.length > 0) {
+                    <div class="recommendations-list">
+                        @for (rec of recommendations.controls; track $index) {
+                            <div class="recommendation-item">
+                                <div class="rec-number">{{ $index + 1 }}</div>
+                                <mat-form-field appearance="outline" class="rec-field">
+                                    <mat-label>Recomendación #{{ $index + 1 }}</mat-label>
+                                    <input matInput [formControl]="getRecControl($index)"
+                                           placeholder="Ej: Contactar al departamento de bienestar">
+                                    <mat-icon matSuffix>lightbulb</mat-icon>
+                                </mat-form-field>
+                                <button mat-icon-button class="delete-rec-btn"
+                                        type="button"
+                                        (click)="removeRecommendation($index)"
+                                        matTooltip="Eliminar recomendación">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <div class="empty-recommendations">
+                        <mat-icon class="empty-icon">lightbulb_outline</mat-icon>
+                        <div class="empty-text">
+                            <span class="empty-title">Sin recomendaciones</span>
+                            <span class="empty-subtitle">Haz clic en "Nueva Recomendación" para agregar</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button class="cancel-btn" mat-dialog-close>
+        <mat-icon>close</mat-icon>
+        Cancelar
+    </button>
+    <button mat-flat-button class="save-btn"
+            [disabled]="form.invalid"
+            (click)="save()"
+            [style.background-color]="isEdit ? '#f59e0b' : '#10b981'">
+        <mat-icon>{{ isEdit ? 'save' : 'check_circle' }}</mat-icon>
+        {{ isEdit ? 'Actualizar Zona' : 'Guardar Zona' }}
+    </button>
+</mat-dialog-actions>

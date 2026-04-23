@@ -1,0 +1,223 @@
+
+.question-card {
+    position: relative;
+    overflow: hidden;
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #ffffff;
+    border-radius: 24px;
+    border: 1px solid rgba(109, 40, 217, 0.1);
+    box-shadow: 0 8px 40px rgba(109, 40, 217, 0.08);
+    gap: 1.5rem;
+}
+
+.zone-indicator-bar {
+    position: absolute;
+    left: 0;
+    top: 15%;
+    bottom: 15%;
+    width: 6px;
+    border-radius: 0 4px 4px 0;
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.zone-header-tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 900;
+    opacity: 0.85;
+    margin-bottom: -0.5rem;
+}
+
+
+.question-icon {
+    mat-icon {
+        font-size: 60px;
+        width: 60px;
+        height: 60px;
+        transition: all 0.5s ease;
+        opacity: 0.9;
+
+    }
+}
+
+
+.question-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.4;
+    max-width: 90%;
+    margin: 0 auto;
+    color: #1e1033;
+}
+
+
+.slide-left {
+    animation: slideOutLeft 0.3s ease-out;
+}
+
+.slide-right {
+    animation: slideOutRight 0.3s ease-out;
+}
+
+@keyframes slideOutLeft {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}
+
+
+.answer-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-answer {
+    min-width: 180px;
+    padding: 1.25rem 2rem !important;
+    border-radius: 16px !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.75rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 2px solid transparent !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+
+    mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+        color: white;
+    }
+
+    &:active {
+        transform: scale(0.95) !important;
+    }
+}
+
+
+.btn-yes {
+    background: linear-gradient(135deg, #16a34a, #15803d) !important;
+    box-shadow: 0 8px 20px rgba(22, 163, 74, 0.25) !important;
+    color: white;
+
+    &:hover {
+        box-shadow: 0 12px 28px rgba(22, 163, 74, 0.4) !important;
+        transform: scale(1.05) translateY(-3px) !important;
+    }
+}
+
+
+.btn-no {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.25) !important;
+    color: white;
+
+    &:hover {
+        box-shadow: 0 12px 28px rgba(220, 38, 38, 0.4) !important;
+        transform: scale(1.05) translateY(-3px) !important;
+    }
+}
+
+
+.category-badge {
+    border-radius: 8px;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+    padding: 0.8rem 2rem;
+    font-weight: 700;
+}
+
+
+.badge-verde,
+.badge-amarillo {
+    background: rgba(234, 179, 8, 0.1);
+    color: #92400e;
+    border: 1px solid rgba(234, 179, 8, 0.35);
+}
+
+
+.badge-naranja,
+.badge-medio {
+    background: rgba(234, 88, 12, 0.1);
+    color: #9a3412;
+    border: 1px solid rgba(234, 88, 12, 0.3);
+}
+
+
+.badge-rojo {
+    background: rgba(220, 38, 38, 0.08);
+    color: #991b1b;
+    border: 1px solid rgba(220, 38, 38, 0.25);
+
+    mat-icon {
+        animation: pulse-red 2s infinite;
+    }
+}
+
+@keyframes pulse-red {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.zone-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800;
+    opacity: 0.75;
+    margin-top: 10px;
+    display: block;
+    color: #4b3d6e;
+}
+
+
+@media (max-width: 768px) {
+    .question-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .question-text {
+        font-size: 1.2rem;
+    }
+
+    .answer-buttons {
+        gap: 1rem;
+    }
+
+    .btn-answer {
+        min-width: 140px !important;
+    }
+}

@@ -1,0 +1,137 @@
+<div class="about-container">
+    <div class="content">
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-header">
+                <mat-icon class="hero-icon" aria-hidden="true">info</mat-icon>
+                <div class="hero-text">
+                    <h1 class="hero-title">Violentómetro ISTR</h1>
+                    <p class="hero-subtitle">
+                        Herramienta educativa para identificar y prevenir la violencia en las relaciones de pareja
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- What is Section -->
+        <section class="what-is-section" aria-labelledby="what-is-title">
+            <h2 id="what-is-title" class="section-title">
+                <mat-icon aria-hidden="true">help_outline</mat-icon>
+                ¿Qué es el Violentómetro?
+            </h2>
+            <div class="what-is-content">
+                <p class="main-text">
+                    El <strong>Violentómetro</strong> es una herramienta visual y educativa que permite identificar
+                    las diferentes manifestaciones de violencia en las relaciones de pareja, desde las más sutiles
+                    hasta las más graves.
+                </p>
+                <p class="main-text">
+                    Desarrollado como un instrumento de prevención, el Violentómetro ayuda a reconocer comportamientos
+                    que pueden parecer normales pero que en realidad son formas de violencia que pueden escalar con el
+                    tiempo.
+                </p>
+            </div>
+        </section>
+
+        <!-- Violence Levels -->
+        <section class="levels-section" aria-labelledby="levels-title">
+            <h2 id="levels-title" class="section-title">
+                <mat-icon aria-hidden="true">trending_up</mat-icon>
+                Niveles de Violencia
+            </h2>
+            <div class="levels-grid">
+                <article class="level-card" *ngFor="let level of violenceLevels; let i = index"
+                    [style.animation-delay]="(i * 0.1) + 's'" [style.--level-color]="level.color">
+                    <div class="level-header">
+                        <mat-icon aria-hidden="true">{{ level.icon }}</mat-icon>
+                        <span class="level-badge">{{ level.level }}</span>
+                    </div>
+                    <h3>{{ level.title }}</h3>
+                    <p>{{ level.description }}</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Objectives Section -->
+        <section class="objectives-section" aria-labelledby="objectives-title">
+            <h2 id="objectives-title" class="section-title">
+                <mat-icon aria-hidden="true">flag</mat-icon>
+                Nuestros Objetivos
+            </h2>
+            <div class="objectives-grid">
+                <article class="objective-card" *ngFor="let obj of objectives; let i = index"
+                    [style.animation-delay]="(0.4 + (i * 0.1)) + 's'">
+                    <div class="objective-icon-wrapper">
+                        <mat-icon aria-hidden="true">{{ obj.icon }}</mat-icon>
+                    </div>
+                    <h3>{{ obj.title }}</h3>
+                    <p>{{ obj.description }}</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section" aria-labelledby="features-title">
+            <h2 id="features-title" class="section-title">
+                <mat-icon aria-hidden="true">stars</mat-icon>
+                Características de la Plataforma
+            </h2>
+            <div class="features-grid">
+                <article class="feature-card" *ngFor="let feature of features; let i = index"
+                    [style.animation-delay]="(0.6 + (i * 0.1)) + 's'">
+                    <mat-icon class="feature-icon" aria-hidden="true">{{ feature.icon }}</mat-icon>
+                    <div>
+                        <h3>{{ feature.title }}</h3>
+                        <p>{{ feature.description }}</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ISTR Section -->
+        <section class="istr-section" aria-labelledby="istr-title">
+            <h2 id="istr-title" class="section-title">
+                <mat-icon aria-hidden="true">account_balance</mat-icon>
+                Instituto Superior Tecnológico Rumiñahui
+            </h2>
+            <div class="istr-content">
+                <article class="istr-card">
+                    <div class="istr-icon-wrapper">
+                        <mat-icon aria-hidden="true">school</mat-icon>
+                    </div>
+                    <div class="istr-text">
+                        <h3>Departamento de Bienestar Institucional</h3>
+                        <p>
+                            Este proyecto es una iniciativa del Departamento de Bienestar Institucional del ISTR,
+                            comprometido con la promoción de relaciones saludables y la prevención de la violencia
+                            en nuestra comunidad educativa.
+                        </p>
+                        <p>
+                            Nuestro objetivo es crear un entorno seguro donde todos los estudiantes puedan desarrollarse
+                            plenamente, libres de violencia y con acceso a recursos de apoyo cuando lo necesiten.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Important Notice -->
+        <section class="notice-section" aria-labelledby="notice-title">
+            <div class="notice-card" role="complementary">
+                <mat-icon class="notice-icon" aria-hidden="true">volunteer_activism</mat-icon>
+                <div class="notice-content">
+                    <h3 id="notice-title">Recuerda</h3>
+                    <p>
+                        Si identificas señales de violencia en tu relación o conoces a alguien que las está viviendo,
+                        <strong>no estás solo/a</strong>. Existen recursos y personas capacitadas para ayudarte.
+                    </p>
+                    <p>
+                        Todas las consultas son <strong>confidenciales</strong> y <strong>gratuitas</strong>.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>

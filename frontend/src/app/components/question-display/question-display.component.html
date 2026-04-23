@@ -1,0 +1,31 @@
+<div class="question-card" [ngClass]="'slide-' + slideDirection">
+    <div class="zone-indicator-bar"
+         [style.background-color]="question.zone.color"
+         [style.box-shadow]="'4px 0 20px ' + question.zone.color + '80'">
+    </div>
+
+    <div class="zone-header-tag" [style.color]="question.zone.color">
+        <span>{{ question.zone.name }}</span>
+    </div>
+
+    <div class="question-icon">
+        <mat-icon [style.color]="question.zone.color" [style.filter]="'drop-shadow(0 0 10px ' + question.zone.color + '60)'">
+            {{ question.zone.color === '#ef4444' || question.zone.name === 'Rojo' ? 'report_problem' : 'help_outline' }}
+        </mat-icon>
+    </div>
+
+    <div class="question-body">
+        <h2 class="question-text">{{ question.question }}</h2>
+    </div>
+
+    <div class="answer-buttons">
+        <button class="btn-answer btn-yes" (click)="onAnswerClick(true)" matRipple>
+            <mat-icon>check_circle</mat-icon>
+            <span>SÍ</span>
+        </button>
+        <button class="btn-answer btn-no" (click)="onAnswerClick(false)" matRipple>
+            <mat-icon>cancel</mat-icon>
+            <span>NO</span>
+        </button>
+    </div>
+</div>

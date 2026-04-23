@@ -1,0 +1,132 @@
+.detail-wrapper {
+    padding: 0 4px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 8px 0;
+    min-width: 420px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-item label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(0, 0, 0, 0.5);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.detail-item p {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.87);
+    margin: 0;
+}
+
+.color-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+.severity-value {
+    font-weight: 600;
+    font-size: 15px !important;
+}
+
+.description-text {
+    font-size: 13px !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+    line-height: 1.6;
+}
+
+.result-title {
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    color: rgba(0, 0, 0, 0.87) !important;
+}
+
+/* ─── Separador de sección ───────────────────────────────────────────────────── */
+
+.section-divider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #3f51b5;
+    padding: 8px 0 4px;
+    border-top: 1px solid #e8eaf6;
+    margin-top: 4px;
+}
+
+.section-divider mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ─── Lista de recomendaciones ───────────────────────────────────────────────── */
+
+.recommendations-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.recommendations-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.75);
+    line-height: 1.5;
+}
+
+.recommendations-list mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: #3f51b5;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* ─── Sin configuración ──────────────────────────────────────────────────────── */
+
+.no-result-config {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px !important;
+    color: rgba(0, 0, 0, 0.4) !important;
+    padding: 10px;
+    background: #fafafa;
+    border-radius: 8px;
+    border: 1px dashed rgba(0, 0, 0, 0.15);
+}
+
+.no-result-config mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}

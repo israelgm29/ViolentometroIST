@@ -1,0 +1,38 @@
+<mat-toolbar class="main-navbar">
+    <button mat-icon-button (click)="toggle()" class="menu-toggle">
+        <mat-icon>{{ drawerOpened ? 'menu_open' : 'menu' }}</mat-icon>
+    </button>
+
+    <span class="spacer"></span>
+
+    <div class="user-profile">
+        <div class="user-info">
+            <span class="user-name">{{ currentUser?.username }}</span>
+            <span class="user-role">
+    @if (currentUser?.role === 'ROLE_ADMIN') {
+        Admin
+    } @else if (currentUser?.role === 'ROLE_ANALYST') {
+        Analista
+    } @else if (currentUser?.role === 'ROLE_WELFARE') {
+        Bienestar Institucional
+    } @else {
+        {{ currentUser?.role }}
+    }
+</span>
+        </div>
+        <button mat-icon-button [matMenuTriggerFor]="menu" class="avatar-button">
+            <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" class="user-menu">
+            <button mat-menu-item routerLink="/admin/profile">
+                <mat-icon>person</mat-icon>
+                <span>Mi Perfil</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Cerrar Sesión</span>
+            </button>
+        </mat-menu>
+    </div>
+</mat-toolbar>

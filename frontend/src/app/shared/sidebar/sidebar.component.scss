@@ -1,0 +1,137 @@
+// ============================================
+// SIDEBAR - DISEÑO INSTITUCIONAL SUAVIZADO
+// ============================================
+@use 'theme-variables';
+@use 'mixins' as m;
+
+.sidebar {
+    display:        flex;
+    flex-direction: column;
+    height:         100%;
+    padding:        0;
+    overflow:       hidden;
+    position:       relative;
+
+    // GRADIENTE SUAVIZADO: Se desvanece antes de llegar al final
+    // Usamos tonos más profundos y menos saturados
+    background: linear-gradient(
+                    180deg,
+                    #0b1051 0%,    // Azul base
+                    #151b5e 30%,   // Azul intermedio
+                    #4a1d35 75%,   // Transición suave (rojo muy apagado)
+                    #1a1a1a 100%   // Final casi negro para el footer
+    );
+
+    // Se eliminó el pseudo-elemento ::before que creaba la línea roja
+
+    &::after {
+        content:    '';
+        position:   absolute;
+        top:        0;
+        right:      0;
+        width:      1px;
+        height:     100%;
+        background: linear-gradient(
+                        to bottom,
+                        transparent,
+                        rgba(255,255,255,0.05) 30%,
+                        rgba(255,255,255,0.05) 70%,
+                        transparent
+        );
+    }
+}
+
+// ── Logo ──────────────────────────────────────
+.sidebar-logo {
+    padding:         var(--space-xl) var(--space-lg) var(--space-lg);
+    border-bottom:   1px solid rgba(255,255,255,0.05);
+    margin-bottom:   var(--space-sm);
+    display:         flex;
+    justify-content: center;
+
+    img {
+        width:      160px;
+        height:     auto;
+        display:    block;
+        opacity:    0.9;
+    }
+}
+
+// ── Navegación ────────────────────────────────
+.sidebar-nav {
+    list-style: none;
+    margin:     0;
+    padding:    var(--space-md) var(--space-lg);
+    flex:       1;
+    overflow-y: auto;
+
+    li { margin-bottom: var(--space-sm); }
+
+    a {
+        display:         flex;
+        align-items:     center;
+        justify-content: flex-start;
+        gap:             1.25rem;
+        padding:         1rem 1.25rem;
+        border-radius:   var(--radius-md);
+        color:           rgba(255,255,255,0.7); // Texto más suave
+        text-decoration: none;
+        font-size:       1.1rem;
+        font-weight:     500;
+        transition:      all 0.3s ease;
+
+        mat-icon {
+            display:         inline-flex;
+            align-items:     center;
+            justify-content: center;
+            font-size:       28px;
+            width:           32px;
+            height:          32px;
+            line-height:     1;
+            opacity:         0.7;
+        }
+
+        &:hover {
+            background: rgba(255,255,255,0.08);
+            color:      #ffffff;
+            transform:  translateX(4px);
+            mat-icon { opacity: 1; color: #fca5a5; }
+        }
+
+        &.active {
+            background: rgba(255,255,255,0.12);
+            color:      #ffffff;
+            font-weight: 600;
+
+            mat-icon { opacity: 1; }
+
+            // Indicador lateral sutil
+            &::after {
+                content:       '';
+                position:      absolute;
+                left:          0;
+                top:           25%;
+                height:        50%;
+                width:         3px;
+                border-radius: 0 4px 4px 0;
+                background:    #f8090e;
+                opacity:       0.8;
+            }
+        }
+    }
+}
+
+// ── Footer ────────────────────────────────────
+.sidebar-footer {
+    padding:     var(--space-lg);
+    border-top:  1px solid rgba(255,255,255,0.05);
+    text-align:  center;
+    background:  rgba(0, 0, 0, 0.2); // Fondo oscuro para el cierre del gradiente
+
+    span {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.63);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+}

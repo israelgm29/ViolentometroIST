@@ -1,0 +1,354 @@
+
+.login-container {
+    width:      100%;
+    min-height: 100vh;
+    display:    grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+    .login-container { grid-template-columns: 1fr; }
+}
+
+/* ── Panel izquierdo: imagen institucional ── */
+.login-image-panel {
+    position:   relative;
+    overflow:   hidden;
+    min-height: 100vh;
+    background-image:    url('/assets/logo-istr-bg-02.png');
+    background-size:     cover;
+    background-position: center;
+    background-color:    #0b1051;
+}
+
+@media (max-width: 768px) {
+    .login-image-panel { display: none; }
+}
+
+.image-overlay {
+    position:        absolute;
+    inset:           0;
+    background:      linear-gradient(
+            160deg,
+            rgba(11,16,81,0.88)  0%,
+            rgba(11,16,81,0.78)  50%,
+            rgba(192,0,8,0.65)   100%
+    );
+    display:         flex;
+    flex-direction:  column;
+    justify-content: flex-end;
+    padding:         3rem;
+}
+
+/* Banda superior rojo + azul ISTR */
+.image-overlay::before {
+    content:    '';
+    position:   absolute;
+    top:        0; left: 0; right: 0;
+    height:     5px;
+    background: linear-gradient(90deg,
+    #0b1051 0%,
+    #1a237e 40%,
+    #f8090e 70%,
+    #f84735 100%);
+}
+
+
+
+.overlay-content { position: relative; z-index: 1; }
+
+.overlay-badge {
+    display:        inline-flex;
+    align-items:    center;
+    gap:            0.5rem;
+    padding:        0.375rem 0.875rem;
+    background:     rgba(248,9,14,0.2);
+    border:         1px solid rgba(248,9,14,0.4);
+    border-radius:  20px;
+    font-size:      0.72rem;
+    font-weight:    700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color:          #fca5a5;
+    margin-bottom:  1rem;
+}
+
+.overlay-badge mat-icon { font-size: 14px; width: 14px; height: 14px; }
+
+.overlay-title {
+    font-size:      2rem;
+    font-weight:    900;
+    color:          white;
+    margin:         0 0 0.75rem;
+    line-height:    1.2;
+    letter-spacing: -0.02em;
+}
+
+.overlay-title span {
+    background:              linear-gradient(135deg, #93c5fd, #fca5a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip:         text;
+}
+
+.overlay-desc {
+    font-size:   0.9rem;
+    color:       rgba(255,255,255,0.6);
+    line-height: 1.6;
+    margin:      0;
+    max-width:   340px;
+}
+
+/* ── Panel derecho: formulario ── */
+.login-form-panel {
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    padding:         2rem;
+    background:      #f4f6fb;
+    position:        relative;
+}
+
+.login-form-panel::before {
+    content:    '';
+    position:   absolute;
+    top:        0; left: 0; right: 0;
+    height:     5px;
+    background: linear-gradient(90deg,
+    #0b1051 0%,
+    #1a237e 40%,
+    #f8090e 70%,
+    #f84735 100%);
+}
+
+.login-wrapper {
+    width:          100%;
+    max-width:      400px;
+    display:        flex;
+    flex-direction: column;
+    /* Aumentado el gap general del wrapper */
+    gap:            2.5rem;
+}
+
+/* Logo en móvil */
+.mobile-brand {
+    display:        none;
+    flex-direction: column;
+    align-items:    center;
+    gap:            0.5rem;
+    text-align:     center;
+    padding-top:    1rem;
+}
+
+@media (max-width: 768px) {
+    .mobile-brand { display: flex; }
+}
+
+.mobile-logo {
+    width:      140px;
+    height:     auto;
+    background: white;
+    border-radius: 12px;
+    padding:    0.5rem 0.75rem;
+    box-shadow: 0 2px 12px rgba(11,16,81,0.12);
+}
+
+.mobile-brand-name {
+    font-size:      0.72rem;
+    font-weight:    600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color:          #8a90b8;
+}
+
+/* Header */
+.form-header { text-align: center; }
+
+.header-icon {
+    width:           56px;
+    height:          56px;
+    border-radius:   16px;
+    background:      linear-gradient(135deg, #0b1051, #f8090e);
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    margin:          0 auto 1rem;
+    box-shadow:      0 8px 24px rgba(11,16,81,0.25);
+}
+
+.header-icon mat-icon {
+    font-size: 28px; width: 28px; height: 28px; color: white;
+}
+
+.form-title {
+    font-size:      1.625rem;
+    font-weight:    900;
+    color:          #0b1051;
+    margin:         0 0 0.375rem;
+    letter-spacing: -0.02em;
+}
+
+.form-subtitle {
+    font-size: 0.85rem;
+    color:     #8a90b8;
+    margin:    0;
+}
+
+/* ========== MEJORAS EN LOS CAMPOS DEL FORMULARIO ========== */
+/* Contenedor del formulario - aumenta el espacio entre elementos */
+form {
+    display: flex;
+    flex-direction: column;
+    /* Gap entre los elementos del formulario (campos, banner, botón) */
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+/* Cada campo individual */
+.field-full {
+    width: 100%;
+    /* Margen inferior adicional por si acaso */
+    margin-bottom: 0.25rem;
+}
+
+/* Ajuste específico para los mat-form-field - mejora el espaciado interno */
+::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0.5rem !important;
+}
+
+::ng-deep .mat-form-field-outline {
+    background: white;
+    border-radius: 8px;
+}
+
+::ng-deep .mat-form-field-flex {
+    padding: 0.25rem 0 !important;
+}
+
+::ng-deep .mat-form-field-infix {
+    padding: 0.75rem 0 !important;
+    border-top: 0.5rem solid transparent !important;
+}
+
+/* Iconos dentro de los campos */
+::ng-deep .mat-form-field-prefix {
+    padding-right: 0.5rem !important;
+}
+
+::ng-deep .mat-form-field-suffix {
+    padding-left: 0.25rem !important;
+}
+
+/* Error banner */
+.error-banner {
+    display:       flex;
+    align-items:   flex-start;
+    gap:           0.625rem;
+    padding:       0.875rem 1rem;
+    background:    rgba(248,9,14,0.05);
+    border:        1px solid rgba(248,9,14,0.2);
+    border-radius: 12px;
+    animation:     fadeIn 0.3s ease-out;
+    /* Margen adicional */
+    margin: 0.25rem 0;
+}
+
+.error-banner mat-icon {
+    font-size: 18px; width: 18px; height: 18px;
+    color: #f8090e; flex-shrink: 0; margin-top: 1px;
+}
+
+.error-banner span {
+    font-size: 0.85rem; color: #8b0000; line-height: 1.5;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Botón login */
+.btn-login {
+    width:           100% !important;
+    height:          56px !important; /* Aumentado ligeramente */
+    border-radius:   14px !important;
+    background:      linear-gradient(135deg, #0b1051, #f8090e) !important;
+    color:           white !important;
+    font-size:       1rem !important;
+    font-weight:     700 !important;
+    border:          none !important;
+    cursor:          pointer !important;
+    display:         flex !important;
+    align-items:     center !important;
+    justify-content: center !important;
+    gap:             0.75rem !important; /* Aumentado el gap */
+    box-shadow:      0 8px 24px rgba(11,16,81,0.25) !important;
+    transition:      all 0.25s ease !important;
+    /* Margen superior adicional */
+    margin-top: 0.5rem !important;
+}
+
+.btn-login mat-icon {
+    font-size: 22px; /* Aumentado */
+    width: 22px;
+    height: 22px;
+}
+
+.btn-login:hover:not(:disabled) {
+    box-shadow: 0 12px 32px rgba(11,16,81,0.35) !important;
+    transform:  translateY(-2px) !important;
+    filter:     brightness(1.08) !important;
+}
+
+.btn-login:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+.spinner {
+    --mdc-circular-progress-active-indicator-color: white !important;
+}
+
+/* Badge institucional */
+.onu-footer {
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    gap:             0.75rem; /* Aumentado */
+    text-align:      center;
+    /* Margen superior para separarlo del botón */
+    margin-top: 0.75rem;
+}
+
+.onu-footer mat-icon {
+    font-size: 16px; /* Aumentado */
+    width: 16px;
+    height: 16px;
+    color: #f8090e;
+}
+
+.onu-footer span {
+    font-size: 0.75rem; /* Ligeramente aumentado */
+    color: #8a90b8;
+    line-height: 1.5;
+}
+
+.onu-footer span strong {
+    color: #0b1051;
+    font-weight: 700;
+}
+
+/* Ajustes responsive para móvil */
+@media (max-width: 768px) {
+    .login-wrapper {
+        gap: 2rem; /* Ligeramente reducido en móvil pero aún espaciado */
+    }
+
+    form {
+        gap: 1.25rem;
+    }
+
+    .btn-login {
+        height: 54px !important;
+    }
+}

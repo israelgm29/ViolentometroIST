@@ -1,0 +1,52 @@
+<div class="preview-container">
+
+    <!-- HEADER -->
+    <header class="header" [style.background]="data.categoryColor || '#6d28d9'">
+        <div class="header-left">
+            <div class="icon">
+                <mat-icon>{{ data.categoryIcon || 'campaign' }}</mat-icon>
+            </div>
+
+            <div>
+                <span class="category">{{ data.categoryName || 'General' }}</span>
+                <h2>{{ data.title }}</h2>
+            </div>
+        </div>
+
+        <button mat-icon-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+        </button>
+    </header>
+
+    <!-- BODY -->
+    <mat-dialog-content class="body">
+
+        @if (data.imageUrl) {
+            <div class="image">
+                <img [src]="data.imageUrl" />
+            </div>
+        }
+
+        <div class="content">
+            <p class="excerpt">{{ data.excerpt }}</p>
+
+            @if (data.externalUrl) {
+                <a [href]="data.externalUrl" target="_blank" class="link">
+                    <mat-icon>open_in_new</mat-icon>
+                    Ver más
+                </a>
+            }
+        </div>
+
+    </mat-dialog-content>
+
+    <!-- FOOTER -->
+    <mat-dialog-actions align="end" class="footer">
+        <button mat-button mat-dialog-close>Cerrar</button>
+        <button mat-flat-button color="primary" (click)="onEdit()">
+            <mat-icon>edit</mat-icon>
+            Editar
+        </button>
+    </mat-dialog-actions>
+
+</div>

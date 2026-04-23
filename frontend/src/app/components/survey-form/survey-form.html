@@ -1,0 +1,97 @@
+<div class="dashboard-container animate-fade-in">
+    <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
+
+        <header class="builder-header">
+            <div class="title-group">
+                <button mat-icon-button type="button" routerLink="/admin/surveys" matTooltip="Volver">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <div>
+                    <h1 class="mat-headline-5">Configuración de Cuestionario</h1>
+                    <p class="text-muted">Diseñe la estructura y preguntas del violentómetro</p>
+                </div>
+            </div>
+            <span class="spacer"></span>
+            <div class="header-actions">
+                <button mat-stroked-button color="warn" type="button" routerLink="/admin/surveys">
+                    CANCELAR
+                </button>
+                <button mat-raised-button color="primary" [disabled]="surveyForm.invalid" type="submit" style="margin-left: 10px;">
+                    <mat-icon>save</mat-icon> GUARDAR TODO
+                </button>
+            </div>
+        </header>
+
+        <mat-card class="main-card">
+            <mat-card-header>
+                <mat-card-title>Datos del Cuestionario</mat-card-title>
+            </mat-card-header>
+            <mat-card-content style="padding-top: 20px;">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Título</mat-label>
+                    <input matInput formControlName="title" placeholder="Ej: Periodo Lectivo 2024">
+                    @if (surveyForm.get('title')?.hasError('required')) {
+                        <mat-error>El título es obligatorio</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Descripción / Instrucciones</mat-label>
+                    <textarea matInput formControlName="description" rows="2" placeholder="Breve explicación para los usuarios..."></textarea>
+                </mat-form-field>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="questions-section">
+            <div class="section-title">
+                <h3>Preguntas del Test</h3>
+                <span class="q-count">Total: {{ questions.length }}</span>
+            </div>
+
+            <div formArrayName="questions">
+                @for (q of questions.controls; track $index; let i = $index) {
+                    <mat-card [formGroupName]="i" class="question-card animate-slide-up">
+                        <mat-card-content class="question-row">
+
+                            <div class="q-badge">{{ i + 1 }}</div>
+
+                            <mat-form-field appearance="fill" class="flex-grow">
+                                <mat-label>Pregunta</mat-label>
+                                <input matInput formControlName="question" placeholder="Escriba la pregunta aquí">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="fill" class="zone-selector">
+                                <mat-label>Zona de Alerta</mat-label>
+                                <mat-select formControlName="idZone">
+                                    @for (zone of zones(); track zone.id) {
+                                        <mat-option [value]="zone.id">
+                                            <div class="zone-option">
+                                                <span class="dot" [style.background-color]="zone.color"></span>
+                                                {{ zone.name }}
+                                            </div>
+                                        </mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+
+                            <button mat-icon-button color="warn"
+                                    type="button"
+                                    (click)="removeQuestion(i)"
+                                    [disabled]="questions.length === 1">
+                                <mat-icon>delete_outline</mat-icon>
+                            </button>
+
+                        </mat-card-content>
+                    </mat-card>
+                }
+            </div>
+
+            <div class="add-action">
+                <button mat-fab extended color="primary" type="button" (click)="addQuestion()">
+                    <mat-icon>add</mat-icon>
+                    AGREGAR PREGUNTA
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

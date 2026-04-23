@@ -1,0 +1,38 @@
+<div class="user-theme">
+    <mat-drawer-container class="main-container" autosize>
+
+        <mat-drawer #drawer
+                    [mode]="isMobile ? 'over' : 'side'"
+                    [opened]="!isMobile"
+                    class="user-sidebar">
+            <app-sidebar (closeRequested)="drawer.close()"></app-sidebar>
+        </mat-drawer>
+
+        <mat-drawer-content class="user-content-wrapper">
+
+            <header class="top-navbar">
+                <button class="nav-menu-btn"
+                        (click)="drawer.toggle()"
+                        [class.is-open]="drawer.opened"
+                        aria-label="Alternar menú">
+                    <mat-icon>{{ drawer.opened ? 'menu_open' : 'menu' }}</mat-icon>
+                </button>
+
+                <div class="nav-spacer"></div>
+
+                <div class="nav-actions">
+                    <div class="safe-badge">
+                        <mat-icon>verified_user</mat-icon>
+                        <span>Entorno Seguro</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content" [@routeAnimations]="prepareRoute(outlet)">
+                <router-outlet #outlet="outlet"></router-outlet>
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+</div>

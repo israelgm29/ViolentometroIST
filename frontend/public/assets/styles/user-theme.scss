@@ -1,0 +1,73 @@
+@use 'theme-variables';  // Garantiza que las variables CSS estén disponibles
+@use 'mixins' as m;
+
+// ============================================
+// TEMA PRINCIPAL - DISEÑO INSTITUCIONAL
+// ============================================
+
+.user-theme {
+  min-height:  100vh;
+  background:  var(--bg-main);
+  color:       var(--text-primary);
+  font-family: var(--font-family-base);
+  font-size:   var(--font-size-md);
+  line-height: var(--line-height-normal);
+
+  // ── Tarjetas ──────────────────────────────
+  .card {
+    @include m.card-base;
+    @include m.card-hover-soft;
+    @include m.focus-ring;
+  }
+
+  .card-glass {
+    @include m.glass-surface;
+    padding: var(--space-lg);
+  }
+
+  // ── Tipografía ────────────────────────────
+  .title-brand {
+    @include m.text-gradient-brand;
+    font-family:   var(--font-family-heading);
+    font-weight:   var(--font-weight-bold);
+    line-height:   var(--line-height-tight);
+  }
+
+  .title-xl  { font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold);     line-height: var(--line-height-tight); }
+  .title-lg  { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold);     line-height: var(--line-height-tight); }
+  .title-md  { font-size: var(--font-size-2xl); font-weight: var(--font-weight-semibold); }
+  .title-sm  { font-size: var(--font-size-xl);  font-weight: var(--font-weight-semibold); }
+
+  .text-muted    { color: var(--text-muted);     font-size: var(--font-size-sm); }
+  .text-secondary{ color: var(--text-secondary); }
+
+  // ── Badges de estado ─────────────────────
+  .badge {
+    @include m.badge-base;
+
+    &--success { background: var(--color-success-light); color: var(--color-success); }
+    &--warning { background: var(--color-warning-light); color: var(--color-warning); }
+    &--danger  { background: var(--color-danger-light);  color: var(--color-danger);  }
+    &--info    { background: var(--color-info-light);    color: var(--color-info);    }
+  }
+
+  // ── Layout ────────────────────────────────
+  .flex-center  { @include m.flex-center; }
+  .flex-between { @include m.flex-between; }
+
+  .grid-auto {
+    @include m.responsive-grid;
+  }
+
+  // ── Utilidades de texto ───────────────────
+  .text-truncate { @include m.text-truncate; }
+  .text-clamp-2  { @include m.text-clamp(2); }
+  .text-clamp-3  { @include m.text-clamp(3); }
+
+  // ── Separador ─────────────────────────────
+  .divider {
+    border: none;
+    border-top: var(--border-width) solid var(--border-color);
+    margin: var(--space-lg) 0;
+  }
+}

@@ -1,0 +1,55 @@
+<nav class="sidebar">
+
+    <div class="sidebar-logo">
+        <img src="assets/logo.png" alt="Violentómetro ISTR" />
+    </div>
+
+    <ul class="sidebar-nav">
+        <li>
+            <a routerLink="/"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{exact: true}"
+               (click)="closeSidebar()">
+                <mat-icon>home</mat-icon>
+                <span>Inicio</span>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/violentometer"
+               routerLinkActive="active"
+               (click)="closeSidebar()">
+                <mat-icon>fact_check</mat-icon>
+                <span>Violentómetro</span>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/welfare"
+               routerLinkActive="active"
+               (click)="closeSidebar()">
+                <mat-icon>volunteer_activism</mat-icon>
+                <span>Bienestar Institucional</span>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/help"
+               routerLinkActive="active"
+               (click)="closeSidebar()">
+                <mat-icon>sos</mat-icon>
+                <span>Solicita Auxilio</span>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/campaigns"
+               routerLinkActive="active"
+               (click)="closeSidebar()">
+                <mat-icon>campaign</mat-icon>
+                <span>Campañas</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="sidebar-footer">
+        <span>© 2026 ISTR</span>
+    </div>
+
+</nav>

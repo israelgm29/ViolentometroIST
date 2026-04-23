@@ -1,0 +1,253 @@
+.dashboard-container {
+    padding: 28px;
+    background: linear-gradient(145deg, #f8f9ff 0%, #f5f5fa 100%);
+    min-height: 100vh;
+}
+
+/* ========================================= */
+/* HEADER MEJORADO */
+/* ========================================= */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    background: white;
+    padding: 20px 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(11, 16, 81, 0.06);
+    border: 1px solid rgba(11, 16, 81, 0.04);
+
+    h1 {
+        color: #0b1051; /* Azul institucional */
+        font-weight: 600;
+        margin: 0 0 4px 0;
+    }
+
+    .text-muted {
+        color: #5e5e7a;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+}
+
+/* Botón CREAR NUEVO con colores institucionales */
+.btn-crear {
+    background: linear-gradient(145deg, #0b1051, #1a1f6b);
+    color: white !important;
+    padding: 8px 24px;
+    border-radius: 30px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    box-shadow: 0 6px 14px rgba(11, 16, 81, 0.25);
+    transition: all 0.3s ease;
+
+    mat-icon {
+        color: white !important;
+        margin-right: 6px;
+    }
+
+    &:hover {
+        background: linear-gradient(145deg, #f8090e, #d1070c);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(248, 9, 14, 0.3);
+    }
+}
+
+/* ========================================= */
+/* TARJETA DE TABLA */
+/* ========================================= */
+.chart-card {
+    border-radius: 20px !important;
+    box-shadow: 0 10px 30px rgba(11, 16, 81, 0.08) !important;
+    background: white;
+    border: 1px solid rgba(11, 16, 81, 0.06);
+    overflow: hidden;
+}
+
+/* ========================================= */
+/* ESTADOS DE CUESTIONARIO (chips) */
+/* ========================================= */
+.status-active {
+    background: linear-gradient(145deg, #e1f5e8, #c8eed9) !important;
+    color: #0b5e2e !important;
+    border: 1px solid #9ad0b5;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    .status-icon {
+        color: #0f9240;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.status-inactive {
+    background: linear-gradient(145deg, #f2f2f2, #e8e8e8) !important;
+    color: #6b6b7a !important;
+    border: 1px solid #d1d1da;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    .status-icon {
+        color: #8b8b9c;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* ========================================= */
+/* BOTONES DE ACCIÓN */
+/* ========================================= */
+/* Botón Activar */
+.btn-activar {
+    background: rgba(11, 16, 81, 0.08) !important;
+    color: #0b1051 !important;
+    transition: all 0.25s ease;
+
+    mat-icon {
+        color: #0b1051 !important;
+    }
+
+    &:hover {
+        background: rgba(11, 16, 81, 0.15) !important;
+        transform: scale(1.12);
+    }
+}
+
+/* Botón Desactivar */
+.btn-desactivar {
+    background: rgba(248, 9, 14, 0.08) !important;
+    color: #f8090e !important;
+    transition: all 0.25s ease;
+
+    mat-icon {
+        color: #f8090e !important;
+        transform: rotate(180deg);
+    }
+
+    &:hover {
+        background: rgba(248, 9, 14, 0.15) !important;
+        transform: scale(1.12);
+    }
+}
+
+/* Botón Editar */
+.btn-editar {
+    color: #0b1051 !important;
+    background: rgba(11, 16, 81, 0.04) !important;
+    margin: 0 4px;
+    transition: all 0.25s ease;
+
+    &:hover {
+        background: rgba(11, 16, 81, 0.1) !important;
+        color: #0b1051 !important;
+        transform: translateY(-2px);
+    }
+}
+
+/* Botón Eliminar */
+.btn-eliminar {
+    color: #f8090e !important;
+    background: rgba(248, 9, 14, 0.04) !important;
+    transition: all 0.25s ease;
+
+    &:hover:not(:disabled) {
+        background: rgba(248, 9, 14, 0.12) !important;
+        color: #f8090e !important;
+        transform: translateY(-2px);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+/* ========================================= */
+/* TABLA MEJORADA */
+/* ========================================= */
+.full-width-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    th.mat-header-cell {
+        background: #f8f9ff;
+        color: #0b1051;
+        font-weight: 600;
+        font-size: 0.85rem;
+        letter-spacing: 0.3px;
+        padding: 16px 12px;
+        border-bottom: 2px solid rgba(11, 16, 81, 0.12);
+    }
+
+    td.mat-cell {
+        padding: 14px 12px;
+        color: #2c2c3a;
+        border-bottom: 1px solid rgba(11, 16, 81, 0.06);
+    }
+}
+
+.element-row {
+    transition: all 0.25s ease;
+
+    &:hover {
+        background: rgba(248, 9, 14, 0.02) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+}
+
+/* ========================================= */
+/* CONTEO DE PREGUNTAS */
+/* ========================================= */
+.questions-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #0b1051;
+
+    mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        color: #f8090e;
+    }
+}
+
+/* ========================================= */
+/* RESPONSIVE */
+/* ========================================= */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 16px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .btn-crear {
+        width: 100%;
+    }
+
+    td.mat-cell, th.mat-header-cell {
+        padding: 10px 8px !important;
+    }
+}

@@ -1,0 +1,46 @@
+<h2 mat-dialog-title class="detail-header">
+    <mat-icon>description</mat-icon>
+    Detalle de la Pregunta #{{ data.questionNumber }}
+</h2>
+
+<mat-dialog-content class="mat-typography">
+    <div class="detail-grid">
+        <div class="detail-item full-width">
+            <label>Pregunta</label>
+            <p class="question-text">{{ data.question }}</p>
+        </div>
+
+        <mat-divider class="full-width"></mat-divider>
+
+        <div class="detail-item">
+            <label>Zona de Riesgo</label>
+            <div class="zone-badge" [style.background-color]="getColorHex(data.zone.color)">
+                {{ data.zone.name }}
+            </div>
+        </div>
+
+        <div class="detail-item">
+            <label>Intensidad del Riesgo</label>
+            <div class="progress-container">
+                <mat-progress-bar
+                        mode="determinate"
+                        [value]="(data.zone.severity / 3) * 100"
+                        [style.--bar-color]="getColorHex(data.zone.color)">
+                </mat-progress-bar>
+                <span class="severity-label">Nivel {{ data.zone.severity }} de 3</span>
+            </div>
+        </div>
+
+        <div class="detail-item">
+            <label>Estado actual</label>
+            <div [class]="data.status ? 'status-active' : 'status-inactive'">
+                <mat-icon>{{ data.status ? 'check_circle' : 'cancel' }}</mat-icon>
+                {{ data.status ? 'Pregunta Activa' : 'Pregunta Inactiva' }}
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Cerrar</button>
+</mat-dialog-actions>

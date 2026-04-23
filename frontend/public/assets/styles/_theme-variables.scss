@@ -1,0 +1,143 @@
+// ============================================
+// VARIABLES GLOBALES — DOS TEMAS
+//
+// :root         → App usuario  (ONU Orange the World)
+// [data-theme="admin"] → Panel admin (ISTR azul marino + rojo)
+//
+// El AdminLayoutComponent debe agregar
+// data-theme="admin" al elemento host:
+//   @HostBinding('attr.data-theme') theme = 'admin';
+// ============================================
+
+// ══════════════════════════════════════════
+// TEMA USUARIO — Morado ONU + Naranja
+// ══════════════════════════════════════════
+:root {
+
+  --color-primary:       #6d28d9;
+  --color-primary-light: #8b5cf6;
+  --color-primary-dark:  #4c1d95;
+  --color-accent:        #ea580c;
+  --color-accent-light:  #fb923c;
+  --color-accent-dark:   #c2410c;
+
+  --color-success:       #16a34a;
+  --color-success-light: #dcfce7;
+  --color-warning:       #d97706;
+  --color-warning-light: #fef3c7;
+  --color-alert:         #ea580c;
+  --color-alert-light:   #fff7ed;
+  --color-danger:        #dc2626;
+  --color-danger-light:  #fef2f2;
+  --color-info:          #0891b2;
+  --color-info-light:    #cffafe;
+
+  --bg-main:      #faf8ff;
+  --bg-card:      #ffffff;
+  --bg-subtle:    #f3f0ff;
+  --border-color: rgba(109,40,217,0.1);
+
+  --text-primary:   #1e1033;
+  --text-secondary: #4b3d6e;
+  --text-muted:     #9d8ec4;
+  --text-inverse:   #ffffff;
+
+  --shadow-xs: 0 1px 3px  rgba(109,40,217,0.06);
+  --shadow-sm: 0 2px 10px rgba(109,40,217,0.07);
+  --shadow-md: 0 4px 20px rgba(109,40,217,0.10);
+  --shadow-lg: 0 8px 40px rgba(109,40,217,0.13);
+  --shadow-xl: 0 16px 60px rgba(109,40,217,0.16);
+}
+
+// ══════════════════════════════════════════
+// TEMA ADMIN — Azul marino ISTR + Rojo ISTR
+// ══════════════════════════════════════════
+[data-theme="admin"] {
+
+  --color-primary:       #0b1051;   // Azul marino exacto del logo
+  --color-primary-light: #1a237e;
+  --color-primary-dark:  #060b38;
+  --color-accent:        #f8090e;   // Rojo exacto del logo
+  --color-accent-light:  #f84735;
+  --color-accent-dark:   #c00008;
+
+  --color-success:       #16a34a;
+  --color-success-light: #dcfce7;
+  --color-warning:       #d97706;
+  --color-warning-light: #fef3c7;
+  --color-alert:         #ea580c;
+  --color-alert-light:   #fff7ed;
+  --color-danger:        #dc2626;
+  --color-danger-light:  #fef2f2;
+  --color-info:          #0891b2;
+  --color-info-light:    #cffafe;
+
+  --bg-main:      #f4f6fb;          // Azul muy claro frío
+  --bg-card:      #ffffff;
+  --bg-subtle:    #eef0f8;          // Azul marino muy suave
+  --border-color: rgba(11,16,81,0.1);
+
+  --text-primary:   #0b1051;        // Mismo azul marino
+  --text-secondary: #3a4080;
+  --text-muted:     #8a90b8;
+  --text-inverse:   #ffffff;
+
+  --shadow-xs: 0 1px 3px  rgba(11,16,81,0.06);
+  --shadow-sm: 0 2px 10px rgba(11,16,81,0.08);
+  --shadow-md: 0 4px 20px rgba(11,16,81,0.10);
+  --shadow-lg: 0 8px 40px rgba(11,16,81,0.13);
+  --shadow-xl: 0 16px 60px rgba(11,16,81,0.16);
+}
+
+// ══════════════════════════════════════════
+// TOKENS COMPARTIDOS (ambos temas)
+// ══════════════════════════════════════════
+:root, [data-theme="admin"] {
+
+  --font-family-base:    'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-family-heading: 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  --font-size-xs:   0.75rem;
+  --font-size-sm:   0.875rem;
+  --font-size-md:   1rem;
+  --font-size-lg:   1.125rem;
+  --font-size-xl:   1.25rem;
+  --font-size-2xl:  1.5rem;
+  --font-size-3xl:  1.875rem;
+  --font-size-4xl:  2.25rem;
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  --line-height-tight:  1.2;
+  --line-height-normal: 1.5;
+  --line-height-loose:  1.75;
+
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  --border-width: 1px;
+
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow:   400ms ease;
+
+  --z-base:    0;
+  --z-raised:  10;
+  --z-overlay: 100;
+  --z-modal:   200;
+  --z-toast:   300;
+}

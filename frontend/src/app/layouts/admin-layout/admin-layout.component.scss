@@ -1,0 +1,33 @@
+.admin-wrapper {
+  height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.main-sidebar {
+  width: 280px;
+  border-right: none !important;
+  background: #fafafa !important;
+  box-shadow: 2px 0 16px rgba(92, 26, 26, 0.08) !important;
+}
+
+.main-content-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.router-container {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-track { background: #f5f7fa; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    &:hover { background: rgba(0, 0, 0, 0.3); }
+  }
+}
+
+@media (max-width: 960px) {
+  .main-sidebar { width: 260px; }
+}

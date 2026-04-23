@@ -1,0 +1,110 @@
+// ============================================
+// MIXINS REUTILIZABLES - ESTILO INSTITUCIONAL
+// ============================================
+
+// 1. Tarjeta base
+@mixin card-base {
+    background:    var(--bg-card);
+    border:        var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow:    var(--shadow-sm);
+    padding:       var(--space-lg);
+    transition:
+            box-shadow var(--transition-normal),
+            transform  var(--transition-normal),
+            border-color var(--transition-normal);
+}
+
+// 2. Hover sutil con respeto a prefers-reduced-motion
+@mixin card-hover-soft {
+    &:hover {
+        box-shadow:   var(--shadow-md);
+        border-color: var(--color-accent-light);
+
+        @media (prefers-reduced-motion: no-preference) {
+            transform: translateY(-4px);
+        }
+    }
+}
+
+// 3. Gradiente de texto de marca
+@mixin text-gradient-brand {
+    background:              linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip:         text;
+}
+
+// 4. Flex centrado
+@mixin flex-center {
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+}
+
+// 5. Flex entre extremos
+@mixin flex-between {
+    display:         flex;
+    align-items:     center;
+    justify-content: space-between;
+}
+
+// 6. Grid responsivo
+@mixin responsive-grid($min-width: 280px, $gap: var(--space-md)) {
+    display:               grid;
+    grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+    gap:                   $gap;
+}
+
+// 7. Truncar texto a una línea
+@mixin text-truncate {
+    overflow:      hidden;
+    white-space:   nowrap;
+    text-overflow: ellipsis;
+}
+
+// 8. Truncar texto multilínea
+@mixin text-clamp($lines: 2) {
+    display:            -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow:           hidden;
+}
+
+// 9. Badge / Chip de estado
+@mixin badge-base {
+    display:       inline-flex;
+    align-items:   center;
+    padding:       var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-size:     var(--font-size-xs);
+    font-weight:   var(--font-weight-semibold);
+    line-height:   1;
+}
+
+// 10. Focus visible accesible
+@mixin focus-ring {
+    &:focus-visible {
+        outline:        2px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+}
+
+// 11. Superficie con glassmorphism sutil
+@mixin glass-surface {
+    background:         var(--glass-bg);
+    border:             var(--border-width) solid var(--glass-border);
+    border-radius:      var(--radius-lg);
+    backdrop-filter:    blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:         0 4px 24px var(--glass-shadow);
+}
+
+// 12. Responsive breakpoints
+@mixin breakpoint($bp) {
+    @if $bp == sm    { @media (min-width: 640px)  { @content; } }
+    @else if $bp == md    { @media (min-width: 768px)  { @content; } }
+    @else if $bp == lg    { @media (min-width: 1024px) { @content; } }
+    @else if $bp == xl    { @media (min-width: 1280px) { @content; } }
+    @else if $bp == 2xl   { @media (min-width: 1536px) { @content; } }
+}

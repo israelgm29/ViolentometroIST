@@ -1,0 +1,105 @@
+<div class="login-container">
+
+    <!-- ── Panel izquierdo: imagen institucional ── -->
+    <div class="login-image-panel">
+        <div class="image-overlay">
+
+            <div class="overlay-content">
+                <div class="overlay-badge">
+                    <mat-icon>favorite</mat-icon>
+                    Orange the World — ONU
+                </div>
+                <h2 class="overlay-title">
+                    Bienestar<br><span>Institucional</span>
+                </h2>
+                <p class="overlay-desc">
+                    Herramienta de detección y prevención de violencia de género
+                    del Instituto Superior Tecnológico Riobamba.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── Panel derecho: formulario ── -->
+    <div class="login-form-panel">
+        <div class="login-wrapper">
+
+            <!-- Logo solo en móvil -->
+            <div class="mobile-brand">
+                <img src="assets/logo.png" alt="ISTR" class="mobile-logo"/>
+                <span class="mobile-brand-name">Instituto Superior Tecnológico Riobamba</span>
+            </div>
+
+            <!-- Header -->
+            <div class="form-header">
+                <div class="header-icon">
+                    <mat-icon>admin_panel_settings</mat-icon>
+                </div>
+                <h1 class="form-title">Panel Administrativo</h1>
+                <p class="form-subtitle">Ingresa tus credenciales para continuar</p>
+            </div>
+
+            <!-- Formulario -->
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+                <mat-form-field appearance="outline" class="field-full">
+                    <mat-label>Correo electrónico</mat-label>
+                    <input matInput
+                           type="email"
+                           placeholder="admin@istriobamba.edu.ec"
+                           formControlName="email"
+                           autocomplete="email"/>
+                    <mat-icon matPrefix>email</mat-icon>
+                    <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="field-full">
+                    <mat-label>Contraseña</mat-label>
+                    <input matInput
+                           [type]="hidePassword ? 'password' : 'text'"
+                           placeholder="••••••••"
+                           formControlName="password"
+                           autocomplete="current-password"/>
+                    <mat-icon matPrefix>lock</mat-icon>
+                    <button mat-icon-button matSuffix type="button"
+                            (click)="hidePassword = !hidePassword"
+                            [attr.aria-label]="hidePassword ? 'Mostrar' : 'Ocultar'">
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+                </mat-form-field>
+
+                @if (errorMessage()) {
+                    <div class="error-banner">
+                        <mat-icon>error_outline</mat-icon>
+                        <span>{{ errorMessage() }}</span>
+                    </div>
+                }
+
+                <button mat-raised-button
+                        type="submit"
+                        class="btn-login"
+                        [disabled]="loginForm.invalid || loading()">
+                    @if (loading()) {
+                        <mat-spinner diameter="20" class="spinner"></mat-spinner>
+                    } @else {
+                        <mat-icon>login</mat-icon>
+                    }
+                    <span>
+                      {{ loading() ? 'Ingresando...' : 'Iniciar Sesión' }}
+                 </span>
+                </button>
+
+            </form>
+
+            <!-- Badge ONU -->
+            <div class="onu-footer">
+                <mat-icon>favorite</mat-icon>
+                <span>Desarrollado por: <strong>Departamento de TI del Instituto Superior Tecnológico Riobamba</strong> </span>
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,187 @@
+<!-- admin-sidebar.component.html -->
+<div class="sidebar-container">
+    <!-- Header -->
+    <div class="sidebar-header">
+        <div class="brand-wrapper">
+            <div class="brand-icon">
+                <mat-icon>shield_with_heart</mat-icon>
+                <div class="icon-glow"></div>
+            </div>
+            <div class="brand-text">
+                <h1>Violentómetro</h1>
+                <span>SISTEMA ISTR</span>
+            </div>
+        </div>
+        <div class="header-accent"></div>
+    </div>
+
+    <!-- Navegación principal -->
+    <nav class="sidebar-nav">
+
+        <!-- Sección Principal - visible para todos los roles autenticados -->
+        <div class="nav-section">
+            <div class="section-header">
+                <span class="section-dot"></span>
+                <span class="section-label">Principal</span>
+                <span class="section-line"></span>
+            </div>
+
+            <ul class="nav-list">
+                <!-- Dashboard: ADMIN y WELFARE -->
+                @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+                    <li>
+                        <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>dashboard</mat-icon>
+                            <span>Panel de Control</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                }
+
+                <!-- Cuestionarios: ADMIN y WELFARE -->
+                @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+                    <li>
+                        <a mat-list-item routerLink="/admin/surveys" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>list_alt</mat-icon>
+                            <span>Cuestionarios</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                }
+
+                <!-- Preguntas: ADMIN y WELFARE -->
+                @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+                    <li>
+                        <a mat-list-item routerLink="/admin/questions" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>analytics</mat-icon>
+                            <span>Preguntas</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                }
+
+                <!-- Alertas: solo ADMIN -->
+                @if (authService.hasRole('ROLE_ADMIN')) {
+                    <li>
+                        <a mat-list-item routerLink="/admin/violence-zones" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>crisis_alert</mat-icon>
+                            <span>Alertas</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                }
+
+                <!-- Gestión de Usuarios: ADMIN, ANALYST y WELFARE -->
+                @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_ANALYST', 'ROLE_WELFARE')) {
+                    <li>
+                        <a mat-list-item routerLink="/admin/users" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>group</mat-icon>
+                            <span>Gestión de Usuarios</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                }
+
+                <!-- Campañas: ADMIN y WELFARE -->
+                @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+                    <li>
+                        <a mat-list-item routerLink="/admin/campaigns" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>campaign</mat-icon>
+                            <span>Campañas</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Divisor - solo visible para ADMIN (las secciones exclusivas) -->
+        @if (authService.hasRole('ROLE_ADMIN')) {
+            <div class="divider"></div>
+        }
+
+        <!-- Sección Sistema - solo ADMIN -->
+        @if (authService.hasRole('ROLE_ADMIN')) {
+            <div class="nav-section">
+                <div class="section-header">
+                    <span class="section-dot"></span>
+                    <span class="section-label">Sistema</span>
+                    <span class="section-line"></span>
+                </div>
+
+                <ul class="nav-list">
+                    <li>
+                        <a mat-list-item routerLink="/admin/sys-users" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>remember_me</mat-icon>
+                            <span>Usuarios del sistema</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                    <li>
+                        <a mat-list-item routerLink="/admin/institutes" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>apartment</mat-icon>
+                            <span>Institutos</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                    <li>
+                        <a mat-list-item routerLink="/admin/settings" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>settings</mat-icon>
+                            <span>Configuración</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        }
+
+        <!-- Reportes: ADMIN y WELFARE -->
+        @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+            <div class="divider"></div>
+            <div class="nav-section">
+                <div class="section-header">
+                    <span class="section-dot"></span>
+                    <span class="section-label">Reportes</span>
+                    <span class="section-line"></span>
+                </div>
+
+                <ul class="nav-list">
+                    <li>
+                        <a mat-list-item routerLink="/admin/report/general" routerLinkActive="active" (click)="closeSidebar()">
+                            <mat-icon>bar_chart</mat-icon>
+                            <span>Reporte General</span>
+                            <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        }
+
+        <!-- Perfil - visible para todos -->
+        <div class="divider"></div>
+        <div class="nav-section">
+            <ul class="nav-list">
+                <li>
+                    <a mat-list-item routerLink="/admin/profile" routerLinkActive="active" (click)="closeSidebar()">
+                        <mat-icon>account_circle</mat-icon>
+                        <span>Mi Perfil</span>
+                        <mat-icon class="arrow-icon">chevron_right</mat-icon>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+        <div class="status-indicator">
+            <span class="status-led"></span>
+            <span>Sistema operativo</span>
+        </div>
+        <div class="version-info">
+            <span>v1.0.0</span>
+            <span class="separator">•</span>
+            <span>ISTR © 2025</span>
+        </div>
+    </div>
+</div>

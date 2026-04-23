@@ -1,0 +1,241 @@
+.main-navbar {
+    background: white !important;
+    border-bottom: 1px solid rgba(11, 16, 81, 0.12); /* Azul institucional sutil */
+    box-shadow: 0 2px 10px rgba(248, 9, 14, 0.05); /* Sombra con tinte rojo */
+    height: 64px;
+    padding: 0 24px;
+    color: #0b1051; /* Azul para el texto principal */
+
+    .menu-toggle {
+        transition: all 0.3s ease;
+
+        mat-icon {
+            color: #0b1051; /* Azul institucional */
+        }
+
+        &:hover {
+            background-color: rgba(248, 9, 14, 0.06); /* Rojo suave al hover */
+
+            mat-icon {
+                color: #f8090e !important; /* Rojo institucional */
+            }
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+/* ========================================= */
+/* PERFIL DE USUARIO - Con la nueva paleta */
+/* ========================================= */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 2px;
+
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0b1051; /* Azul institucional */
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+        }
+
+        .user-role {
+            font-size: 0.7rem;
+            color: #f8090e; /* Rojo institucional */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    .avatar-button {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        /* Gradiente con los colores institucionales */
+        background: linear-gradient(145deg, #0b1051 0%, #f8090e 90%);
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 2px 8px rgba(248, 9, 14, 0.2);
+
+        mat-icon {
+            color: white !important;
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+        }
+
+        &:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(248, 9, 14, 0.35);
+            border-color: white;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        &:hover::after {
+            opacity: 1;
+        }
+    }
+}
+
+/* ========================================= */
+/* MENÚ DESPLEGABLE - Estilizado */
+/* ========================================= */
+::ng-deep .user-menu {
+    margin-top: 8px;
+    min-width: 200px !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(11, 16, 81, 0.15) !important;
+    border: 1px solid rgba(11, 16, 81, 0.08) !important;
+
+    .mat-mdc-menu-content {
+        padding: 6px 0 !important;
+    }
+
+    .mat-mdc-menu-item {
+        height: 44px !important;
+        color: #0b1051 !important; /* Azul institucional */
+        transition: all 0.2s ease;
+        font-weight: 500;
+        gap: 8px;
+
+        .mat-icon {
+            color: #f8090e !important; /* Rojo para iconos */
+            margin-right: 8px !important;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+
+        &:hover {
+            background-color: rgba(248, 9, 14, 0.06) !important; /* Rojo suave */
+
+            .mat-icon {
+                color: #f8090e !important;
+                transform: scale(1.1);
+            }
+        }
+
+        &:active {
+            background-color: rgba(11, 16, 81, 0.08) !important;
+        }
+    }
+
+    .mat-divider {
+        margin: 4px 0 !important;
+        border-color: rgba(11, 16, 81, 0.12) !important;
+    }
+}
+
+/* ========================================= */
+/* BADGE O INDICADOR (si lo usas) */
+/* ========================================= */
+.notification-badge {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 8px;
+        height: 8px;
+        background: #f8090e; /* Rojo institucional */
+        border-radius: 50%;
+        border: 2px solid white;
+        animation: pulse-red 2s infinite;
+    }
+}
+
+@keyframes pulse-red {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ========================================= */
+/* RESPONSIVE - Manteniendo la paleta */
+/* ========================================= */
+@media (max-width: 960px) {
+    .user-info {
+        display: none !important;
+    }
+
+    .main-navbar {
+        padding: 0 16px;
+    }
+
+    .avatar-button {
+        width: 40px !important;
+        height: 40px !important;
+
+        mat-icon {
+            font-size: 22px !important;
+            width: 22px !important;
+            height: 22px !important;
+        }
+    }
+}
+
+/* ========================================= */
+/* OPCIONAL: Indicador de ruta activa */
+/* ========================================= */
+.route-indicator {
+    font-size: 0.85rem;
+    color: #0b1051;
+    background: rgba(11, 16, 81, 0.06);
+    padding: 4px 12px;
+    border-radius: 30px;
+    margin-left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    mat-icon {
+        color: #f8090e;
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+    }
+
+    @media (max-width: 600px) {
+        display: none;
+    }
+}

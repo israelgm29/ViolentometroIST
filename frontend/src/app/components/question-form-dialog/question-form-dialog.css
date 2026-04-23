@@ -1,0 +1,94 @@
+.dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #f8f9fa;
+    margin: 0 !important;
+    padding: 20px 24px !important;
+}
+
+/* Contenedor del Formulario */
+.form-container {
+    padding: 24px !important;
+    max-height: 70vh;
+}
+
+/* Sistema de Rejilla Responsivo */
+.form-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+}
+
+/* Definición de Columnas */
+.col-4 { flex: 1 1 calc(33.3% - 16px); min-width: 120px; }
+.col-6 { flex: 1 1 calc(50% - 16px); min-width: 200px; }
+.col-8 { flex: 1 1 calc(66.6% - 16px); min-width: 250px; }
+.col-12 { flex: 1 1 100%; }
+
+
+
+mat-icon[matPrefix] {
+    color: #5c6bc0;
+    margin-right: 8px;
+}
+
+/* Espaciado para el Toggle */
+.mt-3 {
+    margin-top: 1rem;
+}
+
+/* Acciones Inferiores */
+.dialog-footer {
+    padding: 16px 24px !important;
+    background-color: #fcfcfc;
+    border-top: 1px solid #eee;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 600px) {
+    .col-4, .col-8, .col-6 {
+        flex: 1 1 100% !important;
+    }
+}
+
+
+/* Contenedor principal de la opción */
+.option-container {
+    display: flex;
+    flex-direction: column; /* Apila texto arriba y barra abajo */
+    justify-content: center;
+    padding: 8px 0;
+    width: 100%;
+}
+
+/* Estilo del texto */
+.zone-label {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 4px; /* Espacio entre texto y barra */
+    line-height: 1;
+}
+
+/* Contenedor de la barra con ANCHO DEFINIDO */
+.progress-wrapper {
+    width: 180px; /* Ajusta este valor al ancho que desees que tengan TODAS */
+    height: 6px;
+}
+
+/* Personalización de la barra de Angular Material */
+::ng-deep .progress-wrapper .mat-mdc-progress-bar {
+    height: 6px !important;
+    border-radius: 3px !important;
+    width: 100% !important; /* Ocupa el 100% de los 180px del wrapper */
+}
+
+/* Color dinámico de la barra interna */
+::ng-deep .progress-wrapper .mdc-linear-progress__bar-inner {
+    border-color: var(--bar-color) !important;
+}
+
+/* Color de fondo de la barra (el carril vacío) */
+::ng-deep .progress-wrapper .mdc-linear-progress__buffer-bar {
+    background-color: #f0f0f0 !important;
+}

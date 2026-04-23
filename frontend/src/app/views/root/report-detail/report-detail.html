@@ -1,0 +1,64 @@
+@if (loading()) {
+    <div class="loading-container" style="display: flex; justify-content: center; padding: 100px;">
+        <mat-spinner diameter="50"></mat-spinner>
+    </div>
+} @else {
+    <div class="report-container">
+        <header class="report-header">
+            <button mat-icon-button routerLink="/admin/dashboard">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h1>Análisis Detallado: {{ type | uppercase }}</h1>
+        </header>
+
+        <div class="report-content">
+            @if (chartOptions()) {
+                <mat-card class="chart-card">
+                    <apx-chart
+                            [series]="chartOptions().series"
+                            [chart]="chartOptions().chart"
+                            [plotOptions]="chartOptions().plotOptions"
+                            [xaxis]="chartOptions().xaxis"
+                            [labels]="chartOptions().labels"
+                            [colors]="chartOptions().colors">
+                    </apx-chart>
+                </mat-card>
+            }
+
+            <mat-card class="table-card">
+                <table class="styled-table">
+                    <thead>
+                    <tr>
+                        <th>{{ type === 'preguntas' ? 'Pregunta' : 'Categoría' }}</th>
+                        <th>Nivel de Riesgo</th>
+                        <th>Cantidad de Estudiantes</th>
+                        <th>Impacto (%)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of reportData(); track item.label) {
+                            <tr>
+                                <td class="label-cell">
+                                    <strong>{{ item.label }}</strong>
+                                </td>
+                                <td>
+                                    <span class="badge" [style.background]="item.color">
+                                        {{ item.group }}
+                                    </span>
+                                </td>
+                                <td><strong>{{ item.value }}</strong></td>
+                                <td>{{ item.percentage | number:'1.1-2' }}%</td>
+                            </tr>
+                        } @empty {
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 20px;">
+                                    No se encontraron registros para este periodo.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </mat-card>
+        </div>
+    </div>
+}

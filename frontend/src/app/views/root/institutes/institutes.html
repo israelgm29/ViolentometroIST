@@ -1,0 +1,159 @@
+<div class="dashboard-container">
+
+    <header class="dashboard-header">
+        <h1 class="mat-headline-5">Gestión de Institutos</h1>
+        <p class="text-muted">Análisis estadístico institucional</p>
+    </header>
+
+    <div class="widgets-grid">
+        <mat-card class="widget-card">
+            <mat-card-content>
+                <div class="widget-icon bg-light-blue">
+                    <mat-icon color="primary">business</mat-icon>
+                </div>
+                <div class="widget-info">
+                    <span class="widget-value">{{ dataSource.data.length }}</span>
+                    <span class="widget-info">Institutos Registrados</span>
+                </div>
+            </mat-card-content>
+
+        </mat-card>
+
+        <mat-card class="widget-card">
+            <mat-card-content>
+                <div class="widget-icon bg-light-red">
+                    <mat-icon>check_circle</mat-icon>
+                </div>
+                <div class="widget-info">
+                    <span class="widget-value">{{ getActiveCount() }}</span>
+                    <span class="stat-label">Sedes Activas</span>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="widget-card">
+            <mat-card-content>
+                <div class="widget-icon bg-orange">
+                    <mat-icon>update</mat-icon>
+                </div>
+                <div class="widget-info">
+                    <span class="widget-value">{{ getLatestInstituteName() }}</span>
+                    <span class="stat-label">Último Registro</span>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+    <mat-card class="table-card mat-elevation-z2">
+        <div class="table-toolbar">
+            <div class="search-box">
+                <mat-icon>search</mat-icon>
+                <input type="text" (keyup)="applyFilter($event)" placeholder="Buscar institutos..." #input>
+            </div>
+
+            <div class="toolbar-actions">
+                <button mat-icon-button (click)="openDialog()" matTooltip="Nuevo Instituto" color="primary">
+                    <mat-icon>add_circle</mat-icon>
+                </button>
+
+                <button mat-icon-button [matMenuTriggerFor]="filterMenu" matTooltip="Filtrar por estado">
+                    <mat-icon>filter_list</mat-icon>
+                </button>
+
+                <mat-menu #filterMenu="matMenu">
+                    <button mat-menu-item (click)="filterByStatus('all')">
+                        <mat-icon>list</mat-icon>
+                        <span>Mostrar todos</span>
+                    </button>
+                    <button mat-menu-item (click)="filterByStatus('active')">
+                        <mat-icon color="primary">check_circle</mat-icon>
+                        <span>Solo Activos</span>
+                    </button>
+                    <button mat-menu-item (click)="filterByStatus('inactive')">
+                        <mat-icon color="warn">block</mat-icon>
+                        <span>Solo Inactivos</span>
+                    </button>
+                </mat-menu>
+
+                <button mat-icon-button
+                        (click)="exportToExcel()"
+                        matTooltip="Exportar a Excel"
+                        [disabled]="isExporting">
+
+                    @if (!isExporting) {
+                        <mat-icon style="color: #2e7d32;">grid_on</mat-icon>
+                    } @else {
+                        <mat-icon class="spin-animation">sync</mat-icon>
+                    }
+                </button>
+            </div>
+        </div>
+        <mat-card-content class="p-0 d-flex flex-column h-100">
+            <div class="table-container">
+                <table mat-table [dataSource]="dataSource" class="full-width-table">
+
+                    <ng-container matColumnDef="code">
+                        <th mat-header-cell *matHeaderCellDef> Código</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.code }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Nombre</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="city">
+                        <th mat-header-cell *matHeaderCellDef> Ciudad</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.city }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="province">
+                        <th mat-header-cell *matHeaderCellDef> Provincia</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.province }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="phone">
+                        <th mat-header-cell *matHeaderCellDef> Teléfono</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.phone }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef> Email</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.email }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef> Estado</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span [class]="element.status ? 'status-active' : 'status-inactive'">
+                                {{ element.status ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef> Acciones</th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button color="primary" (click)="openDialog(element)" matTooltip="Editar">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" (click)="deleteInstitute(element.id)"
+                                    matTooltip="Borrar">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="viewDetail(element)" matTooltip="Ver Detalles">
+                                <mat-icon>info_outline</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </mat-card-content>
+    </mat-card>
+</div>

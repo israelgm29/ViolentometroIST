@@ -1,0 +1,297 @@
+/* ========================================
+   1. LAYOUT PRINCIPAL
+   ======================================== */
+.dashboard-container {
+    padding: 24px;
+    background-color: #fafafa;
+    min-height: calc(100vh - 64px);
+}
+
+.builder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.title-group > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.title-group h1 {
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.title-group p {
+    margin: 0;
+    color: #757575;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ========================================
+   2. TARJETAS (CARDS)
+   ======================================== */
+
+/* Tarjeta principal - Datos del Cuestionario */
+.main-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+    margin-bottom: 40px;
+    border-top: 6px solid #3f51b5;
+    overflow: hidden;
+}
+
+.main-card .mat-mdc-card-header {
+    background-color: #f5f5f5;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.main-card .mat-mdc-card-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+}
+
+.main-card .mat-mdc-card-content {
+    padding: 24px !important;
+}
+
+.main-card .mat-mdc-form-field {
+    margin-bottom: 16px;
+}
+
+.main-card .mat-mdc-form-field:last-child {
+    margin-bottom: 0;
+}
+
+.main-card .mat-mdc-form-field.mat-form-field-appearance-outline .mat-mdc-text-field-wrapper {
+    background-color: white;
+}
+
+.main-card textarea.mat-mdc-input-element {
+    min-height: 60px;
+    resize: vertical;
+}
+
+/* Tarjetas de preguntas */
+.question-card {
+    margin-bottom: 16px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.question-card:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1) !important;
+    transform: translateY(-2px);
+    border-left-color: #3f51b5;
+}
+
+.question-card .mat-mdc-card-content {
+    padding: 8px 16px;
+}
+
+/* ========================================
+   3. FILA DE PREGUNTA DINÁMICA
+   ======================================== */
+.question-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+}
+
+.q-badge {
+    background: #3f51b5;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-right: 8px;
+}
+
+.flex-grow {
+    flex: 1;
+}
+
+.zone-selector {
+    width: 250px;
+}
+
+/* ========================================
+   4. SELECTOR DE ZONAS (COLORES)
+   ======================================== */
+.zone-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* ========================================
+   5. SECCIÓN DE PREGUNTAS
+   ======================================== */
+.questions-section {
+    margin-top: 32px;
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.section-title h3 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.q-count {
+    background: #e8eaf6;
+    color: #3f51b5;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* ========================================
+   6. HELPERS Y ACCIONES
+   ======================================== */
+.add-action {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 50px 0;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.spacer {
+    flex: 1;
+}
+
+.text-muted {
+    color: #757575;
+}
+
+/* ========================================
+   7. ANIMACIONES
+   ======================================== */
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-in;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   8. RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .builder-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .question-row {
+        flex-wrap: wrap;
+        padding: 12px 16px;
+    }
+
+    .q-badge {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+
+    .zone-selector {
+        width: 100%;
+    }
+
+    .section-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-container {
+        padding: 16px;
+    }
+
+    .title-group h1 {
+        font-size: 1.25rem;
+    }
+
+    .title-group p {
+        font-size: 0.8rem;
+    }
+
+    .main-card .mat-mdc-card-header {
+        padding: 16px;
+    }
+
+    .main-card .mat-mdc-card-content {
+        padding: 16px !important;
+    }
+}

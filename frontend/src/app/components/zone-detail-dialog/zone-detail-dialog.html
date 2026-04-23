@@ -1,0 +1,82 @@
+<div class="detail-wrapper" [style.border-left]="'6px solid ' + data.color">
+    <h2 mat-dialog-title>
+        <mat-icon color="primary">info</mat-icon>
+        Detalles de la Zona
+    </h2>
+
+    <mat-dialog-content>
+        <div class="detail-grid">
+
+            <div class="detail-item full-width">
+                <label>Nombre del Nivel</label>
+                <p>{{ data.name }}</p>
+            </div>
+
+            <div class="detail-item">
+                <label>Color Asignado</label>
+                <div class="color-badge">
+                    <div class="color-dot" [style.background-color]="data.color"></div>
+                    <span>{{ data.color | titlecase }}</span>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <label>Severidad</label>
+                <p class="severity-value">Nivel {{ data.severity }}</p>
+            </div>
+
+            <div class="detail-item full-width">
+                <label>Descripción y Protocolo de Actuación</label>
+                <p class="description-text">{{ data.description }}</p>
+            </div>
+
+            <!-- ─── Sección resultado del quiz ───────────────────────────── -->
+            @if (data.resultTitle || data.resultMessage || data.recommendations?.length) {
+                <div class="section-divider full-width">
+                    <mat-icon>quiz</mat-icon>
+                    <span>Resultado del Cuestionario</span>
+                </div>
+
+                @if (data.resultTitle) {
+                    <div class="detail-item full-width">
+                        <label>Título del Resultado</label>
+                        <p class="result-title">{{ data.resultTitle }}</p>
+                    </div>
+                }
+
+                @if (data.resultMessage) {
+                    <div class="detail-item full-width">
+                        <label>Mensaje</label>
+                        <p class="description-text">{{ data.resultMessage }}</p>
+                    </div>
+                }
+
+                @if (data.recommendations?.length) {
+                    <div class="detail-item full-width">
+                        <label>Recomendaciones</label>
+                        <ul class="recommendations-list">
+                            @for (rec of data.recommendations; track $index) {
+                                <li>
+                                    <mat-icon>chevron_right</mat-icon>
+                                    {{ rec }}
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            } @else {
+                <div class="detail-item full-width">
+                    <p class="no-result-config">
+                        <mat-icon>info_outline</mat-icon>
+                        Sin configuración de resultado. Edita la zona para agregar título, mensaje y recomendaciones.
+                    </p>
+                </div>
+            }
+
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-flat-button color="primary" mat-dialog-close>Cerrar</button>
+    </mat-dialog-actions>
+</div>
