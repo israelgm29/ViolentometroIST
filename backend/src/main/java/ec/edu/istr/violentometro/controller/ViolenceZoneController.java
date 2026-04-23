@@ -24,7 +24,7 @@ class ViolenceZoneController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ViolenceZoneDTO> getById(@PathVariable Integer id) {
+    public ResponseEntity<ViolenceZoneDTO> getById(@PathVariable("id") Integer id) {
         // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
         return ResponseEntity.ok(violenceZoneService.findById(id));
     }
@@ -36,14 +36,14 @@ class ViolenceZoneController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ViolenceZoneDTO> update(@PathVariable Integer id, @RequestBody @Valid ViolenceZoneDTO violenceZoneDTO) {
+    public ResponseEntity<ViolenceZoneDTO> update(@PathVariable("id") Integer id, @RequestBody @Valid ViolenceZoneDTO violenceZoneDTO) {
         // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
         ViolenceZoneDTO updatedViolenceZone = violenceZoneService.updateOne(id, violenceZoneDTO);
         return ResponseEntity.ok(updatedViolenceZone);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
         violenceZoneService.deleteById(id);
         return ResponseEntity.noContent().build();

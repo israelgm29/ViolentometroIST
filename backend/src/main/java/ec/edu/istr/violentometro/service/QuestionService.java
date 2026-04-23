@@ -2,11 +2,10 @@ package ec.edu.istr.violentometro.service;
 
 import ec.edu.istr.violentometro.components.QuestionMapper;
 import ec.edu.istr.violentometro.dto.QuestionDTO;
-
+import ec.edu.istr.violentometro.dto.QuestionZoneDTO;
 import ec.edu.istr.violentometro.model.Question;
 import ec.edu.istr.violentometro.repository.QuestionRepository;
 import ec.edu.istr.violentometro.repository.ViolenceZoneRepository;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,17 +14,21 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor // Genera el constructor con todos los final fields (DI)
+@RequiredArgsConstructor
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
-    private final ViolenceZoneRepository zoneRepository; // Inyección del Repository de Zone
+    private final ViolenceZoneRepository zoneRepository;
     private final QuestionMapper questionMapper;
 
-    // Ya no es necesario el 'BaseService<Question>' si no aporta valor
+
 
     public List<QuestionDTO> findAll() {
         return questionMapper.toDto(questionRepository.findAll());
+    }
+
+    public List<QuestionZoneDTO> findAllWhitZone() {
+        return questionMapper.toDtoWithZone(questionRepository.findAllWithZoneEagerly());
     }
 
     public QuestionDTO findById(Integer id) {
@@ -42,9 +45,7 @@ public class QuestionService {
 
         // 2. Convertimos el DTO a Entidad
         Question newQuestion = questionMapper.toEntity(dto);
-        // Aquí deberías setear la entidad Zone completa en newQuestion,
-        // pero por simplicidad solo se lanza la excepción si no existe.
-        // Si Zone es una Entidad compleja, necesitarías: newQuestion.setIdZone(zoneEntity);
+
 
         // 3. Guardamos y devolvemos el DTO
         return questionMapper.toDto(questionRepository.save(newQuestion));

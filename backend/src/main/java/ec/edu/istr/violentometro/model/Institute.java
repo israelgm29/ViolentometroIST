@@ -41,8 +41,8 @@ public class Institute {
     @Column(name = "province", length = Integer.MAX_VALUE)
     private String province;
 
-    @Column(name = "county", length = Integer.MAX_VALUE)
-    private String county;
+    @Column(name = "country", length = Integer.MAX_VALUE)
+    private String country;
 
     @Column(name = "phone", length = Integer.MAX_VALUE)
     private String phone;
@@ -58,11 +58,18 @@ public class Institute {
     private Map<String, Object> config;
 
     @Column(name = "status")
-    private Boolean status;
+    private Boolean status =true;
 
-    @Column(name = "created_date")
+    @Column(name = "created_date", updatable = false)
     private OffsetDateTime createdDate;
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdDate = OffsetDateTime.now();
+        if (this.status == null) {
+            this.status = true;
+        }
+    }
 
 
 }

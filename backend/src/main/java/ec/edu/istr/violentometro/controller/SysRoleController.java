@@ -24,7 +24,7 @@ class SysRoleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SysRoleDTO> getById(@PathVariable Integer id) {
+    public ResponseEntity<SysRoleDTO> getById(@PathVariable("id") Integer id) {
         // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
         return ResponseEntity.ok(sysRoleService.findById(id));
     }
@@ -36,14 +36,14 @@ class SysRoleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SysRoleDTO> update(@PathVariable Integer id, @RequestBody @Valid SysRoleDTO sysRoleDTO) {
+    public ResponseEntity<SysRoleDTO> update(@PathVariable("id") Integer id, @RequestBody @Valid SysRoleDTO sysRoleDTO) {
         // El Service maneja la lógica de actualización segura y lanza 404 si no existe
         SysRoleDTO updatedRole = sysRoleService.updateOne(id, sysRoleDTO);
         return ResponseEntity.ok(updatedRole);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         // El Service maneja la lógica de validación y lanza 404 si no existe
         sysRoleService.deleteById(id);
         return ResponseEntity.noContent().build();

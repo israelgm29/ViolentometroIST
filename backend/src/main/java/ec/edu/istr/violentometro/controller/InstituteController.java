@@ -25,7 +25,7 @@ class InstituteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InstituteDTO> getById(@PathVariable Integer id) {
+    public ResponseEntity<InstituteDTO> getById(@PathVariable("id") Integer id) {
         // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
         return ResponseEntity.ok(instituteService.findById(id));
     }
@@ -39,14 +39,14 @@ class InstituteController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<InstituteDTO> update(@PathVariable Integer id, @RequestBody @Valid InstituteDTO instituteDTO) {
+    public ResponseEntity<InstituteDTO> update(@PathVariable("id") Integer id, @RequestBody @Valid InstituteDTO instituteDTO) {
         // El Service maneja la lógica de actualización segura y lanza 404 si no existe
         InstituteDTO updatedInstitute = instituteService.updateOne(id, instituteDTO);
         return ResponseEntity.ok(updatedInstitute);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         // El Service maneja la lógica de validación y lanza 404 si no existe
         instituteService.deleteById(id);
         return ResponseEntity.noContent().build();

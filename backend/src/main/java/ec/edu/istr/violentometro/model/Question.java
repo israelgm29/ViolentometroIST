@@ -19,7 +19,11 @@ public class Question {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_zone", insertable = false, updatable = false)
+    @JoinColumn(name = "id_survey", nullable = false)
+    private Survey survey;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_zone", updatable = false)
     private ViolenceZone idZone;
 
     @Column(name = "question_number")

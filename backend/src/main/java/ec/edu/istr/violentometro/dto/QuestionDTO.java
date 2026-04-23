@@ -1,22 +1,24 @@
 package ec.edu.istr.violentometro.dto;
 
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class QuestionDTO {
     private Integer id;
 
-    @NotNull("La pregunta es obligatoria")
+    @NotNull(message = "La pregunta es obligatoria")
     private String question;
 
-    @NotNull("El número de pregunta es obligatorio")
+    @NotNull(message="El número de pregunta es obligatorio")
     private Integer questionNumber;
 
-    @NotNull("La zona es obligatoria")
+    @NotNull(message="La zona es obligatoria")
     private Integer idZone;
 
     private Boolean status;

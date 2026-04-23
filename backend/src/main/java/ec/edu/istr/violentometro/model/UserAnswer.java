@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.time.OffsetTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "user_answer")
@@ -29,12 +29,17 @@ public class UserAnswer {
     @JoinColumn(name = "id_question")
     private Question idQuestion;
 
-    @Column(name = "aswer")
-    private Boolean aswer;
+    @Column(name = "answer")
+    private Boolean answer;
 
     @ColumnDefault("now()")
     @Column(name = "created_at")
-    private OffsetTime createdAt;
+    private OffsetDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = OffsetDateTime.now();
+    }
 
 
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor // Inyección limpia con Lombok
+@RequiredArgsConstructor
 public class InstituteService {
 
     private final InstituteRepository instituteRepository;
