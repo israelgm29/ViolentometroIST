@@ -1,0 +1,204 @@
+<div class="reports-page">
+
+    <!-- HEADER -->
+    <header class="reports-header">
+        <div class="header-left">
+            <div class="header-icon">
+                <mat-icon>summarize</mat-icon>
+            </div>
+            <div>
+                <h1>Módulo de Reportes</h1>
+                <p class="header-sub">Genera y descarga reportes institucionales en PDF</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONFIGURACIÓN GLOBAL -->
+    <section class="config-bar">
+        <div class="config-group">
+            <label class="config-label">
+                <mat-icon>assignment</mat-icon> Cuestionario
+            </label>
+            <mat-form-field appearance="outline" class="config-field">
+                <mat-select [ngModel]="selectedSurvey()"
+                            (ngModelChange)="selectedSurvey.set($event)">
+                    @for (s of surveys(); track s.id) {
+                        <mat-option [value]="s">{{ s.title }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="config-group">
+            <label class="config-label">
+                <mat-icon>date_range</mat-icon> Período
+            </label>
+            <mat-form-field appearance="outline" class="config-field wide">
+                <mat-date-range-input [rangePicker]="picker">
+                    <input matStartDate [ngModel]="startDate()"
+                           (ngModelChange)="startDate.set($event)">
+                    <input matEndDate [ngModel]="endDate()"
+                           (ngModelChange)="endDate.set($event)">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+        </div>
+
+        <div class="config-actions">
+            <button mat-stroked-button (click)="setToday()">
+                <mat-icon>today</mat-icon> Hoy
+            </button>
+            <button mat-stroked-button (click)="setLastMonth()">
+                <mat-icon>date_range</mat-icon> Último mes
+            </button>
+        </div>
+
+        @if (selectedSurvey()) {
+            <div class="active-config">
+                <mat-icon>info_outline</mat-icon>
+                <span>
+                    <strong>{{ selectedSurvey()!.title }}</strong>
+                    · {{ startDate() | date:'dd MMM yyyy' }} — {{ endDate() | date:'dd MMM yyyy' }}
+                </span>
+            </div>
+        }
+    </section>
+
+    <!-- ADVERTENCIA -->
+    @if (!canDownload()) {
+        <div class="no-survey-warning">
+            <mat-icon>warning_amber</mat-icon>
+            <span>Selecciona un cuestionario para habilitar la descarga de reportes</span>
+        </div>
+    }
+
+    <!-- REPORTES POR CATEGORÍA -->
+    @for (category of categories; track category) {
+        <section class="report-category">
+            <h2 class="category-title">
+                <span class="category-dot"></span>
+                {{ category }}
+            </h2>
+
+            <div class="reports-grid">
+                @for (report of reportsByCategory(category); track report.id) {
+                    <div class="report-card" [class.unavailable]="!report.available">
+
+                        <div class="card-header">
+                            <div class="card-icon"
+                                 [class.icon-available]="report.available"
+                                 [class.icon-unavailable]="!report.available">
+                                <mat-icon>{{ report.icon }}</mat-icon>
+                            </div>
+                            @if (!report.available) {
+                                <span class="coming-soon">Próximamente</span>
+                            }
+                        </div>
+
+                        <div class="card-body">
+                            <h3 class="card-title">{{ report.title }}</h3>
+                            <p class="card-desc">{{ report.description }}</p>
+                        </div>
+
+                        <div class="card-footer">
+
+                            @if (!report.available) {
+                                <button mat-stroked-button disabled class="btn-soon">
+                                    <mat-icon>lock_outline</mat-icon>
+                                    <span>No disponible</span>
+                                </button>
+
+                            } @else if (report.id === 'student-tracking') {
+                                <div class="tracking-input">
+                                    <input type="text"
+                                           class="dni-input"
+                                           placeholder="Ingresa el DNI del estudiante"
+                                           [value]="trackingDni()"
+                                           (input)="trackingDni.set($any($event.target).value)"
+                                           maxlength="10">
+                                    <button mat-flat-button
+                                            class="btn-download btn-excel"
+                                            [disabled]="!canDownload() || !trackingDni() || isDownloading(report.id)"
+                                            (click)="download(report)">
+                                        @if (isDownloading(report.id)) {
+                                            <mat-spinner diameter="16"></mat-spinner>
+                                            <span>Generando...</span>
+                                        } @else {
+                                            <mat-icon>table_view</mat-icon>
+                                            <span>Descargar Excel</span>
+                                        }
+                                    </button>
+                                </div>
+
+                            } @else if (report.id === 'period-comparison') {
+                                <div class="comparison-inputs">
+                                    <div class="period-group">
+                                        <label class="period-label">Período 1</label>
+                                        <mat-form-field appearance="outline" class="period-field">
+                                            <mat-date-range-input [rangePicker]="picker1">
+                                                <input matStartDate [ngModel]="startDate()"
+                                                       (ngModelChange)="startDate.set($event)">
+                                                <input matEndDate [ngModel]="endDate()"
+                                                       (ngModelChange)="endDate.set($event)">
+                                            </mat-date-range-input>
+                                            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                                            <mat-date-range-picker #picker1></mat-date-range-picker>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="period-group">
+                                        <label class="period-label">Período 2</label>
+                                        <mat-form-field appearance="outline" class="period-field">
+                                            <mat-date-range-input [rangePicker]="picker2">
+                                                <input matStartDate [ngModel]="startDate2()"
+                                                       (ngModelChange)="startDate2.set($event)">
+                                                <input matEndDate [ngModel]="endDate2()"
+                                                       (ngModelChange)="endDate2.set($event)">
+                                            </mat-date-range-input>
+                                            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                                            <mat-date-range-picker #picker2></mat-date-range-picker>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <button mat-flat-button
+                                            class="btn-download btn-excel"
+                                            [disabled]="!canDownload() || isDownloading(report.id)"
+                                            (click)="download(report)">
+                                        @if (isDownloading(report.id)) {
+                                            <mat-spinner diameter="16"></mat-spinner>
+                                            <span>Generando...</span>
+                                        } @else {
+                                            <mat-icon>table_view</mat-icon>
+                                            <span>Descargar Excel</span>
+                                        }
+                                    </button>
+                                </div>
+
+                            } @else {
+                                <button mat-flat-button
+                                        class="btn-download"
+                                        [class.btn-excel]="report.id === 'critical-excel'"
+                                        [disabled]="!canDownload() || isDownloading(report.id)"
+                                        (click)="download(report)">
+                                    @if (isDownloading(report.id)) {
+                                        <mat-spinner diameter="16"></mat-spinner>
+                                        <span>Generando...</span>
+                                    } @else if (report.id === 'critical-excel') {
+                                        <mat-icon>table_view</mat-icon>
+                                        <span>Descargar Excel</span>
+                                    } @else {
+                                        <mat-icon>picture_as_pdf</mat-icon>
+                                        <span>Descargar PDF</span>
+                                    }
+                                </button>
+                            }
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+</div>
