@@ -1,7 +1,0 @@
-{
-  "name": "Violentometro",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}

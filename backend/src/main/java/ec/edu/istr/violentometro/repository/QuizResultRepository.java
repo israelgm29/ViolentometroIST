@@ -1,5 +1,6 @@
 package ec.edu.istr.violentometro.repository;
 
+import ec.edu.istr.violentometro.dto.DemographicReportDTO;
 import ec.edu.istr.violentometro.dto.StatisticsDTO;
 import ec.edu.istr.violentometro.dto.VulnerabilityReportDTO;
 import ec.edu.istr.violentometro.model.QuizResult;
@@ -151,4 +152,148 @@ public interface QuizResultRepository extends JpaRepository<QuizResult, Integer>
             @Param("start") OffsetDateTime start,
             @Param("end") OffsetDateTime end,
             @Param("surveyId") Integer surveyId);
+
+
+    @Query("SELECT new ec.edu.istr.violentometro.dto.StatisticsDTO(qr.riskLevel, COUNT(qr.id)) " +
+            "FROM QuizResult qr " +
+            "WHERE qr.createdAt BETWEEN :start AND :end " +
+            "AND (:surveyId IS NULL OR qr.idSurvey.id = :surveyId) " +
+            "GROUP BY qr.riskLevel")
+    List<StatisticsDTO> countByRiskLevel(@Param("start") OffsetDateTime start,
+                                         @Param("end") OffsetDateTime end,
+                                         @Param("surveyId") Integer surveyId);
+
+    // ─── AÑADIR en QuizResultRepository.java ─────────────────────────────────────
+// Estas queries cuentan estudiantes únicos por categoría demográfica + nivel de riesgo
+// directamente desde quiz_result, sin tocar user_answer.
+
+    /**
+     * Estudiantes únicos por GÉNERO + nivel de riesgo.
+     */
+    @Query("SELECT new ec.edu.istr.violentometro.dto.DemographicReportDTO(" +
+            "u.idGender.name, qr.riskLevel, COUNT(DISTINCT u.id), null) " +
+            "FROM QuizResult qr " +
+            "JOIN qr.idAppUser u " +
+            "WHERE qr.createdAt BETWEEN :start AND :end " +
+            "AND qr.idSurvey.id = :surveyId " +
+            "AND u.idGender IS NOT NULL " +
+            "GROUP BY u.idGender.name, qr.riskLevel " +
+            "ORDER BY u.idGender.name ASC, qr.riskLevel ASC")
+    List<DemographicReportDTO> getGenderByRiskLevel(
+            @Param("start") OffsetDateTime start,
+            @Param("end") OffsetDateTime end,
+            @Param("surveyId") Integer surveyId);
+
+    /**
+     * Estudiantes únicos por ETNIA + nivel de riesgo.
+     */
+    @Query("SELECT new ec.edu.istr.violentometro.dto.DemographicReportDTO(" +
+            "u.idEthnicity.name, qr.riskLevel, COUNT(DISTINCT u.id), null) " +
+            "FROM QuizResult qr " +
+            "JOIN qr.idAppUser u " +
+            "WHERE qr.createdAt BETWEEN :start AND :end " +
+            "AND qr.idSurvey.id = :surveyId " +
+            "AND u.idEthnicity IS NOT NULL " +
+            "GROUP BY u.idEthnicity.name, qr.riskLevel " +
+            "ORDER BY u.idEthnicity.name ASC, qr.riskLevel ASC")
+    List<DemographicReportDTO> getEthnicityByRiskLevel(
+            @Param("start") OffsetDateTime start,
+            @Param("end") OffsetDateTime end,
+            @Param("surveyId") Integer surveyId);
+
+    /**
+     * Estudiantes únicos por DISCAPACIDAD + nivel de riesgo.
+     */
+    @Query("SELECT new ec.edu.istr.violentometro.dto.DemographicReportDTO(" +
+            "u.idDisability.name, qr.riskLevel, COUNT(DISTINCT u.id), null) " +
+            "FROM QuizResult qr " +
+            "JOIN qr.idAppUser u " +
+            "WHERE qr.createdAt BETWEEN :start AND :end " +
+            "AND qr.idSurvey.id = :surveyId " +
+            "AND u.idDisability IS NOT NULL " +
+            "GROUP BY u.idDisability.name, qr.riskLevel " +
+            "ORDER BY u.idDisability.name ASC, qr.riskLevel ASC")
+    List<DemographicReportDTO> getDisabilityByRiskLevel(
+            @Param("start") OffsetDateTime start,
+            @Param("end") OffsetDateTime end,
+            @Param("surveyId") Integer surveyId);
+
+    /**
+     * Todas las sesiones de un estudiante por DNI, ordenadas por fecha ASC.
+     * Retorna proyección plana para construir el historial.
+     */
+    @Query("SELECT qr FROM QuizResult qr " +
+            "JOIN FETCH qr.idAppUser u " +
+            "LEFT JOIN FETCH qr.dominantZone z " +
+            "WHERE u.dni = :dni " +
+            "AND qr.createdAt BETWEEN :start AND :end " +
+            "AND (:surveyId IS NULL OR qr.idSurvey.id = :surveyId) " +
+            "ORDER BY qr.createdAt ASC")
+    List<QuizResult> findSessionsByDni(
+            @Param("dni") String dni,
+            @Param("start") OffsetDateTime start,
+            @Param("end") OffsetDateTime end,
+            @Param("surveyId") Integer surveyId);
+
+
+    /**
+     * Puntaje promedio en un período.
+     */
+    @Query("SELECT AVG(qr.totalScore) FROM QuizResult qr " +
+            "WHERE qr.createdAt BETWEEN :start AND :end " +
+            "AND qr.idSurvey.id = :surveyId")
+    Double getAvgScore(
+            @Param("start") OffsetDateTime start,
+            @Param("end") OffsetDateTime end,
+            @Param("surveyId") Integer surveyId);
+
+    /**
+     * Conteo de sesiones por nivel de riesgo en un período.
+     * Retorna StatisticsDTO con label=riskLevel, count=sesiones
+     */
+    @Query("SELECT new ec.edu.istr.violentometro.dto.StatisticsDTO(" +
+            "qr.riskLevel, COUNT(qr.id)) " +
+            "FROM QuizResult qr " +
+            "WHERE qr.createdAt BETWEEN :start AND :end " +
+            "AND qr.idSurvey.id = :surveyId " +
+            "GROUP BY qr.riskLevel")
+    List<StatisticsDTO> countSessionsByRiskLevel(
+            @Param("start") OffsetDateTime start,
+            @Param("end") OffsetDateTime end,
+            @Param("surveyId") Integer surveyId);
+
+    /**
+     * Todas las sesiones del período con datos del estudiante.
+     * Para el reporte de participación individual.
+     */
+    @Query("SELECT qr FROM QuizResult qr " +
+            "JOIN FETCH qr.idAppUser u " +
+            "LEFT JOIN FETCH u.idGender " +
+            "LEFT JOIN FETCH u.idEthnicity " +
+            "LEFT JOIN FETCH u.idInstitute " +
+            "LEFT JOIN FETCH qr.dominantZone " +
+            "WHERE qr.createdAt BETWEEN :start AND :end " +
+            "AND qr.idSurvey.id = :surveyId " +
+            "ORDER BY qr.createdAt ASC")
+    List<QuizResult> findAllSessionsInPeriod(
+            @Param("start") OffsetDateTime start,
+            @Param("end") OffsetDateTime end,
+            @Param("surveyId") Integer surveyId);
+
+    /**
+     * Resumen diario: conteo de sesiones y puntaje promedio por día.
+     */
+    @Query("SELECT new ec.edu.istr.violentometro.dto.StatisticsDTO(" +
+            "CAST(qr.createdAt AS date) || '', COUNT(qr.id)) " +
+            "FROM QuizResult qr " +
+            "WHERE qr.createdAt BETWEEN :start AND :end " +
+            "AND qr.idSurvey.id = :surveyId " +
+            "GROUP BY CAST(qr.createdAt AS date) " +
+            "ORDER BY CAST(qr.createdAt AS date) ASC")
+    List<StatisticsDTO> getDailySessionCount(
+            @Param("start") OffsetDateTime start,
+            @Param("end") OffsetDateTime end,
+            @Param("surveyId") Integer surveyId);
+
+
 }

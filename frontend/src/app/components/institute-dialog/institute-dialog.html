@@ -6,6 +6,47 @@
 <mat-dialog-content [formGroup]="form" class="form-container">
     <div class="form-grid">
 
+        <!-- ── LOGO ────────────────────────────────────────── -->
+        <div class="col-12 logo-section">
+            <div class="section-title">
+                <mat-icon inline>image</mat-icon>
+                Logo Institucional
+            </div>
+
+            <div class="logo-uploader">
+                <!-- Preview -->
+                <div class="logo-preview" [class.has-logo]="logoPreview">
+                    @if (logoPreview) {
+                        <img [src]="logoPreview" alt="Logo del instituto">
+                        <button mat-icon-button class="remove-logo-btn"
+                                (click)="removeLogo()"
+                                matTooltip="Eliminar logo">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    } @else {
+                        <div class="logo-placeholder">
+                            <mat-icon>add_photo_alternate</mat-icon>
+                            <span>Sin logo</span>
+                        </div>
+                    }
+                </div>
+
+                <!-- Botón de subida -->
+                <div class="logo-actions">
+                    <label class="upload-btn" matTooltip="PNG, JPG o SVG · Máx. 1MB">
+                        <input type="file"
+                               accept="image/png,image/jpeg,image/svg+xml"
+                               (change)="onFileSelected($event)"
+                               hidden>
+                        <mat-icon>upload</mat-icon>
+                        {{ logoPreview ? 'Cambiar logo' : 'Subir logo' }}
+                    </label>
+                    <p class="upload-hint">PNG, JPG o SVG · Máximo 1MB</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── DATOS BÁSICOS ────────────────────────────────── -->
         <mat-form-field appearance="outline" class="col-6">
             <mat-label>Código</mat-label>
             <mat-icon matPrefix>qr_code</mat-icon>
@@ -22,12 +63,14 @@
         <mat-form-field appearance="outline" class="col-12">
             <mat-label>Nombre Completo del Instituto</mat-label>
             <mat-icon matPrefix>business</mat-icon>
-            <input matInput formControlName="name" placeholder="Ej: Instituto Superior Tecnológico...">
+            <input matInput formControlName="name">
             <mat-error *ngIf="form.get('name')?.invalid">El nombre es obligatorio</mat-error>
         </mat-form-field>
 
+        <!-- ── UBICACIÓN ────────────────────────────────────── -->
         <div class="section-title col-12">
-            <mat-icon inline>location_on</mat-icon> Ubicación Geográfica
+            <mat-icon inline>location_on</mat-icon>
+            Ubicación Geográfica
         </div>
 
         <mat-form-field appearance="outline" class="col-12">
@@ -51,14 +94,16 @@
             <input matInput formControlName="city">
         </mat-form-field>
 
+        <!-- ── CONTACTO ─────────────────────────────────────── -->
         <div class="section-title col-12">
-            <mat-icon inline>contact_mail</mat-icon> Información de Contacto
+            <mat-icon inline>contact_mail</mat-icon>
+            Información de Contacto
         </div>
 
         <mat-form-field appearance="outline" class="col-6">
             <mat-label>Teléfono</mat-label>
             <mat-icon matPrefix>phone</mat-icon>
-            <input matInput formControlName="phone" placeholder="Ej: 022345678">
+            <input matInput formControlName="phone">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="col-6">
@@ -71,7 +116,7 @@
         <mat-form-field appearance="outline" class="col-12">
             <mat-label>Sitio Web (URL)</mat-label>
             <mat-icon matPrefix>language</mat-icon>
-            <input matInput formControlName="web_url" placeholder="https://www.ejemplo.edu.ec">
+            <input matInput formControlName="webUrl" placeholder="https://www.ejemplo.edu.ec">
         </mat-form-field>
 
     </div>
@@ -79,8 +124,15 @@
 
 <mat-dialog-actions align="end" class="dialog-actions">
     <button mat-button (click)="close()">Cancelar</button>
-    <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="save()">
-        <mat-icon>{{ isEdit ? 'save' : 'add_circle' }}</mat-icon>
-        {{ isEdit ? 'Actualizar Instituto' : 'Guardar Instituto' }}
+    <button mat-flat-button color="primary"
+            [disabled]="form.invalid || uploadingLogo"
+            (click)="save()">
+        @if (uploadingLogo) {
+            <mat-spinner diameter="18" style="margin-right:8px"></mat-spinner>
+            Guardando...
+        } @else {
+            <mat-icon>{{ isEdit ? 'save' : 'add_circle' }}</mat-icon>
+            {{ isEdit ? 'Actualizar Instituto' : 'Guardar Instituto' }}
+        }
     </button>
 </mat-dialog-actions>

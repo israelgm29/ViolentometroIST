@@ -1,4 +1,5 @@
 export interface InterfaceInstitute {
+    hasLogo: boolean;
     id: number;
     code: string;
     name: string;

@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -193,4 +194,13 @@ public class StatisticsService {
                 .avgScore(avg)
                 .build();
     }
+
+    // Helper para el label del periodo
+    private String formatPeriod(OffsetDateTime start, OffsetDateTime end) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return String.format("Del %s al %s", start.format(fmt), end.format(fmt));
+    }
+
 }
+
+

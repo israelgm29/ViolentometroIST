@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/institutes").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/quiz-results").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/statistics/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,    "/api/v1/institutes/*/logo").permitAll()
                         .requestMatchers("/api/v1/reports/**").permitAll()
 
                         // Rutas públicas de autenticación
@@ -107,6 +108,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/campaigns/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/campaigns/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/campaigns/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/institutes/*/logo").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/institutes/*/logo").hasAnyRole("ADMIN")
 
                         // Gestión de usuarios (app-users)
                         // GET: todos pueden ver (ADMIN, ANALYST, WELFARE)

@@ -18,6 +18,7 @@ import java.util.Map;
 @Getter
 @Setter
 public class Institute {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_instituto", nullable = false)
@@ -58,18 +59,22 @@ public class Institute {
     private Map<String, Object> config;
 
     @Column(name = "status")
-    private Boolean status =true;
+    private Boolean status = true;
 
     @Column(name = "created_date", updatable = false)
     private OffsetDateTime createdDate;
 
+    // ✅ LAZY — no se carga en getAll(), solo cuando se pide explícitamente
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "logo")
+    private byte[] logo;
+
+    @Column(name = "logo_content_type", length = 50)
+    private String logoContentType;
+
     @PrePersist
     protected void onCreate() {
         this.createdDate = OffsetDateTime.now();
-        if (this.status == null) {
-            this.status = true;
-        }
+        if (this.status == null) this.status = true;
     }
-
-
 }

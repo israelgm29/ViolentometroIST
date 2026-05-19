@@ -90,26 +90,59 @@ export class Institutes implements OnInit {
         });
     }
 
-    createInstitute(institute: InterfaceInstitute): void {
+    createInstitute(data: any): void {
+        const pendingLogo: File | null = data._pendingLogo || null;
+        const {_pendingLogo, ...institute} = data;
 
         this.instituteService.saveInstitute(institute).subscribe({
-            next: () => {
-                this.loadInstitutes();
-                this.toastr.success('Instituto creado correctamente', '¡Éxito!')
+            next: (saved) => {
+                // Si había un logo pendiente, subirlo ahora que tenemos el ID
+                if (pendingLogo && saved.id) {
+                    this.instituteService.uploadLogo(saved.id, pendingLogo).subscribe({
+                        next: () => {
+                            this.loadInstitutes();
+                            this.toastr.success('Instituto creado con logo', '¡Éxito!');
+                        },
+                        error: () => {
+                            this.loadInstitutes();
+                            this.toastr.warning('Instituto creado, pero no se pudo subir el logo');
+                        }
+                    });
+                } else {
+                    this.loadInstitutes();
+                    this.toastr.success('Instituto creado correctamente', '¡Éxito!');
+                }
             },
             error: () => this.toastr.error('No se pudo guardar el registro', 'Error')
         });
     }
 
     updateInstitute(id: number, data: any): void {
-        this.instituteService.updateInstitute(id, data).subscribe({
+        const pendingLogo: File | null = data._pendingLogo || null;
+        const {_pendingLogo, ...institute} = data;
+
+        this.instituteService.updateInstitute(id, institute).subscribe({
             next: () => {
-                this.loadInstitutes();
-                this.toastr.success('Actualizado con éxito');
+                if (pendingLogo) {
+                    this.instituteService.uploadLogo(id, pendingLogo).subscribe({
+                        next: () => {
+                            this.loadInstitutes();
+                            this.toastr.success('Actualizado con logo', '¡Éxito!');
+                        },
+                        error: () => {
+                            this.loadInstitutes();
+                            this.toastr.warning('Actualizado, pero no se pudo subir el logo');
+                        }
+                    });
+                } else {
+                    this.loadInstitutes();
+                    this.toastr.success('Actualizado con éxito');
+                }
             },
             error: (err) => console.error(err)
         });
     }
+
 
     deleteInstitute(id: number): void {
         const dialogRef = this.dialog.open(ConfirmDialog, {
@@ -197,9 +230,9 @@ export class Institutes implements OnInit {
 
                 // 5. Configuración de anchos de columna para que se vea profesional
                 worksheet['!cols'] = [
-                    { wch: 5 }, { wch: 10 }, { wch: 40 }, { wch: 15 }, { wch: 30 },
-                    { wch: 15 }, { wch: 15 }, { wch: 10 }, { wch: 15 }, { wch: 30 },
-                    { wch: 30 }, { wch: 10 }, { wch: 15 }
+                    {wch: 5}, {wch: 10}, {wch: 40}, {wch: 15}, {wch: 30},
+                    {wch: 15}, {wch: 15}, {wch: 10}, {wch: 15}, {wch: 30},
+                    {wch: 30}, {wch: 10}, {wch: 15}
                 ];
 
                 const workbook = XLSX.utils.book_new();

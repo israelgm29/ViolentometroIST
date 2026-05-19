@@ -52,4 +52,31 @@ public class InstituteService {
         }
         instituteRepository.deleteById(id);
     }
+
+    public void updateLogo(Integer id, byte[] logoBytes, String contentType) {
+        Institute institute = instituteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Instituto no encontrado: " + id));
+        institute.setLogo(logoBytes);
+        institute.setLogoContentType(contentType);
+        instituteRepository.save(institute);
+    }
+
+    /**
+     * Obtiene los bytes del logo.
+     */
+    public byte[] getLogo(Integer id) {
+        return instituteRepository.findById(id)
+                .map(Institute::getLogo)
+                .orElse(null);
+    }
+
+    /**
+     * Obtiene el content type del logo.
+     */
+    public String getLogoContentType(Integer id) {
+        return instituteRepository.findById(id)
+                .map(Institute::getLogoContentType)
+                .orElse(null);
+    }
+
 }

@@ -126,47 +126,16 @@
                 </button>
 
                 <mat-menu #reportsMenu="matMenu" class="reports-menu">
-                    <button mat-menu-item [routerLink]="['/admin/report/general']">
-                        <mat-icon>dashboard_customize</mat-icon>
-                        <span>Reporte General</span>
-                    </button>
-                    <mat-divider></mat-divider>
-                    <button mat-menu-item [routerLink]="['/admin/report/genero']">
-                        <mat-icon>face</mat-icon>
-                        <span>Análisis por Género</span>
-                    </button>
-                    <button mat-menu-item [routerLink]="['/admin/report/discapacidad']">
-                        <mat-icon>accessible</mat-icon>
-                        <span>Análisis por Discapacidad</span>
-                    </button>
-                    <button mat-menu-item [routerLink]="['/admin/report/etnia']">
-                        <mat-icon>groups</mat-icon>
-                        <span>Análisis por Etnia</span>
-                    </button>
-                    <mat-divider></mat-divider>
-                    <button mat-menu-item (click)="exportCurrentView()">
-                        <mat-icon>download</mat-icon>
-                        <span>Exportar vista actual</span>
+                    <button mat-menu-item (click)="downloadReport('general')" [disabled]="isDownloading()">
+                        <mat-icon>picture_as_pdf</mat-icon>
+                        <span>Reporte General PDF</span>
+                        @if (isDownloading() && downloadingType() === 'general') {
+                            <mat-spinner diameter="16" style="margin-left:auto"></mat-spinner>
+                        }
                     </button>
                 </mat-menu>
             </div>
         </header>
-
-        <!-- ═══════════════════════════════════════════════════════════
-             INDICADOR DE PERÍODO ACTIVO
-        ═══════════════════════════════════════════════════════════ -->
-        <div class="period-indicator" @fadeIn>
-            <mat-icon>calendar_today</mat-icon>
-            <span>Mostrando datos del</span>
-            <strong>{{ startDate() | date:'dd MMM yyyy' }}</strong>
-            <span>al</span>
-            <strong>{{ endDate() | date:'dd MMM yyyy' }}</strong>
-            <span class="period-divider"></span>
-            <span class="period-survey">
-                <mat-icon>assignment</mat-icon>
-                {{ dataSharedService.selectedSurvey()?.title }}
-            </span>
-        </div>
 
         <!-- ═══════════════════════════════════════════════════════════
              NAVEGACIÓN POR TABS (Dashboard vs Reportes Detallados)
@@ -401,9 +370,6 @@
                                 <mat-icon>face</mat-icon>
                                 Distribución por Género
                             </mat-card-title>
-                            <button mat-stroked-button [routerLink]="['/admin/report/genero']">
-                                Ver detalle
-                            </button>
                         </mat-card-header>
                         <mat-card-content>
                             @if (genderChartOptions()) {
@@ -424,9 +390,6 @@
                                 <mat-icon>accessible</mat-icon>
                                 Condición de Discapacidad
                             </mat-card-title>
-                            <button mat-stroked-button [routerLink]="['/admin/report/discapacidad']">
-                                Ver detalle
-                            </button>
                         </mat-card-header>
                         <mat-card-content>
                             @if (disabilityChartOptions()) {
@@ -447,9 +410,6 @@
                                 <mat-icon>groups</mat-icon>
                                 Distribución por Etnia
                             </mat-card-title>
-                            <button mat-stroked-button [routerLink]="['/admin/report/etnia']">
-                                Ver detalle
-                            </button>
                         </mat-card-header>
                         <mat-card-content>
                             @if (etniaChartOptions()) {

@@ -33,6 +33,7 @@ import {animate, style, transition, trigger} from '@angular/animations';
 import {StatisticsService} from '../../../services/statistics.service';
 import {DataSharedService} from '../../../services/data-shared.service';
 import {SurveyService} from '../../../services/survey.service';
+import {ReportService} from '../../../services/report.service';
 import {Survey} from '../../../models/survey';
 import {DashboardData, TrendResponseDTO} from '../../../models/statistics';
 import {CriticalReportComponent} from '../../../components/critical-report/critical-report';
@@ -75,26 +76,29 @@ export type ChartOptions = {
 })
 export class Dashboard implements OnInit {
     private statisticsService = inject(StatisticsService);
-    public  dataSharedService = inject(DataSharedService);
-    private surveyService     = inject(SurveyService);
+    public dataSharedService = inject(DataSharedService);
+    private surveyService = inject(SurveyService);
+    private reportService = inject(ReportService);
 
     // Referencia al componente hijo de casos críticos
     @ViewChild(CriticalReportComponent)
     private criticalReport?: CriticalReportComponent;
 
     // Signals públicos
-    public view             = signal<'select' | 'dashboard'>('select');
-    public isLoading        = signal(false);
+    public view = signal<'select' | 'dashboard'>('select');
+    public isLoading = signal(false);
     public isLoadingSurveys = signal(false);
-    public activeTabIndex   = signal(0);
-    public surveys          = signal<Survey[]>([]);
+    public activeTabIndex = signal(0);
+    public surveys = signal<Survey[]>([]);
+    public isDownloading = signal(false);
+    public downloadingType = signal<string>('');
 
     // KPIs
-    public totalVictimas      = signal(0);
-    public criticalRiskCount  = signal(0);
-    public alertLevel         = signal('ESTABLE');
-    public zonaMasFrecuente   = signal('N/A');
-    public totalRespuestas    = signal(0);
+    public totalVictimas = signal(0);
+    public criticalRiskCount = signal(0);
+    public alertLevel = signal('ESTABLE');
+    public zonaMasFrecuente = signal('N/A');
+    public totalRespuestas = signal(0);
     public etniasMasAfectadas = signal('N/A');
 
     // true cuando hay datos cargados para el período actual
@@ -102,23 +106,23 @@ export class Dashboard implements OnInit {
 
     // Fechas
     public startDate = this.dataSharedService.startDate;
-    public endDate   = this.dataSharedService.endDate;
+    public endDate = this.dataSharedService.endDate;
 
     // Gráficos
-    public zoneChartOptions       = signal<ChartOptions | null>(null);
-    public trendChartOptions      = signal<ChartOptions | null>(null);
-    public genderChartOptions     = signal<ChartOptions | null>(null);
+    public zoneChartOptions = signal<ChartOptions | null>(null);
+    public trendChartOptions = signal<ChartOptions | null>(null);
+    public genderChartOptions = signal<ChartOptions | null>(null);
     public disabilityChartOptions = signal<ChartOptions | null>(null);
-    public etniaChartOptions      = signal<ChartOptions | null>(null);
-    public topQuestionsOptions    = signal<ChartOptions | null>(null);
-    public regionChartOptions     = signal<ChartOptions | null>(null);
-    public regionsData            = signal<{label: string; count: number}[]>([]);
+    public etniaChartOptions = signal<ChartOptions | null>(null);
+    public topQuestionsOptions = signal<ChartOptions | null>(null);
+    public regionChartOptions = signal<ChartOptions | null>(null);
+    public regionsData = signal<{ label: string; count: number }[]>([]);
 
     // Tendencias
-    public trendsData             = signal<TrendResponseDTO | null>(null);
-    public participationChart     = signal<ChartOptions | null>(null);
-    public riskLevelChart         = signal<ChartOptions | null>(null);
-    public avgScoreChart          = signal<ChartOptions | null>(null);
+    public trendsData = signal<TrendResponseDTO | null>(null);
+    public participationChart = signal<ChartOptions | null>(null);
+    public riskLevelChart = signal<ChartOptions | null>(null);
+    public avgScoreChart = signal<ChartOptions | null>(null);
 
     ngOnInit(): void {
         this.loadSurveys();
@@ -127,8 +131,11 @@ export class Dashboard implements OnInit {
     loadSurveys(): void {
         this.isLoadingSurveys.set(true);
         this.surveyService.getAllSurveys().subscribe({
-            next:  data => { this.surveys.set(data); this.isLoadingSurveys.set(false); },
-            error: ()   => this.isLoadingSurveys.set(false)
+            next: data => {
+                this.surveys.set(data);
+                this.isLoadingSurveys.set(false);
+            },
+            error: () => this.isLoadingSurveys.set(false)
         });
     }
 
@@ -160,7 +167,7 @@ export class Dashboard implements OnInit {
 
         this.isLoading.set(true);
         const start = this.dataSharedService.startISO();
-        const end   = this.dataSharedService.endISO();
+        const end = this.dataSharedService.endISO();
 
         this.statisticsService.getDashboardData(start, end, surveyId).subscribe({
             next: (data: DashboardData) => {
@@ -195,13 +202,13 @@ export class Dashboard implements OnInit {
     }
 
     private updateCharts(data: DashboardData): void {
-        if (data.zones)        this.renderZoneChart(data.zones);
-        if (data.alertsTrend)  this.renderTrendChart(data.alertsTrend);
-        if (data.genders)      this.renderGenderChart(data.genders);
+        if (data.zones) this.renderZoneChart(data.zones);
+        if (data.alertsTrend) this.renderTrendChart(data.alertsTrend);
+        if (data.genders) this.renderGenderChart(data.genders);
         if (data.disabilities) this.renderDisabilityChart(data.disabilities);
-        if (data.ethnics)      this.renderEtniaChart(data.ethnics);
+        if (data.ethnics) this.renderEtniaChart(data.ethnics);
         if (data.topQuestions) this.renderTopQuestions(data.topQuestions);
-        if (data.regions)      this.renderRegionChart(data.regions);
+        if (data.regions) this.renderRegionChart(data.regions);
     }
 
     private renderZoneChart(zones: any[]): void {
@@ -209,7 +216,7 @@ export class Dashboard implements OnInit {
             series: zones.map(z => z.totalAnswers || z.count || 0),
             chart: {type: 'donut', height: 380, animations: {enabled: true, speed: 800}},
             labels: zones.map(z => z.zoneName || z.label),
-            colors: zones.map(z => z.color || '#94a3b8'),
+            colors: ['#6d28d9', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe'],
             plotOptions: {pie: {donut: {size: '65%'}}},
             legend: {position: 'right', fontSize: '12px'}
         });
@@ -337,15 +344,15 @@ export class Dashboard implements OnInit {
         const dates = data.participationTrend.map(d => d.label);
         this.participationChart.set({
             series: [
-                { name: 'Participaciones', data: data.participationTrend.map(d => d.count) },
-                { name: 'Críticos',        data: data.criticalTrend.map(d => d.count) }
+                {name: 'Participaciones', data: data.participationTrend.map(d => d.count)},
+                {name: 'Críticos', data: data.criticalTrend.map(d => d.count)}
             ],
-            chart:  { type: 'area', height: 300, toolbar: { show: false }, animations: { enabled: true, speed: 800 } },
-            stroke: { curve: 'smooth', width: 2 },
-            fill:   { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.5, opacityTo: 0.1 } },
-            xaxis:  { categories: dates },
+            chart: {type: 'area', height: 300, toolbar: {show: false}, animations: {enabled: true, speed: 800}},
+            stroke: {curve: 'smooth', width: 2},
+            fill: {type: 'gradient', gradient: {shadeIntensity: 1, opacityFrom: 0.5, opacityTo: 0.1}},
+            xaxis: {categories: dates},
             colors: ['#6d28d9', '#ef4444'],
-            tooltip: { x: { format: 'dd MMM yyyy' } }
+            tooltip: {x: {format: 'dd MMM yyyy'}}
         });
     }
 
@@ -364,22 +371,22 @@ export class Dashboard implements OnInit {
                 name: labelMap[s.name] ?? s.name,
                 data: s.data
             })),
-            chart:       { type: 'bar', height: 300, stacked: true, toolbar: { show: false } },
-            xaxis:       { categories: data.riskLevelSeries[0].dates },
-            colors:      data.riskLevelSeries.map(s => colorMap[s.name] ?? '#94a3b8'),
-            plotOptions: { bar: { borderRadius: 2 } },
-            legend:      { position: 'top' }
+            chart: {type: 'bar', height: 300, stacked: true, toolbar: {show: false}},
+            xaxis: {categories: data.riskLevelSeries[0].dates},
+            colors: data.riskLevelSeries.map(s => colorMap[s.name] ?? '#94a3b8'),
+            plotOptions: {bar: {borderRadius: 2}},
+            legend: {position: 'top'}
         });
     }
 
     private renderAvgScoreChart(data: TrendResponseDTO): void {
         this.avgScoreChart.set({
-            series: [{ name: 'Puntaje promedio', data: data.avgScoreTrend.map(d => d.count) }],
-            chart:  { type: 'line', height: 220, toolbar: { show: false }, animations: { enabled: true, speed: 800 } },
-            stroke: { curve: 'smooth', width: 3 },
-            xaxis:  { categories: data.avgScoreTrend.map(d => d.label) },
+            series: [{name: 'Puntaje promedio', data: data.avgScoreTrend.map(d => d.count)}],
+            chart: {type: 'line', height: 220, toolbar: {show: false}, animations: {enabled: true, speed: 800}},
+            stroke: {curve: 'smooth', width: 3},
+            xaxis: {categories: data.avgScoreTrend.map(d => d.label)},
             colors: ['#0ea5e9'],
-            dataLabels: { enabled: true, style: { fontSize: '11px' } }
+            dataLabels: {enabled: true, style: {fontSize: '11px'}}
         });
     }
 
@@ -387,13 +394,43 @@ export class Dashboard implements OnInit {
         return this.criticalRiskCount() > 0 ? '#ef4444' : '#10b981';
     }
 
-    exportCurrentView(): void {
-        window.print();
+    downloadReport(type: string): void {
+        const surveyId = this.dataSharedService.selectedSurvey()?.id;
+        if (!surveyId) return;
+
+        this.isDownloading.set(true);
+        this.downloadingType.set(type);
+
+        const body = {
+            startDate: this.dataSharedService.startISO(),
+            endDate: this.dataSharedService.endISO(),
+            surveyId
+        };
+
+        this.reportService.downloadGeneralReportPdf(body).subscribe({
+            next: (blob) => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const date = new Date().toISOString().slice(0, 10);
+                a.href = url;
+                a.download = `reporte-${type}-${date}.pdf`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                this.isDownloading.set(false);
+                this.downloadingType.set('');
+            },
+            error: () => {
+                this.isDownloading.set(false);
+                this.downloadingType.set('');
+            }
+        });
     }
 
     setToday(): void {
-        const s = new Date(); s.setHours(0, 0, 0, 0);
-        const e = new Date(); e.setHours(23, 59, 59, 999);
+        const s = new Date();
+        s.setHours(0, 0, 0, 0);
+        const e = new Date();
+        e.setHours(23, 59, 59, 999);
         this.dataSharedService.updateDates(s, e);
         this.loadAllStatistics();
         if (this.activeTabIndex() === 3) this.loadTrends();
@@ -402,7 +439,8 @@ export class Dashboard implements OnInit {
 
     setLastMonth(): void {
         const e = new Date();
-        const s = new Date(); s.setMonth(s.getMonth() - 1);
+        const s = new Date();
+        s.setMonth(s.getMonth() - 1);
         this.dataSharedService.updateDates(s, e);
         this.loadAllStatistics();
         if (this.activeTabIndex() === 3) this.loadTrends();

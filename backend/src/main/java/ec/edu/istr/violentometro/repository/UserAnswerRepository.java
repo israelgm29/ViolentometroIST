@@ -292,7 +292,7 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Integer>
             "ORDER BY COUNT(ua.id) DESC")
     List<CriticalCaseDTO> getCriticalCases(
             @Param("startDate") OffsetDateTime startDate,
-            @Param("endDate")   OffsetDateTime endDate);
+            @Param("endDate") OffsetDateTime endDate);
 
     // Casos críticos — filtrado por survey
     @Query("SELECT new ec.edu.istr.violentometro.dto.CriticalCaseDTO(" +
@@ -312,8 +312,8 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Integer>
             "ORDER BY COUNT(ua.id) DESC")
     List<CriticalCaseDTO> getCriticalCasesBySurvey(
             @Param("startDate") OffsetDateTime startDate,
-            @Param("endDate")   OffsetDateTime endDate,
-            @Param("surveyId")  Integer surveyId);
+            @Param("endDate") OffsetDateTime endDate,
+            @Param("surveyId") Integer surveyId);
 
     // Señales de alerta de un usuario — con surveyId opcional
     @Query("SELECT new ec.edu.istr.violentometro.dto.AlertSignalDTO(" +
@@ -327,10 +327,10 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Integer>
             "AND (:surveyId IS NULL OR q.survey.id = :surveyId) " +
             "ORDER BY q.questionNumber ASC")
     List<AlertSignalDTO> getAlertSignalsByUser(
-            @Param("userId")    Integer userId,
+            @Param("userId") Integer userId,
             @Param("startDate") OffsetDateTime startDate,
-            @Param("endDate")   OffsetDateTime endDate,
-            @Param("surveyId")  Integer surveyId);
+            @Param("endDate") OffsetDateTime endDate,
+            @Param("surveyId") Integer surveyId);
 
 
     @Query("SELECT ua FROM UserAnswer ua " +
@@ -339,6 +339,26 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Integer>
             "AND CAST(ua.createdAt AS date) = CAST(CURRENT_TIMESTAMP AS date) " +
             "ORDER BY ua.createdAt ASC")
     List<UserAnswer> findByAppUserDniAndSurveyIdToday(
-            @Param("dni")      String  dni,
+            @Param("dni") String dni,
             @Param("surveyId") Integer surveyId);
+
+    // Conteos por Etnia
+    @Query("SELECT new ec.edu.istr.violentometro.dto.StatisticsDTO(u.idEthnicity.name, COUNT(DISTINCT u.id)) " +
+            "FROM UserAnswer ua JOIN ua.idAppUser u " +
+            "WHERE ua.createdAt BETWEEN :start AND :end " +
+            "AND (:surveyId IS NULL OR ua.idQuestion.survey.id = :surveyId) " +
+            "GROUP BY u.idEthnicity.name")
+    List<StatisticsDTO> countByEthnicity(@Param("start") OffsetDateTime start,
+                                         @Param("end") OffsetDateTime end,
+                                         @Param("surveyId") Integer surveyId);
+
+    // Conteos por Género
+    @Query("SELECT new ec.edu.istr.violentometro.dto.StatisticsDTO(u.idGender.name, COUNT(DISTINCT u.id)) " +
+            "FROM UserAnswer ua JOIN ua.idAppUser u " +
+            "WHERE ua.createdAt BETWEEN :start AND :end " +
+            "AND (:surveyId IS NULL OR ua.idQuestion.survey.id = :surveyId) " +
+            "GROUP BY u.idGender.name")
+    List<StatisticsDTO> countByGender(@Param("start") OffsetDateTime start,
+                                      @Param("end") OffsetDateTime end,
+                                      @Param("surveyId") Integer surveyId);
 }

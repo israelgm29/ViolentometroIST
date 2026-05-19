@@ -3,7 +3,6 @@ import {UserLayoutComponent} from './layouts/user-layout/user-layout.component';
 import {AdminLayoutComponent} from './layouts/admin-layout/admin-layout.component';
 import {authGuard, roleGuard} from './guards/auth.guard';
 
-// Roles disponibles
 const ADMIN = 'ROLE_ADMIN';
 const ANALYST = 'ROLE_ANALYST';
 const WELFARE = 'ROLE_WELFARE';
@@ -11,7 +10,7 @@ const WELFARE = 'ROLE_WELFARE';
 export const routes: Routes = [
 
     // ══════════════════════════════════════════
-    // RUTAS PÚBLICAS — sin guard
+    // RUTAS PÚBLICAS
     // ══════════════════════════════════════════
     {
         path: '',
@@ -56,7 +55,7 @@ export const routes: Routes = [
     },
 
     // ══════════════════════════════════════════
-    // LOGIN — público
+    // LOGIN
     // ══════════════════════════════════════════
     {
         path: 'admin/login',
@@ -65,7 +64,7 @@ export const routes: Routes = [
     },
 
     // ══════════════════════════════════════════
-    // RUTAS ADMIN — protegidas por rol
+    // RUTAS ADMIN
     // ══════════════════════════════════════════
     {
         path: 'admin',
@@ -73,9 +72,7 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
 
-            // ======================================
-            // RUTAS: ADMIN + WELFARE
-            // ======================================
+            // ADMIN + WELFARE
             {
                 path: 'dashboard',
                 canActivate: [roleGuard(ADMIN, WELFARE)],
@@ -101,26 +98,19 @@ export const routes: Routes = [
                 data: {animation: 'AdminSurveyBuilderPage'}
             },
             {
-                path: 'report/general',
-                canActivate: [roleGuard(ADMIN, WELFARE)],
-                loadComponent: () => import('./components/general-report/general-report').then(m => m.GeneralReport)
-            },
-            {
-                path: 'report/:type',
-                canActivate: [roleGuard(ADMIN, WELFARE)],
-                loadComponent: () => import('./views/root/report-detail/report-detail').then(m => m.ReportDetail),
-                data: {animation: 'AdminReportDetailPage'}
-            },
-            {
                 path: 'campaigns',
                 canActivate: [roleGuard(ADMIN, WELFARE)],
                 loadComponent: () => import('./views/root/campaing/campaing').then(m => m.CampaingComponent),
                 data: {animation: 'AdminCampaignsPage'}
             },
+            {
+                path: 'reports',
+                canActivate: [roleGuard(ADMIN, WELFARE)],
+                loadComponent: () => import('./views/root/reports/reports.component').then(m => m.ReportsComponent),
+                data: {animation: 'AdminReportsPage'}
+            },
 
-            // ======================================
-            // RUTAS: ADMIN + ANALYST + WELFARE
-            // ======================================
+            // ADMIN + ANALYST + WELFARE
             {
                 path: 'profile',
                 canActivate: [roleGuard(ADMIN, ANALYST, WELFARE)],
@@ -134,9 +124,7 @@ export const routes: Routes = [
                 data: {animation: 'AdminUsersPage'}
             },
 
-            // ======================================
-            // RUTAS: SOLO ADMIN
-            // ======================================
+            // SOLO ADMIN
             {
                 path: 'institutes',
                 canActivate: [roleGuard(ADMIN)],

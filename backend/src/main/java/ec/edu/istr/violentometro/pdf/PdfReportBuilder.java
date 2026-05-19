@@ -11,10 +11,13 @@ import ec.edu.istr.violentometro.pdf.template.PdfCoverPage;
 import ec.edu.istr.violentometro.pdf.template.PdfFooter;
 import ec.edu.istr.violentometro.pdf.template.PdfHeader;
 
+import lombok.Getter;
+
 import java.util.List;
 
 public class PdfReportBuilder {
 
+    @Getter
     private final com.itextpdf.layout.Document doc;
     private final PdfContext                   context;
     private final PdfFooter                    footer;
@@ -26,16 +29,23 @@ public class PdfReportBuilder {
     }
 
     /**
-     * Portada institucional completa.
-     * Siempre debe ser la primera llamada en la cadena.
+     * Portada en A4 vertical.
+     * Agrega explícitamente una página A4 vertical como primera página,
+     * luego salta a la segunda página que hereda A4 horizontal del Document.
      */
     public PdfReportBuilder cover(
             String reportTitle,
             String surveyTitle,
             String period,
             byte[] logoBytes) {
+
+        // Insertar primera página en A4 vertical explícitamente
+        context.pdf().addNewPage(1, PageSize.A4);
+
+        // Dibujar portada en esa primera página
         PdfCoverPage.draw(doc, reportTitle, surveyTitle, period, logoBytes);
-        context.pdf().addNewPage(PageSize.A4.rotate());
+
+        // Saltar a la siguiente página — el Document usará su tamaño base (A4 horizontal)
         doc.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
         return this;
     }
@@ -60,13 +70,17 @@ public class PdfReportBuilder {
         return this;
     }
 
+    /**
+     * Salto de página — el Document ya tiene A4 horizontal como base,
+     * por lo que todas las páginas nuevas serán horizontal automáticamente.
+     */
     public PdfReportBuilder pageBreak() {
         doc.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
         return this;
     }
 
     public byte[] build() {
-        footer.writeTotal(context.pdf());   // ✅ ANTES de close()
+        footer.writeTotal(context.pdf());
         doc.close();
         return context.out().toByteArray();
     }
