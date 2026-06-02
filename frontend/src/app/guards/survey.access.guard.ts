@@ -1,59 +1,55 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, of } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../services/auth.service';
 
 interface CanAnswerResponse {
     canAnswer: boolean;
     message:   string | null;
 }
 
-/**
- * Guard que verifica si el estudiante ya respondió el cuestionario hoy.
- *
- * Uso en rutas:
- *   {
- *     path: 'survey/:surveyId',
- *     component: SurveyComponent,
- *     canActivate: [surveyAccessGuard]
- *   }
- *
- * Requiere que el userId y surveyId estén disponibles.
- * Ajusta cómo obtienes el userId según tu sistema de autenticación.
- */
 export const surveyAccessGuard: CanActivateFn = (route) => {
-    const router = inject(Router);
-    const http   = inject(HttpClient);
+    const router      = inject(Router);
+    const http        = inject(HttpClient);
+    const authService = inject(AuthService);
 
     const surveyId = route.paramMap.get('surveyId');
-    // Ajusta esto según dónde guardas el userId en tu app
-    // (localStorage, signal de AuthService, etc.)
-    const userId = localStorage.getItem('userId');
 
-    if (!userId || !surveyId) {
+    if (!surveyId) {
         router.navigate(['/']);
         return of(false);
     }
 
-    const url = `${environment.apiUrl}/v1/user-answers/can-answer`;
+    const userId$ = authService.isLoggedIn()
+        ? of(authService.user()!.id)
+        : authService.loadSession().pipe(map(u => u.id));
 
-    return http.get<CanAnswerResponse>(url, {
-        params: { userId, surveyId }
-    }).pipe(
-        map(response => {
-            if (response.canAnswer) {
-                return true;
+    return userId$.pipe(
+        switchMap(userId => {
+            if (!userId) {
+                router.navigate(['/']);
+                return of(false);
             }
-            // Ya respondió hoy — redirige con el mensaje
-            router.navigate(['/survey-blocked'], {
-                queryParams: { message: response.message }
-            });
-            return false;
+
+            return http.get<CanAnswerResponse>(
+                `${environment.apiUrl}/v1/user-answers/can-answer`,
+                { params: { userId: userId.toString(), surveyId } }
+            ).pipe(
+                map(response => {
+                    if (response.canAnswer) return true;
+                    router.navigate(['/survey-blocked'], {
+                        queryParams: { message: response.message }
+                    });
+                    return false;
+                }),
+                catchError(() => of(true))
+            );
         }),
         catchError(() => {
-            // Si el backend falla, permitimos el acceso para no bloquear al estudiante
-            return of(true);
+            router.navigate(['/']);
+            return of(false);
         })
     );
 };

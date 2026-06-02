@@ -11,6 +11,7 @@ public class SurveyDTO {
     private String description;
     private Boolean isActive;
     private OffsetDateTime createdAt;
+    private Integer idInstituto;        // ← NUEVO
     private List<QuestionDTO> questions;
 
     @Data

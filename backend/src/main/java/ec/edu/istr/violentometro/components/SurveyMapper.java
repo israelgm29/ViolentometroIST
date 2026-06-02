@@ -8,8 +8,6 @@ import ec.edu.istr.violentometro.repository.ViolenceZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +25,12 @@ public class SurveyMapper {
         dto.setDescription(entity.getDescription());
         dto.setIsActive(entity.getIsActive());
         dto.setCreatedAt(entity.getCreatedAt());
+
+        // ── NUEVO: exponer idInstituto en la respuesta ─────────────
+        if (entity.getInstitute() != null) {
+            dto.setIdInstituto(entity.getInstitute().getId());
+        }
+        // ───────────────────────────────────────────────────────────
 
         if (questions != null) {
             dto.setQuestions(questions.stream()
@@ -52,6 +56,9 @@ public class SurveyMapper {
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setIsActive(false);
+        // Nota: institute NO se mapea aquí — se asigna en SurveyService
+        // usando el idInstituto extraído del JWT. Esto evita que el cliente
+        // pueda enviar un instituto arbitrario en el body.
         return entity;
     }
 
@@ -92,7 +99,6 @@ public class SurveyMapper {
                             zDto.setStatus(q.getIdZone().getStatus());
                             zDto.setResultTitle(q.getIdZone().getResultTitle());
                             zDto.setResultMessage(q.getIdZone().getResultMessage());
-                            // Usar el helper de la entidad que ya divide por "|"
                             zDto.setRecommendations(q.getIdZone().getRecommendationList());
                             qDto.setZone(zDto);
                         }
