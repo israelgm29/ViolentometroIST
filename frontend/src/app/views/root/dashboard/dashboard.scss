@@ -204,8 +204,8 @@ h1 {
 // ── Survey Selector Grid ──────────────────────────────────────
 .survey-selector {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
 
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
@@ -215,40 +215,74 @@ h1 {
 .survey-card {
     @include card-interactive;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 16px;
-    padding: 20px;
-    border: 2px solid transparent;
+    padding: 24px;
+    border: 1px solid $border-light;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, $bg-surface 100%);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: $primary-gradient;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+        border-color: $primary-subtle;
+        box-shadow: 0 8px 24px rgba($primary, 0.12);
+
+        &::before {
+            opacity: 1;
+        }
+
+        .survey-action {
+            transform: translateX(4px);
+        }
+    }
 
     &.survey-active {
         border-color: $primary;
-        background: linear-gradient(135deg, rgba($primary, 0.03) 0%, $bg-surface 100%);
+        background: linear-gradient(135deg, $primary-subtle 0%, $bg-surface 100%);
+        box-shadow: 0 8px 24px rgba($primary, 0.15);
+
+        &::before {
+            opacity: 1;
+        }
 
         .survey-card-icon {
-            background: $primary;
+            background: $primary-gradient;
+            box-shadow: 0 4px 12px rgba($primary, 0.3);
             mat-icon { color: $text-inverse; }
         }
     }
 
     @media (max-width: 600px) {
-        flex-direction: column;
-        text-align: center;
+        padding: 20px;
     }
 }
 
 .survey-card-icon {
-    width: 52px;
-    height: 52px;
+    width: 56px;
+    height: 56px;
     border-radius: $radius-md;
-    background: $bg-page;
+    background: $primary-subtle;
     @include flex-center;
     flex-shrink: 0;
+    transition: all 0.3s ease;
 
     mat-icon {
-        font-size: 26px;
-        width: 26px;
-        height: 26px;
-        color: $text-muted;
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+        color: $primary;
     }
 
     &.active {
@@ -259,35 +293,40 @@ h1 {
 
 .survey-card-content {
     flex: 1;
-    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .survey-card-header {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 0;
     flex-wrap: wrap;
 
     h3 {
-        font-size: 1rem;
+        font-size: 1.05rem;
         font-weight: 700;
         color: $text-primary;
         margin: 0;
         letter-spacing: -0.01em;
+        flex: 1;
     }
 }
 
 .status-chip {
-    height: 22px;
-    font-size: 0.6875rem;
+    height: 24px;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.03em;
     text-transform: uppercase;
+    padding: 0 10px !important;
 
     &.active {
-        --mdc-chip-container-color: #{$primary-subtle};
-        --mdc-chip-label-text-color: #{$primary-dark};
+        --mdc-chip-container-color: #{$primary-gradient};
+        --mdc-chip-label-text-color: #{$text-inverse};
+        background: $primary-gradient !important;
     }
 
     &.inactive {
@@ -570,8 +609,8 @@ h1 {
     @include card-base;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 18px;
+    gap: 10px;
+    padding: 14px 16px;
     border-left: 4px solid $primary;
     border-radius: $radius-md;
     background: $bg-surface;
@@ -603,16 +642,16 @@ h1 {
 }
 
 .kpi-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
     @include flex-center;
     flex-shrink: 0;
 
     mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
     }
 }
 
@@ -637,7 +676,7 @@ h1 {
 }
 
 .kpi-value {
-    font-size: 2.25rem;
+    font-size: 1.75rem;
     font-weight: 800;
     color: $text-primary;
     line-height: 1;
@@ -648,7 +687,7 @@ h1 {
     }
 
     &.zone {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         font-weight: 700;
@@ -656,19 +695,19 @@ h1 {
 }
 
 .kpi-label {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
     color: $text-muted;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 .kpi-trend {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: $text-muted;
     font-weight: 500;
-    margin-top: 4px;
+    margin-top: 2px;
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -706,7 +745,6 @@ h1 {
 .chart-card {
     @include card-base;
     border-radius: $radius-md;
-    border-left: 5px solid $primary;
     overflow: hidden;
 
     &.primary {
