@@ -80,8 +80,9 @@ class UserAnswerController {
      */
     @GetMapping("/user/dni/{encryptedDni}/survey/{surveyId}/today")
     public ResponseEntity<List<UserAnswerDTO>> getByDniAndSurveyToday(
-            @PathVariable String  encryptedDni,
+            @PathVariable String encryptedDni,
             @PathVariable Integer surveyId) {
+        // Spring decodea automáticamente el %2B → + cuando viene encodeado
         return ResponseEntity.ok(
                 userAnswerService.findByDniAndSurveyToday(encryptedDni, surveyId));
     }

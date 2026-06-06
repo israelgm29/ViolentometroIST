@@ -1,245 +1,247 @@
-// ══════════════════════════════════════════
-// QUESTIONS CONTAINER — Tema Institucional Claro
-// El quiz se muestra sobre el contenido principal,
-// se mantiene background transparente pero los
-// elementos internos usan el sistema de diseño
-// ══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  QUESTIONS CONTAINER — Gauge semicircular
+//  Paleta: Morado (#7c3aed) principal + Teal acento
+// ══════════════════════════════════════════════════════
 
-$purple:      #6d28d9;
-$text-primary:   #1a202c;
-$text-secondary: #4b3d6e;
-$border:         rgba(109,40,217,0.1);
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+$purple      : #7c3aed;
+$purple-dark : #6d28d9;
+$purple-pale : #faf5ff;
+$teal        : #0d9488;
+$text-primary: #111827;
+$text-muted  : #6b7280;
+$border      : #e5e7eb;
+$font        : 'Plus Jakarta Sans', sans-serif;
+
+:host { display: block; font-family: $font; }
 
 .quiz-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
+  min-height     : 100vh;
+  display        : flex;
+  align-items    : flex-start;
   justify-content: center;
-  padding: 2rem;
-  background: transparent;
-  position: relative;
-  overflow: hidden;
-  z-index: 10;
+  padding        : 2rem 1.5rem 4rem;
+  background     : #f5f3ff;
 }
 
 .quiz-content {
-  max-width: 800px;
-  width: 100%;
-  display: flex;
+  width         : 100%;
+  max-width     : 760px;
+  display       : flex;
   flex-direction: column;
-  gap: 2rem;
+  gap           : 1.5rem;
 }
 
-// ── Termómetro ────────────────────────────────
-.thermometer-section {
-  margin-bottom: 3rem;
-  padding: 1.5rem;
-  display: flex;
+// ── Gauge section ─────────────────────────────────────
+.gauge-section {
+  background    : #ffffff;
+  border-radius : 24px;
+  border        : 1px solid $border;
+  padding       : 1.5rem 1.75rem 1.25rem;
+  box-shadow    : 0 4px 20px rgba($purple, .06);
+  display       : flex;
   flex-direction: column;
-  gap: 1rem;
-  animation: fadeInDown 0.5s ease-out;
-  width: 100%;
-  background: #ffffff;
-  border-radius: 20px;
-  border: 1px solid $border;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  gap           : 1rem;
+  animation     : fadeInDown .45s ease-out both;
 }
 
-.thermometer-header {
-  display: flex;
+.gauge-top-row {
+  display        : flex;
+  align-items    : center;
   justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
+  gap            : .75rem;
+}
+
+.eval-label {
+  display       : flex;
+  align-items   : center;
+  gap           : 6px;
+  font-size     : 11px;
+  font-weight   : 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color         : $text-muted;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; color: $purple; }
 }
 
 .question-counter-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: rgba(109,40,217,0.08);
-  border: 1px solid rgba(109,40,217,0.2);
-  border-radius: 12px;
-  animation: fadeIn 0.5s ease-out;
+  font-size    : 12px;
+  font-weight  : 700;
+  color        : $text-muted;
+  background   : #f9fafb;
+  border       : 1px solid $border;
+  border-radius: 20px;
+  padding      : 4px 12px;
 }
 
-.counter-icon { font-size: 20px; width: 20px; height: 20px; color: $purple; }
-
-.counter-text {
-  color: $text-primary;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.risk-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  border: 1px solid;
-  animation: fadeIn 0.5s ease-out 0.1s backwards;
-  transition: all 0.3s ease;
-}
-
-.risk-badge.risk-neutral { background: rgba(234,88,12,0.08);  border-color: rgba(234,88,12,0.25); }
-.risk-badge.risk-low     { background: rgba(39,174,96,0.08);   border-color: rgba(39,174,96,0.25); }
-.risk-badge.risk-medium  { background: rgba(243,156,18,0.08);  border-color: rgba(243,156,18,0.25); }
-.risk-badge.risk-high    { background: rgba(230,126,34,0.08);  border-color: rgba(230,126,34,0.25); }
-.risk-badge.risk-critical{
-  background: rgba(231,76,60,0.08);
-  border-color: rgba(231,76,60,0.25);
-  animation: fadeIn 0.5s ease-out 0.1s backwards, pulse 2s infinite;
-}
-
-.risk-icon { font-size: 20px; width: 20px; height: 20px; transition: all 0.3s ease; }
-
-.risk-badge.risk-neutral  .risk-icon { color: #ea580c; }
-.risk-badge.risk-low      .risk-icon { color: #27ae60; }
-.risk-badge.risk-medium   .risk-icon { color: #f39c12; }
-.risk-badge.risk-high     .risk-icon { color: #e67e22; }
-.risk-badge.risk-critical .risk-icon { color: #e74c3c; }
-
-.risk-text { color: $text-primary; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.3px; }
-
-.thermometer-horizontal {
-  width: 100%;
-  overflow: visible;
-  max-width: 600px;
-  height: 100px;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
-  margin: 0 auto;
-}
-
-// SVG internos del termómetro — se mantienen iguales
-// ya que son colores dinámicos del estado del quiz
-
-.thermometer-bulb-bg {
-  fill: rgba(248,250,252,0.95);
-  stroke: rgba(109,40,217,0.4);
-  stroke-width: 3;
-  transition: all 0.3s ease;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
-}
-
-.thermometer-tube-bg {
-  fill: rgba(248,250,252,0.9);
-  stroke: rgba(109,40,217,0.3);
-  stroke-width: 3;
-  transition: all 0.3s ease;
-}
-
-.thermometer-mercury {
-  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: drop-shadow(0 0 8px currentColor);
-}
-
-.thermometer-shimmer { opacity: 0.4; mix-blend-mode: multiply; }
-
-.thermometer-bulb-fill {
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  animation: bulbPulse 2.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 6px currentColor);
-}
-
-@keyframes bulbPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.85; transform: scale(1.02); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.7; }
-}
-
-.thermometer-percentage {
-  font-size: 18px;
-  font-weight: 800;
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
-  letter-spacing: 0.5px;
-}
-
-.percentage-inside  { fill: rgba(26,32,44,0.9); }
-.percentage-outside { fill: rgba(26,32,44,0.8); }
-
-.thermometer-marks { opacity: 0.6; }
-
-.mark-label {
-  font-size: 11px;
-  fill: $text-secondary;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
-
-// ── Botones de navegación ─────────────────────
-.navigation-buttons {
-  display: flex;
+// ── Gauge body ────────────────────────────────────────
+.gauge-body {
+  display        : flex;
+  align-items    : center;
   justify-content: space-between;
-  gap: 1rem;
-  animation: fadeInUp 0.5s ease-out 0.4s backwards;
+  gap            : 1.5rem;
 }
 
-.btn-nav {
-  padding: 0.75rem 1.5rem !important;
-  border-radius: 12px !important;
-  color: $text-secondary !important;
-  font-weight: 500 !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.5rem !important;
-  transition: all 0.3s ease !important;
-  background: #ffffff !important;
-  border: 1px solid $border !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+.gauge-svg-wrap {
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+  flex-shrink   : 0;
 }
 
-.btn-nav:hover:not(:disabled) {
-  background: #f8fafc !important;
-  border-color: rgba(109,40,217,0.2) !important;
-  color: $text-primary !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+.gauge-svg {
+  width   : 200px;
+  height  : auto;
+  overflow: visible;
 }
 
-.btn-nav:disabled { opacity: 0.35; cursor: not-allowed; }
+.gauge-needle {
+  transition: all .6s cubic-bezier(.4, 0, .2, 1);
+}
 
-.btn-nav mat-icon { font-size: 20px; width: 20px; height: 20px; }
+.gauge-zone-labels {
+  display        : flex;
+  justify-content: space-between;
+  width          : 180px;
+  margin-top     : -6px;
+}
 
-// ── Loading ────────────────────────────────────
+.gz-label {
+  font-size     : 10px;
+  font-weight   : 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.gz-low  { color: #16a34a; }
+.gz-med  { color: #ca8a04; }
+.gz-high { color: #ea580c; }
+.gz-crit { color: #dc2626; }
+
+// ── Risk chip ─────────────────────────────────────────
+.risk-chip {
+  display      : inline-flex;
+  align-items  : center;
+  gap          : 7px;
+  padding      : 8px 18px;
+  border-radius: 20px;
+  font-size    : .82rem;
+  font-weight  : 700;
+  border       : 1px solid;
+  transition   : all .3s ease;
+  flex-shrink  : 0;
+
+  &-icon { font-size: 18px !important; width: 18px !important; height: 18px !important; }
+
+  &--neutral, &--low {
+    background: #f0fdf4; color: #166534; border-color: #bbf7d0;
+    .risk-chip-icon { color: #16a34a; }
+  }
+  &--medium {
+    background: #fefce8; color: #854d0e; border-color: #fde68a;
+    .risk-chip-icon { color: #ca8a04; }
+  }
+  &--high {
+    background: #fff7ed; color: #9a3412; border-color: #fed7aa;
+    .risk-chip-icon { color: #ea580c; }
+  }
+  &--critical {
+    background: #fef2f2; color: #991b1b; border-color: #fecaca;
+    animation : pulseCrit 2s infinite;
+    .risk-chip-icon { color: #dc2626; }
+  }
+}
+
+@keyframes pulseCrit { 0%,100%{opacity:1} 50%{opacity:.7} }
+
+// ── Progress segments ─────────────────────────────────
+.progress-segments {
+  display: flex;
+  gap    : 3px;
+  height : 5px;
+}
+
+.seg {
+  flex         : 1;
+  height       : 5px;
+  border-radius: 3px;
+  background   : #e5e7eb;
+  transition   : background .3s ease;
+
+  &--done   { background: $teal; }
+  &--active { background: $purple; }
+}
+
+// ── Loading ───────────────────────────────────────────
 .loading-state {
-  text-align: center;
-  color: $text-primary;
-  animation: fadeIn 0.5s ease-out;
+  display        : flex;
+  flex-direction : column;
+  align-items    : center;
+  justify-content: center;
+  gap            : 1rem;
+  min-height     : 60vh;
+  text-align     : center;
+  animation      : fadeIn .5s ease-out;
+}
+
+.loading-icon-wrap {
+  width        : 80px;
+  height       : 80px;
+  border-radius: 22px;
+  background   : linear-gradient(135deg, $purple-dark, #8b5cf6);
+  display      : flex;
+  align-items  : center;
+  justify-content: center;
+  box-shadow   : 0 12px 30px rgba($purple, .25);
 }
 
 .loading-icon {
-  font-size: 64px; width: 64px; height: 64px;
-  color: $purple;
+  font-size: 40px !important;
+  width    : 40px !important;
+  height   : 40px !important;
+  color    : #ffffff;
   animation: spin 2s linear infinite;
 }
 
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.loading-title { font-size: 1.25rem; font-weight: 800; color: $text-primary; }
+.loading-text  { font-size: .88rem;  color: $text-muted; }
 
-// ── Animaciones ────────────────────────────────
-@keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
-@keyframes fadeInDown{ from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInUp  { from { opacity: 0; transform: translateY(20px);  } to { opacity: 1; transform: translateY(0); } }
+.loading-bar {
+  width        : 220px;
+  height       : 4px;
+  border-radius: 2px;
+  background   : #e5e7eb;
+  overflow     : hidden;
+}
 
-// ── Responsive ─────────────────────────────────
-@media (max-width: 768px) {
-  .quiz-container { padding: 1rem; }
+.loading-bar-fill {
+  height    : 100%;
+  background: linear-gradient(90deg, $purple, $teal);
+  animation : loadBar 1.8s ease-in-out infinite;
+}
 
-  .question-card {
-    padding: 2rem 1.5rem;
-    min-height: 350px;
-  }
+@keyframes loadBar {
+  0%   { width: 0%;  margin-left: 0; }
+  50%  { width: 70%; margin-left: 0; }
+  100% { width: 0%;  margin-left: 100%; }
+}
 
-  .question-text { font-size: 1.2rem; }
+// ── Keyframes ─────────────────────────────────────────
+@keyframes fadeIn     { from{opacity:0}                           to{opacity:1} }
+@keyframes fadeInDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes spin       { from{transform:rotate(0deg)}              to{transform:rotate(360deg)} }
 
-  .answer-buttons { flex-direction: column; gap: 1rem; }
-  .btn-answer     { min-width: 100%; }
-  .navigation-buttons { flex-direction: column; }
+// ── Responsive ────────────────────────────────────────
+@media (max-width: 640px) {
+  .quiz-container  { padding: 1rem 1rem 3rem; }
+  .gauge-body      { flex-direction: column; align-items: center; }
+  .gauge-svg       { width: 180px; }
+  .risk-chip       { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 400px) {
+  .gauge-svg        { width: 160px; }
+  .gauge-zone-labels{ width: 160px; }
 }

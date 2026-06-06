@@ -1,0 +1,81 @@
+
+    <div class="modal-overlay" @fadeIn>
+        <div class="modal-container" [ngClass]="resultData.colorClass" [@slideIn]>
+
+            <!-- COLUMNA IZQUIERDA — imagen -->
+            <div class="col-left">
+                <div class="col-left-bg"></div>
+                @if (resultData.image) {
+                    <img class="col-img" [src]="resultData.image" [alt]="resultData.titulo" />
+                } @else {
+                    <div class="col-icon-wrap">
+                        <mat-icon class="col-icon">{{ resultData.icon }}</mat-icon>
+                    </div>
+                }
+                <span class="level-tag">{{ resultData.nivel | titlecase }}</span>
+            </div>
+
+            <!-- COLUMNA DERECHA — contenido -->
+            <div class="col-right">
+                <div class="accent-bar"></div>
+
+                             <!-- Header fijo -->
+                <div class="col-header">
+                    <span class="result-eyebrow">Resultado del análisis</span>
+                    <h2 class="modal-title">{{ resultData.titulo }}</h2>
+                </div>
+
+                <!-- Zona con scroll -->
+                <div class="scroll-area">
+
+                    <div class="msg-card">
+                        <mat-icon class="msg-icon">info</mat-icon>
+                        <p>{{ resultData.mensaje }}</p>
+                    </div>
+
+                    @if (resultData.recomendaciones.length > 0) {
+                        <div class="recs-section">
+                            <div class="recs-title">
+                                <mat-icon>checklist</mat-icon>
+                                Pasos a seguir
+                            </div>
+                            <ul class="recs-list">
+                                @for (rec of resultData.recomendaciones; track $index) {
+                                    <li class="rec-item">
+                                        <mat-icon class="rec-icon">check_circle</mat-icon>
+                                        <span>{{ rec }}</span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                </div>
+
+                <!-- Acciones -->
+                <div class="actions-row">
+                    <button class="act-btn act-btn--whatsapp" (click)="openWhatsapp()">
+                        <mat-icon>support_agent</mat-icon>
+                        <span>Ayuda WhatsApp</span>
+                    </button>
+                    <button class="act-btn act-btn--form" (click)="openGoogleForm()">
+                        <mat-icon>description</mat-icon>
+                        <span>Reportar caso</span>
+                    </button>
+                </div>
+
+                <!-- Footer fijo -->
+                <div class="modal-footer">
+                    <button class="btn-ghost" (click)="startNewQuiz()">
+                        <mat-icon>refresh</mat-icon>
+                        Nueva encuesta
+                    </button>
+                    <button class="btn-primary" (click)="navigateToContact()">
+                        Ir a Bienestar
+                        <mat-icon>chevron_right</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>

@@ -106,8 +106,11 @@
     <app-footer></app-footer>
 
     <!-- Results Modal -->
-    <app-results-modal [show]="showResultsModal()"
-                       [resultData]="resultData()"
-                       (close)="closeResultsModal()">
-    </app-results-modal>
+    @if (showResults()) {
+
+        <app-results
+                [resultData]="resultData()!">
+        </app-results>
+
+    }
 </div>

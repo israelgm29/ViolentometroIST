@@ -1,0 +1,252 @@
+<div class="ui-page">
+    <div class="ui-header">
+        @if (step() === 1) {
+
+            <!-- ══════════════════════════════
+                 PASO 1 — Verificación cédula
+                 ══════════════════════════════ -->
+            <div class="step1-wrap animate-fade-in">
+
+                <div class="hero-section">
+                    <div class="hero-icon-wrap">
+                        <mat-icon class="hero-icon">shield</mat-icon>
+                    </div>
+                    <h2 class="main-title">Verificación de identidad</h2>
+                    <p class="main-subtitle">
+                        Ingresa tu cédula para acceder al Violentómetro.
+                        Tu identidad queda protegida en todo momento.
+                    </p>
+                    <div class="anon-chip">
+                        <mat-icon>lock</mat-icon>
+                        DATOS ANÓNIMOS Y CONFIDENCIALES
+                    </div>
+                </div>
+
+                <mat-dialog-content class="step1-content">
+
+                    <div class="field-label">
+                        <mat-icon>badge</mat-icon>
+                        Número de cédula
+                    </div>
+
+                    <div class="input-row"
+                         [class.input-ok]="isDniValid()"
+                         [class.input-err]="isDniInvalid()">
+
+                        <div class="input-pre">
+                            <mat-icon>credit_card</mat-icon>
+                        </div>
+
+                        <input
+                                type="text"
+                                class="input-field"
+                                [(ngModel)]="dni"
+                                (input)="onDniInput($event)"
+                                (keyup.enter)="checkUser()"
+                                placeholder="Ingresa tu número de cédula"
+                                [disabled]="loading()"
+                                maxlength="10"
+                                autocomplete="off">
+
+                        <div class="input-suf">
+                            @if (loading()) {
+                                <mat-spinner diameter="22"></mat-spinner>
+                            } @else if (isDniValid()) {
+                                <mat-icon class="ico-ok">check_circle</mat-icon>
+                            } @else if (isDniInvalid()) {
+                                <mat-icon class="ico-err">cancel</mat-icon>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="input-feedback">
+                        <span class="counter" [class.counter-done]="dni().length === 10">
+                            {{ dni().length }} / 10
+                        </span>
+                        @if (isDniInvalid()) {
+                            <span class="msg-err">
+                                <mat-icon>error_outline</mat-icon>
+                                Cédula inválida. Verifica el número.
+                            </span>
+                        } @else if (isDniValid()) {
+                            <span class="msg-ok">
+                                <mat-icon>check_circle_outline</mat-icon>
+                                Cédula válida
+                            </span>
+                        }
+                    </div>
+
+                    <div class="tip-box">
+                        <mat-icon>info</mat-icon>
+                        <span>Ingresa los 10 dígitos de tu cédula ecuatoriana sin espacios ni guiones.</span>
+                    </div>
+
+                </mat-dialog-content>
+
+                <mat-dialog-actions align="center" class="step1-actions">
+                    <button
+                            mat-raised-button
+                            class="btn-primary btn-full"
+                            (click)="checkUser()"
+                            [disabled]="!isDniValid() || loading()">
+                        @if (loading()) {
+                            <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
+                            <span>Verificando...</span>
+                        } @else {
+                            <span>Continuar</span>
+                            <mat-icon>arrow_forward</mat-icon>
+                        }
+                    </button>
+                </mat-dialog-actions>
+
+            </div>
+
+        } @else {
+
+            <!-- ══════════════════════════════
+                 PASO 2 — Completar perfil
+                 ══════════════════════════════ -->
+            <div class="step2-wrap animate-fade-in">
+
+                <div class="step2-header">
+                    <div class="step2-icon-wrap">
+                        <mat-icon class="step2-icon">assignment_ind</mat-icon>
+                    </div>
+                    <div>
+                        <h2 class="step2-title">Perfil Anónimo</h2>
+                        <p class="step2-subtitle">Sus datos son anónimos y procesados estadísticamente</p>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+
+                <form [formGroup]="infoForm" (ngSubmit)="onSubmit()">
+                    <mat-dialog-content class="form-grid">
+
+                        <div class="form-field">
+                            <div class="field-label">
+                                <mat-icon>event</mat-icon>
+                                Fecha de nacimiento
+                            </div>
+                            <mat-form-field appearance="outline" class="ui-field">
+                                <input matInput
+                                       [matDatepicker]="picker"
+                                       formControlName="birthdate"
+                                       [max]="maxDate"
+                                       readonly>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="form-field">
+                            <div class="field-label">
+                                <mat-icon>wc</mat-icon>
+                                Género
+                            </div>
+                            <mat-form-field appearance="outline" class="ui-field">
+                                <mat-select formControlName="idGender">
+                                    @for (g of genders(); track g.id) {
+                                        <mat-option [value]="g.id">{{ g.name }}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="form-field">
+                            <div class="field-label">
+                                <mat-icon>public</mat-icon>
+                                Región
+                            </div>
+                            <mat-form-field appearance="outline" class="ui-field">
+                                <mat-select formControlName="idRegion">
+                                    @for (r of regions(); track r.id) {
+                                        <mat-option [value]="r.id">{{ r.name }}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="form-field">
+                            <div class="field-label">
+                                <mat-icon>groups</mat-icon>
+                                Autoidentificación
+                            </div>
+                            <mat-form-field appearance="outline" class="ui-field">
+                                <mat-select formControlName="idEthnicity">
+                                    @for (e of ethnicities(); track e.id) {
+                                        <mat-option [value]="e.id">{{ e.name }}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="form-field form-field--full">
+                            <div class="field-label">
+                                <mat-icon>school</mat-icon>
+                                Instituto
+                            </div>
+                            <mat-form-field appearance="outline" class="ui-field">
+                                <mat-select formControlName="idInstitute">
+                                    @for (i of institutes(); track i.id) {
+                                        <mat-option [value]="i.id">{{ i.name }}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="form-field form-field--full disability-field">
+                            <div class="field-label">
+                                <mat-icon>accessibility</mat-icon>
+                                ¿Posee alguna discapacidad?
+                            </div>
+                            <mat-radio-group formControlName="hasDisability" class="radio-group">
+                                <mat-radio-button value="no">No</mat-radio-button>
+                                <mat-radio-button value="si">Sí</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        @if (infoForm.get('hasDisability')?.value === 'si') {
+                            <div class="form-field form-field--full animate-fade-in">
+                                <div class="field-label">
+                                    <mat-icon>list</mat-icon>
+                                    Tipo de discapacidad
+                                </div>
+                                <mat-form-field appearance="outline" class="ui-field">
+                                    <mat-select formControlName="idDisability">
+                                        @for (d of disabilitiesFiltered(); track d.id) {
+                                            <mat-option [value]="d.id">{{ d.name }}</mat-option>
+                                        }
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        }
+
+                    </mat-dialog-content>
+
+                    <mat-dialog-actions align="end" class="step2-actions">
+                        <button mat-button class="btn-ghost" type="button" (click)="goToStep1()">
+                            <mat-icon>arrow_back</mat-icon>
+                            Atrás
+                        </button>
+                        <button mat-raised-button class="btn-primary" type="submit"
+                                [disabled]="infoForm.invalid || loading()">
+                            @if (loading()) {
+                                <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
+                                <span>Guardando...</span>
+                            } @else {
+                                <span>Iniciar Cuestionario</span>
+                                <mat-icon>bolt</mat-icon>
+                            }
+                        </button>
+                    </mat-dialog-actions>
+
+                </form>
+
+            </div>
+
+        }
+    </div>
+</div>

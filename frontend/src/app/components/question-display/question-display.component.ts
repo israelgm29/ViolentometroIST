@@ -11,7 +11,7 @@ import {MatIconModule} from "@angular/material/icon";
         NgClass
     ],
     templateUrl: './question-display.component.html',
-    styleUrl: './question-display.component.css',
+    styleUrl: './question-display.component.scss',
 })
 export class QuestionDisplay {
 // 1. INPUT: Recibe la pregunta a mostrar

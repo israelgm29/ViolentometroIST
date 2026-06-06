@@ -1,0 +1,425 @@
+// ══════════════════════════════════════════════════════
+//  RESULTS MODAL — Layout dos columnas · Angular
+//  Fuentes: Playfair Display + Plus Jakarta Sans
+// ══════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap');
+
+// ── Variables base ──────────────────────────────────
+$font-display : 'Playfair Display', serif;
+$font-body    : 'Plus Jakarta Sans', sans-serif;
+$radius-modal : 24px;
+$radius-inner : 12px;
+$radius-sm    : 9px;
+$shadow-modal : 0 32px 72px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.05);
+
+// ── Overlay ─────────────────────────────────────────
+.modal-overlay {
+    position        : fixed;
+    inset           : 0;
+    background      : rgba(10, 14, 26, 0.72);
+    backdrop-filter : blur(10px);
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    z-index         : 1100;
+    padding         : 1.25rem;
+}
+
+// ── Contenedor principal (dos columnas) ─────────────
+.modal-container {
+    display       : flex;
+    flex-direction: row;
+    width         : 100%;
+    max-width     : 680px;
+    max-height    : 90vh;        // nunca supera la pantalla
+    border-radius : $radius-modal;
+    overflow      : hidden;
+    box-shadow    : $shadow-modal;
+    font-family   : $font-body;
+
+    // ── Tokens de color por nivel (se aplican vía [ngClass]) ──
+    &.nivel-bajo {
+        --rc        : #16a34a;
+        --rc-rgb    : 22, 163, 74;
+        --rc-bg     : #f0fdf4;
+        --rc-left   : #ecfdf5;
+    }
+    &.nivel-medio {
+        --rc        : #d97706;
+        --rc-rgb    : 217, 119, 6;
+        --rc-bg     : #fffbeb;
+        --rc-left   : #fefce8;
+    }
+    &.nivel-alto {
+        --rc        : #dc2626;
+        --rc-rgb    : 220, 38, 38;
+        --rc-bg     : #fef2f2;
+        --rc-left   : #fff1f1;
+    }
+    &.nivel-critico {
+        --rc        : #7c3aed;
+        --rc-rgb    : 124, 58, 237;
+        --rc-bg     : #f5f3ff;
+        --rc-left   : #f0ebff;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  COLUMNA IZQUIERDA — imagen / ilustración
+// ══════════════════════════════════════════════════════
+.col-left {
+    width       : 220px;
+    min-width   : 220px;
+    position    : relative;
+    overflow    : hidden;
+    display     : flex;
+    flex-direction : column;
+    align-items : center;
+    justify-content : flex-end;
+    padding     : 20px 16px;
+    background  : var(--rc-left);
+
+    // degradado sutil sobre la imagen
+    &::after {
+        content    : '';
+        position   : absolute;
+        inset      : 0;
+        background : linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, transparent 55%);
+        z-index    : 1;
+        pointer-events: none;
+    }
+}
+
+// Imagen real (cuando resultData.image existe)
+.col-img {
+    position   : absolute;
+    inset      : 0;
+    width      : 100%;
+    height     : 100%;
+    object-fit : cover;
+}
+
+// Ícono de fallback (cuando no hay imagen)
+.col-icon-wrap {
+    position        : absolute;
+    inset           : 0;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+
+    .col-icon {
+        font-size : 80px;
+        width     : 80px;
+        height    : 80px;
+        color     : var(--rc);
+        opacity   : 0.35;
+    }
+}
+
+// Etiqueta de nivel (sobre la imagen)
+.level-tag {
+    position       : relative;
+    z-index        : 2;
+    font-size      : 10px;
+    font-weight    : 700;
+    text-transform : uppercase;
+    letter-spacing : 0.1em;
+    color          : #ffffff;
+    background     : rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    padding        : 5px 14px;
+    border-radius  : 20px;
+    border         : 1px solid rgba(255, 255, 255, 0.28);
+}
+
+// ══════════════════════════════════════════════════════
+//  COLUMNA DERECHA — contenido
+// ══════════════════════════════════════════════════════
+.col-right {
+    flex           : 1;
+    min-width      : 0;
+    display        : flex;
+    flex-direction : column;
+    background     : #ffffff;
+    position       : relative;
+    // La columna derecha gestiona su propia altura interna
+    max-height     : inherit;
+    overflow       : hidden;
+}
+
+// Barra de acento superior (color del nivel)
+.accent-bar {
+    height     : 4px;
+    width      : 100%;
+    background : var(--rc);
+    flex-shrink: 0;
+}
+
+// Botón cerrar
+.close-btn {
+    position    : absolute;
+    top         : 10px;
+    right       : 10px;
+    width       : 30px;
+    height      : 30px;
+    border-radius: 8px;
+    border      : none;
+    background  : rgba(0, 0, 0, 0.06);
+    color       : #9ca3af;
+    cursor      : pointer;
+    display     : flex;
+    align-items : center;
+    justify-content: center;
+    z-index     : 10;
+    transition  : background 0.2s, color 0.2s;
+
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+    &:hover {
+        background : rgba(0, 0, 0, 0.1);
+        color      : #374151;
+    }
+}
+
+// Header fijo (no scrollea)
+.col-header {
+    padding       : 18px 48px 14px 20px;
+    flex-shrink   : 0;
+    border-bottom : 1px solid #f3f4f6;
+}
+
+.result-eyebrow {
+    display        : block;
+    font-size      : 10px;
+    font-weight    : 700;
+    text-transform : uppercase;
+    letter-spacing : 0.1em;
+    color          : var(--rc);
+    margin-bottom  : 4px;
+}
+
+.modal-title {
+    font-family : $font-display;
+    font-size   : 1.3rem;
+    font-weight : 900;
+    color       : #111827;
+    margin      : 0;
+    line-height : 1.2;
+}
+
+// ── Zona con scroll interno ──────────────────────────
+.scroll-area {
+    flex      : 1;
+    overflow-y: auto;
+    padding   : 14px 20px;
+    display   : flex;
+    flex-direction: column;
+    gap       : 10px;
+    // scrollbar discreta
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--rc-rgb), 0.2) transparent;
+
+    &::-webkit-scrollbar       { width: 4px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb {
+        background    : rgba(var(--rc-rgb), 0.2);
+        border-radius : 4px;
+    }
+}
+
+// Tarjeta de mensaje principal
+.msg-card {
+    display      : flex;
+    gap          : 10px;
+    padding      : 12px 14px;
+    background   : var(--rc-bg);
+    border-radius: $radius-inner;
+    border-left  : 3px solid var(--rc);
+    flex-shrink  : 0;
+
+    .msg-icon {
+        font-size  : 18px;
+        width      : 18px;
+        height     : 18px;
+        color      : var(--rc);
+        flex-shrink: 0;
+        margin-top : 1px;
+    }
+
+    p {
+        margin      : 0;
+        font-size   : 0.82rem;
+        line-height : 1.55;
+        color       : #4b5563;
+    }
+}
+
+// Sección de recomendaciones
+.recs-section { flex-shrink: 0; }
+
+.recs-title {
+    display        : flex;
+    align-items    : center;
+    gap            : 5px;
+    font-size      : 10px;
+    font-weight    : 700;
+    text-transform : uppercase;
+    letter-spacing : 0.08em;
+    color          : #9ca3af;
+    margin-bottom  : 8px;
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+}
+
+.recs-list {
+    list-style : none;
+    padding    : 0;
+    margin     : 0;
+    display    : flex;
+    flex-direction: column;
+    gap        : 5px;
+}
+
+.rec-item {
+    display      : flex;
+    align-items  : flex-start;
+    gap          : 8px;
+    padding      : 9px 11px;
+    background   : rgba(var(--rc-rgb), 0.05);
+    border-radius: $radius-sm;
+    border       : 1px solid rgba(var(--rc-rgb), 0.08);
+    transition   : transform 0.2s ease;
+
+    &:hover { transform: translateX(3px); }
+
+    .rec-icon {
+        font-size  : 15px;
+        width      : 15px;
+        height     : 15px;
+        color      : var(--rc);
+        flex-shrink: 0;
+        margin-top : 2px;
+    }
+
+    span {
+        font-size  : 0.79rem;
+        line-height: 1.45;
+        color      : #374151;
+        font-weight: 500;
+    }
+}
+
+// ── Acciones ─────────────────────────────────────────
+.actions-row {
+    display               : grid;
+    grid-template-columns : 1fr 1fr;
+    gap                   : 7px;
+    padding               : 0 20px 10px;
+    flex-shrink           : 0;
+}
+
+.act-btn {
+    display        : flex;
+    align-items    : center;
+    gap            : 7px;
+    padding        : 9px 12px;
+    border-radius  : 10px;
+    border         : none;
+    cursor         : pointer;
+    font-family    : $font-body;
+    font-size      : 0.76rem;
+    font-weight    : 600;
+    transition     : transform 0.2s, filter 0.2s;
+
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+    &:hover { transform: translateY(-2px); filter: brightness(0.95); }
+
+    &--whatsapp {
+        background : #ecfdf5;
+        color      : #059669;
+    }
+    &--form {
+        background : #eff6ff;
+        color      : #2563eb;
+    }
+}
+
+// ── Footer fijo ───────────────────────────────────────
+.modal-footer {
+    display      : flex;
+    gap          : 7px;
+    padding      : 10px 20px 16px;
+    border-top   : 1px solid #f3f4f6;
+    flex-shrink  : 0;
+    background   : #ffffff;
+
+    button {
+        flex           : 1;
+        height         : 40px;
+        border-radius  : $radius-sm;
+        font-family    : $font-body;
+        font-size      : 0.78rem;
+        font-weight    : 600;
+        cursor         : pointer;
+        display        : flex;
+        align-items    : center;
+        justify-content: center;
+        gap            : 4px;
+        transition     : all 0.2s ease;
+
+        mat-icon { font-size: 17px; width: 17px; height: 17px; }
+    }
+}
+
+.btn-ghost {
+    background : transparent;
+    border     : 1px solid #e5e7eb;
+    color      : #6b7280;
+    flex       : 1;
+
+    &:hover { background: #f9fafb; color: #1f2937; }
+}
+
+.btn-primary {
+    flex       : 1.4;
+    background : var(--rc);
+    border     : none;
+    color      : #ffffff;
+    box-shadow : 0 4px 12px rgba(var(--rc-rgb), 0.22);
+
+    &:hover {
+        filter    : brightness(1.08);
+        transform : translateY(-2px);
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  RESPONSIVE — móvil: una sola columna
+// ══════════════════════════════════════════════════════
+@media (max-width: 540px) {
+    .modal-container {
+        flex-direction : column;
+        max-height     : 92vh;
+    }
+
+    .col-left {
+        width     : 100%;
+        min-width : unset;
+        height    : 160px;
+        min-height: 160px;
+        justify-content: flex-end;
+    }
+
+    .col-icon-wrap .col-icon {
+        font-size : 56px;
+        width     : 56px;
+        height    : 56px;
+    }
+
+    .actions-row    { grid-template-columns: 1fr; }
+    .modal-footer   { flex-direction: column-reverse; }
+    .btn-primary,
+    .btn-ghost      { flex: unset; width: 100%; }
+}

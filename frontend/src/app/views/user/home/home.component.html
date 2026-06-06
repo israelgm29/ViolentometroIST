@@ -1,15 +1,26 @@
 <div class="home-page">
-    <div class="background-wrapper">
-        <app-particle-background></app-particle-background>
-    </div>
 
     <div class="home-content-area">
+
+        @if (!showQuiz()) {
+
+            <app-user-identification
+                    (completed)="onUserValidated($event)"
+                    (cancelled)="onCancelIdentification()">
+            </app-user-identification>
+
+        }
+
         @if (showQuiz()) {
+
             <app-questions-container
                     [userId]="currentUserId()!"
                     [userDni]="currentUserDni()!"
                     [surveyId]="currentSurveyId()!">
             </app-questions-container>
+
         }
+
     </div>
+
 </div>

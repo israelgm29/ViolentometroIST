@@ -1,31 +1,46 @@
 <div class="question-card" [ngClass]="'slide-' + slideDirection">
-    <div class="zone-indicator-bar"
-         [style.background-color]="question.zone.color"
-         [style.box-shadow]="'4px 0 20px ' + question.zone.color + '80'">
+
+    <!-- Zona / categoría -->
+    <div class="zone-tag"
+         [style.color]="question.zone.color"
+         [style.background]="question.zone.color + '18'"
+         [style.border-color]="question.zone.color + '35'">
+        {{ question.zone.name }}
     </div>
 
-    <div class="zone-header-tag" [style.color]="question.zone.color">
-        <span>{{ question.zone.name }}</span>
-    </div>
-
-    <div class="question-icon">
-        <mat-icon [style.color]="question.zone.color" [style.filter]="'drop-shadow(0 0 10px ' + question.zone.color + '60)'">
-            {{ question.zone.color === '#ef4444' || question.zone.name === 'Rojo' ? 'report_problem' : 'help_outline' }}
+    <!-- Ícono -->
+    <div class="question-icon" [style.border-color]="question.zone.color + '30'">
+        <mat-icon [style.color]="question.zone.color">
+            {{
+                question.zone.name === 'Rojo'    ? 'warning'       :
+                    question.zone.name === 'Naranja' ? 'priority_high' :
+                        question.zone.name === 'Amarillo'? 'help_outline'  : 'psychology'
+            }}
         </mat-icon>
     </div>
 
+    <!-- Pregunta -->
     <div class="question-body">
         <h2 class="question-text">{{ question.question }}</h2>
+        <p class="question-hint">
+            <mat-icon>lock</mat-icon>
+            Responde con sinceridad. Esta información es confidencial.
+        </p>
     </div>
 
+    <!-- Respuestas -->
     <div class="answer-buttons">
-        <button class="btn-answer btn-yes" (click)="onAnswerClick(true)" matRipple>
-            <mat-icon>check_circle</mat-icon>
-            <span>SÍ</span>
-        </button>
+
         <button class="btn-answer btn-no" (click)="onAnswerClick(false)" matRipple>
             <mat-icon>cancel</mat-icon>
-            <span>NO</span>
+            <span>No</span>
         </button>
+
+        <button class="btn-answer btn-yes" (click)="onAnswerClick(true)" matRipple>
+            <mat-icon>check_circle</mat-icon>
+            <span>Sí</span>
+        </button>
+
     </div>
+
 </div>

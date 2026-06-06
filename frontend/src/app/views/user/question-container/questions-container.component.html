@@ -1,77 +1,115 @@
 <div class="quiz-container">
     @if (currentQuestion()) {
         <div class="quiz-content">
-            <div class="quiz-layout">
-                <div class="thermometer-section">
-                    <div class="thermometer-header">
-                        <div class="question-counter-badge">
-                            <mat-icon class="counter-icon">assignment</mat-icon>
-                            <span class="counter-text">Pregunta {{ currentIndex() + 1 }} de {{ questions().length }}</span>
-                        </div>
 
-                        <div class="risk-badge" [ngClass]="'risk-' + riskLevel()">
-                            <mat-icon class="risk-icon">{{ riskIcon() }}</mat-icon>
-                            <span class="risk-text">
-                                Nivel
-                                @if (riskLevel() === 'neutral') { Inicial }
-                                @else if (riskLevel() === 'low') { Bajo }
-                                @else if (riskLevel() === 'medium') { Medio }
-                                @else if (riskLevel() === 'high') { Alto }
-                                @else { Crítico }
-                            </span>
+            <!-- ── GAUGE + HEADER ─────────────────────────── -->
+            <div class="gauge-section">
+
+                <div class="gauge-top-row">
+                    <div class="eval-label">
+                        <mat-icon>assignment</mat-icon>
+                        Evaluación de riesgo
+                    </div>
+                    <div class="question-counter-badge">
+                        Pregunta {{ currentIndex() + 1 }} de {{ questions().length }}
+                    </div>
+                </div>
+
+                <div class="gauge-body">
+
+                    <!-- Gauge SVG semicircular -->
+                    <div class="gauge-svg-wrap">
+                        <svg viewBox="0 0 220 130" class="gauge-svg" aria-hidden="true">
+                            <defs>
+                                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%"   stop-color="#22c55e"/>
+                                    <stop offset="35%"  stop-color="#facc15"/>
+                                    <stop offset="65%"  stop-color="#f97316"/>
+                                    <stop offset="100%" stop-color="#ef4444"/>
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Track fondo -->
+                            <path d="M 20 110 A 90 90 0 0 1 200 110"
+                                  fill="none" stroke="#e5e7eb"
+                                  stroke-width="14" stroke-linecap="round"/>
+
+                            <!-- Fill dinámico -->
+                            <path d="M 20 110 A 90 90 0 0 1 200 110"
+                                  fill="none" stroke="url(#gaugeGrad)"
+                                  stroke-width="14" stroke-linecap="round"
+                                  stroke-dasharray="283"
+                                  [attr.stroke-dashoffset]="gaugeDashOffset()"/>
+
+                            <!-- Aguja -->
+                            <line [attr.x2]="gaugeNeedleX()"
+                                  [attr.y2]="gaugeNeedleY()"
+                                  x1="110" y1="110"
+                                  stroke="#1f2937"
+                                  stroke-width="2.5"
+                                  stroke-linecap="round"
+                                  class="gauge-needle"/>
+
+                            <!-- Centro de la aguja -->
+                            <circle cx="110" cy="110" r="6" fill="#1f2937"/>
+                            <circle cx="110" cy="110" r="3" fill="#ffffff"/>
+                        </svg>
+
+                        <div class="gauge-zone-labels">
+                            <span class="gz-label gz-low">Bajo</span>
+                            <span class="gz-label gz-med">Medio</span>
+                            <span class="gz-label gz-high">Alto</span>
+                            <span class="gz-label gz-crit">Crítico</span>
                         </div>
                     </div>
 
-                    <svg viewBox="0 0 550 120" class="thermometer-horizontal">
-                        <defs>
-                            <linearGradient id="quizThermometerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" [attr.stop-color]="getMercuryColor(0)"/>
-                                <stop [attr.offset]="progress() + '%'" [attr.stop-color]="getMercuryColor(progress())"/>
-                            </linearGradient>
-                            <filter id="quizGlow" x="-20%" y="-20%" width="140%" height="140%">
-                                <feGaussianBlur stdDeviation="3" result="blur" />
-                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                            </filter>
-                        </defs>
+                    <!-- Chip nivel de riesgo -->
+                    <div class="risk-chip" [ngClass]="'risk-chip--' + riskLevel()">
+                        <mat-icon class="risk-chip-icon">{{ riskIcon() }}</mat-icon>
+                        <span>
+                            @if (riskLevel() === 'neutral') { Nivel inicial }
+                            @else if (riskLevel() === 'low') { Nivel bajo }
+                            @else if (riskLevel() === 'medium') { Nivel medio }
+                            @else if (riskLevel() === 'high') { Nivel alto }
+                            @else { Nivel crítico }
+                        </span>
+                    </div>
 
-                        <rect x="50" y="40" width="450" height="30" rx="15" fill="rgba(30, 30, 50, 0.5)" stroke="rgba(255,255,255,0.1)"/>
-
-                        <rect x="50" y="42" [attr.width]="(progress() / 100) * 450" height="26" rx="13"
-                              fill="url(#quizThermometerGradient)" class="thermometer-fill-active" filter="url(#quizGlow)"/>
-
-                        <g class="bulb-group">
-                            <circle cx="45" cy="55" r="28" fill="rgba(20, 15, 35, 0.95)" stroke="rgba(155, 89, 182, 0.7)" stroke-width="2"/>
-                            <circle cx="45" cy="55" r="24" [attr.fill]="'url(#quizThermometerGradient)'" filter="url(#quizGlow)"/>
-                        </g>
-
-                        <text [attr.x]="progress() > 10 ? 47 + (progress() / 100) * 456 : 95" y="60"
-                              text-anchor="middle" class="thermometer-percentage"
-                              [attr.fill]="progress() > 15 ? '#ffffff' : getMercuryColor(progress())">
-                            {{ progress() | number:'1.0-0' }}%
-                        </text>
-                    </svg>
                 </div>
 
-                <app-question-display
-                        [question]="currentQuestion()!"
-                        [slideDirection]="slideDirection()"
-                        (answered)="answerQuestion($event)">
-                </app-question-display>
+                <!-- Segmentos de progreso -->
+                <div class="progress-segments">
+                    @for (seg of progressSegments(); track $index) {
+                        <div class="seg"
+                             [class.seg--done]="seg === 'done'"
+                             [class.seg--active]="seg === 'active'">
+                        </div>
+                    }
+                </div>
+
             </div>
+
+            <!-- ── TARJETA DE PREGUNTA ─────────────────────── -->
+            <app-question-display
+                    [question]="currentQuestion()!"
+                    [slideDirection]="slideDirection()"
+                    (answered)="answerQuestion($event)">
+            </app-question-display>
+
         </div>
+
     } @else {
+
         <div class="loading-state">
-            <div class="loader-content">
-                <div class="scanner-line"></div>
-                <div class="loading-icon-wrapper">
-                    <mat-icon class="loading-icon animate-pulse">security</mat-icon>
-                </div>
-                <h3 class="loading-title">Preparando Evaluación</h3>
-                <p class="loading-text">Configurando entorno seguro y cargando reactivos...</p>
-                <div class="loading-bar-container">
-                    <div class="loading-bar-fill"></div>
-                </div>
+            <div class="loading-icon-wrap">
+                <mat-icon class="loading-icon">security</mat-icon>
+            </div>
+            <h3 class="loading-title">Preparando evaluación</h3>
+            <p class="loading-text">Configurando entorno seguro...</p>
+            <div class="loading-bar">
+                <div class="loading-bar-fill"></div>
             </div>
         </div>
+
     }
 </div>

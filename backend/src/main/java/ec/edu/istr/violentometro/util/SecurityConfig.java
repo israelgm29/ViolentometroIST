@@ -29,110 +29,108 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. CORS debe ir primero
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-                // 2. Desactivar CSRF para API Stateless
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // 3. Configurar permisos de rutas
                 .authorizeHttpRequests(auth -> auth
-                        // Permitir todas las peticiones OPTIONS (Preflight de CORS)
+
+                        // ── CORS Preflight ──────────────────────────────────────
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // ============================================
-                        // RUTAS PÚBLICAS (sin autenticación)
-                        // ============================================
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user-answers/user/dni/**").permitAll()
+                        // ── Auth ────────────────────────────────────────────────
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout").permitAll()
+
+                        // ── App-users (flujo público de encuesta, sin sesión) ───
+                        // Los app-users NO se loguean; operan solo con su cédula.
+                        // GET:   buscar por DNI para validar/mostrar perfil
+                        // POST:  registrar nuevo usuario
+                        // PUT:   completar/actualizar perfil antes de la encuesta
+                        // PATCH: actualizar estado
+                        // DELETE: solo ADMIN (va en la sección de roles más abajo)
+                        .requestMatchers(HttpMethod.GET,   "/api/v1/app-users/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,  "/api/v1/app-users").permitAll()
+                        .requestMatchers(HttpMethod.PUT,   "/api/v1/app-users/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/app-users/**").permitAll()
+
+                        // ── Encuesta (flujo público) ────────────────────────────
                         .requestMatchers(HttpMethod.POST, "/api/v1/user-answers").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/api/v1/user-answers/user/dni/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/api/v1/user-answers/can-answer").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/quiz-results").permitAll()
+
+                        // ── Catálogos públicos ──────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/genders/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/regions/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/ethnicities/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/disabilities/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user-answers/user/dni/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/statistics/**").permitAll()
+
+                        // Institutes: solo lista e imagen son públicos
+                        .requestMatchers(HttpMethod.GET, "/api/v1/institutes").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/institutes/*/logo").permitAll()
+
+                        // Campaigns: solo activas son públicas
                         .requestMatchers(HttpMethod.GET, "/api/v1/campaigns/active").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/campaigns/categories/active").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user-answers/can-answer").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/institutes").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/quiz-results").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/statistics/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,    "/api/v1/institutes/*/logo").permitAll()
-                        .requestMatchers("/api/v1/reports/**").permitAll()
 
-                        // Rutas públicas de autenticación
-                        .requestMatchers(
-                                "/api/v1/auth/login",
-                                "/api/v1/auth/logout"
-                        ).permitAll()
+                        // Reports: público (lectura)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/reports/**").permitAll()
 
-                        // ============================================
-                        // RUTAS SEMI-PÚBLICAS (cualquier usuario autenticado)
-                        // ============================================
-                        .requestMatchers(
-                                "/api/v1/surveys/**",
-                                "/api/v1/questions/**",
-                                "/api/v1/violence-zones/**"
-                        ).authenticated()
+                        // Surveys: solo la activa es pública (flujo cuestionario)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/surveys/active").permitAll()
 
-                        // ============================================
-                        // RUTAS POR ROL ESPECÍFICO
-                        // ============================================
+                        // Violence-zones: público para mostrar zonas en el cuestionario
+                        .requestMatchers(HttpMethod.GET, "/api/v1/violence-zones").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/violence-zones/**").permitAll()
 
-                        // SOLO ADMIN (gestión completa del sistema)
-                        .requestMatchers("/api/v1/sys-users/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/settings/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/institutes/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/violence-zones/**").hasRole("ADMIN")
+                        // ── Roles: ADMIN ────────────────────────────────────────
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/app-users/**").hasRole("ADMIN")
 
-                        // ADMIN + ANALYST + WELFARE (bienestar puede ver ciertas cosas)
-                        .requestMatchers(HttpMethod.GET, "/api/v1/dashboard/**")
-                        .hasAnyRole("ADMIN", "WELFARE")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/campaigns/**")
-                        .hasAnyRole("ADMIN", "WELFARE")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/reports/**")
-                        .hasAnyRole("ADMIN", "WELFARE")
+                        .requestMatchers(HttpMethod.GET,    "/api/v1/sys-users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/sys-users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/v1/sys-users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/sys-users/**").hasRole("ADMIN")
 
-                        // ADMIN + WELFARE (ANALYST NO tiene acceso)
-                        .requestMatchers(HttpMethod.GET, "/api/v1/surveys/**")
-                        .hasAnyRole("ADMIN", "WELFARE")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/questions/**")
-                        .hasAnyRole("ADMIN", "WELFARE")
+                        .requestMatchers(HttpMethod.GET,    "/api/v1/settings/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/settings/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/v1/settings/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/settings/**").hasRole("ADMIN")
 
-                        // CRUD completo solo ADMIN
-                        .requestMatchers(HttpMethod.POST, "/api/v1/surveys/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/surveys/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/surveys/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/questions/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/questions/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/questions/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/campaigns/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/campaigns/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/api/v1/violence-zones/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/violence-zones/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/v1/violence-zones/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/violence-zones/**").hasRole("ADMIN")
+
+                        // Institutes CRUD (fuera de los públicos declarados arriba)
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/institutes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/v1/institutes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/institutes/**").hasRole("ADMIN")
+
+                        // ── Roles: ADMIN + WELFARE ──────────────────────────────
+                        .requestMatchers(HttpMethod.GET, "/api/v1/dashboard/**").hasAnyRole("ADMIN", "WELFARE")
+
+                        .requestMatchers(HttpMethod.GET,    "/api/v1/campaigns/**").hasAnyRole("ADMIN", "WELFARE")
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/campaigns/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/v1/campaigns/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/campaigns/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,   "/api/v1/institutes/*/logo").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/institutes/*/logo").hasAnyRole("ADMIN")
 
-                        // Gestión de usuarios (app-users)
-                        // GET: todos pueden ver (ADMIN, ANALYST, WELFARE)
-                        .requestMatchers(HttpMethod.GET, "/api/v1/app-users/**")
-                        .hasAnyRole("ADMIN", "ANALYST", "WELFARE")
-                        // POST (crear): ADMIN, ANALYST, WELFARE
-                        .requestMatchers(HttpMethod.POST, "/api/v1/app-users/**")
-                        .hasAnyRole("ADMIN", "ANALYST", "WELFARE")
-                        // PUT (editar): solo ADMIN
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/app-users/**")
-                        .hasRole("ADMIN")
-                        // DELETE: solo ADMIN
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/app-users/**")
-                        .hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/api/v1/surveys/**").hasAnyRole("ADMIN", "WELFARE")
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/surveys/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/v1/surveys/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/surveys/**").hasRole("ADMIN")
 
-                        // Cualquier otra ruta requiere autenticación
+                        .requestMatchers(HttpMethod.GET,    "/api/v1/questions/**").hasAnyRole("ADMIN", "WELFARE")
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/questions/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/v1/questions/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/questions/**").hasRole("ADMIN")
+
+                        // ── Cualquier otra ruta requiere autenticación ──────────
                         .anyRequest().authenticated()
                 )
 
-                // 4. Gestión de sesión (Sin estado por JWT)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                // 5. Proveedor de autenticación y filtro JWT
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -143,23 +141,17 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Origen de tu Angular
         config.setAllowedOrigins(List.of(
                 "http://localhost:4200",
                 "http://localhost",
-                "http://localhost:80"
+                "http://localhost:80",
+                "http://181.211.10.246",
+                "http://violentometroistr.duckdns.org"
         ));
 
-        // Métodos permitidos
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-
-        // Cabeceras permitidas
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
-
-        // Permitir credenciales (cookies)
         config.setAllowCredentials(true);
-
-        // Tiempo que el navegador guarda la respuesta del Preflight (30 min)
         config.setMaxAge(1800L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

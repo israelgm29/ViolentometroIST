@@ -1,23 +1,23 @@
 .main-navbar {
-    background: white !important;
-    border-bottom: 1px solid rgba(11, 16, 81, 0.12); /* Azul institucional sutil */
-    box-shadow: 0 2px 10px rgba(248, 9, 14, 0.05); /* Sombra con tinte rojo */
+    background: #ffffff !important;
+    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     height: 64px;
     padding: 0 24px;
-    color: #0b1051; /* Azul para el texto principal */
+    color: #0066cc;
 
     .menu-toggle {
         transition: all 0.3s ease;
 
         mat-icon {
-            color: #0b1051; /* Azul institucional */
+            color: #0066cc;
         }
 
         &:hover {
-            background-color: rgba(248, 9, 14, 0.06); /* Rojo suave al hover */
+            background-color: #e6f2ff;
 
             mat-icon {
-                color: #f8090e !important; /* Rojo institucional */
+                color: #0066cc !important;
             }
         }
 
@@ -48,14 +48,14 @@
         .user-name {
             font-size: 0.9rem;
             font-weight: 600;
-            color: #0b1051; /* Azul institucional */
+            color: #0066cc;
             line-height: 1.2;
             letter-spacing: -0.01em;
         }
 
         .user-role {
             font-size: 0.7rem;
-            color: #f8090e; /* Rojo institucional */
+            color: #495057;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -66,11 +66,10 @@
         width: 44px;
         height: 44px;
         border-radius: 50%;
-        /* Gradiente con los colores institucionales */
-        background: linear-gradient(145deg, #0b1051 0%, #f8090e 90%);
+        background: linear-gradient(145deg, #0066cc 0%, #0099ff 90%);
         transition: all 0.3s ease;
-        border: 2px solid rgba(255, 255, 255, 0.8);
-        box-shadow: 0 2px 8px rgba(248, 9, 14, 0.2);
+        border: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 
         mat-icon {
             color: white !important;
@@ -81,7 +80,7 @@
 
         &:hover {
             transform: scale(1.08);
-            box-shadow: 0 6px 16px rgba(248, 9, 14, 0.35);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
             border-color: white;
         }
 
@@ -111,10 +110,10 @@
 ::ng-deep .user-menu {
     margin-top: 8px;
     min-width: 200px !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(11, 16, 81, 0.15) !important;
-    border: 1px solid rgba(11, 16, 81, 0.08) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid #dee2e6 !important;
 
     .mat-mdc-menu-content {
         padding: 6px 0 !important;
@@ -122,13 +121,13 @@
 
     .mat-mdc-menu-item {
         height: 44px !important;
-        color: #0b1051 !important; /* Azul institucional */
+        color: #0066cc !important;
         transition: all 0.2s ease;
         font-weight: 500;
         gap: 8px;
 
         .mat-icon {
-            color: #f8090e !important; /* Rojo para iconos */
+            color: #495057 !important;
             margin-right: 8px !important;
             font-size: 20px;
             width: 20px;
@@ -136,22 +135,22 @@
         }
 
         &:hover {
-            background-color: rgba(248, 9, 14, 0.06) !important; /* Rojo suave */
+            background-color: #e6f2ff !important;
 
             .mat-icon {
-                color: #f8090e !important;
+                color: #0066cc !important;
                 transform: scale(1.1);
             }
         }
 
         &:active {
-            background-color: rgba(11, 16, 81, 0.08) !important;
+            background-color: #cce6ff !important;
         }
     }
 
     .mat-divider {
         margin: 4px 0 !important;
-        border-color: rgba(11, 16, 81, 0.12) !important;
+        border-color: #dee2e6 !important;
     }
 }
 
@@ -168,7 +167,7 @@
         right: 2px;
         width: 8px;
         height: 8px;
-        background: #f8090e; /* Rojo institucional */
+        background: #00cc66;
         border-radius: 50%;
         border: 2px solid white;
         animation: pulse-red 2s infinite;
@@ -219,8 +218,8 @@
 /* ========================================= */
 .route-indicator {
     font-size: 0.85rem;
-    color: #0b1051;
-    background: rgba(11, 16, 81, 0.06);
+    color: #0066cc;
+    background: #e6f2ff;
     padding: 4px 12px;
     border-radius: 30px;
     margin-left: 16px;
@@ -229,7 +228,7 @@
     gap: 6px;
 
     mat-icon {
-        color: #f8090e;
+        color: #0066cc;
         font-size: 18px;
         width: 18px;
         height: 18px;

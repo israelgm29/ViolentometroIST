@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { NgClass } from '@angular/common'; // Solo dejamos NgClass si lo usas para objetos complejos
+import {NgClass, TitleCasePipe} from '@angular/common';
 
 export interface ResultData {
     nivel: 'bajo' | 'medio' | 'alto' | 'critico';
@@ -16,11 +16,11 @@ export interface ResultData {
 }
 
 @Component({
-    selector: 'app-results-modal',
+    selector: 'app-results',
     standalone: true,
-    imports: [MatIconModule, MatButtonModule, NgClass],
-    templateUrl: './results-modal.component.html',
-    styleUrls: ['./results-modal.component.scss'],
+    imports: [MatIconModule, MatButtonModule, NgClass, TitleCasePipe],
+    templateUrl: './results.component.html',
+    styleUrls: ['./results.component.scss'],
     animations: [
         trigger('fadeIn', [
             transition(':enter', [
@@ -40,26 +40,21 @@ export interface ResultData {
         ])
     ]
 })
-export class ResultsModalComponent {
+export class ResultsComponent {
     @Input() resultData!: ResultData;
-    @Input() show: boolean = true;
-    @Output() close = new EventEmitter<void>();
 
     private router = inject(Router);
 
     closeModal() {
-        this.close.emit();
+       //pendiente
     }
 
     navigateToContact() {
         this.router.navigate(['/welfare']);
-        this.closeModal();
     }
 
     startNewQuiz() {
-        // Lógica para reiniciar, usualmente redirigir a la ruta del test
-        this.router.navigate(['/quiz']);
-        this.closeModal();
+        window.location.reload();
     }
 
     openWhatsapp() {

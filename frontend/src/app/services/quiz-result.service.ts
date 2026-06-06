@@ -32,9 +32,14 @@ export class QuizResultService {
         this.currentResult.set(result);
     }
 
-    getResultData(): ResultData {
+    getResultData(): ResultData | null {
+
         const result = this.currentResult();
-        if (!result) return this.getDefaultResult();
+
+        if (!result) {
+            return null;
+        }
+
         return this.mapResultToData(result);
     }
 
@@ -85,13 +90,13 @@ export class QuizResultService {
 
     private defaultImage(riskLevel: string): string {
         const images: Record<string, string> = {
-            neutral: 'assets/images/neutral.png',
-            low: 'assets/images/neutral.png',
-            medium: 'assets/images/neutral.png',
-            high: 'assets/images/Gender violence women.svg',
-            critical: 'assets/images/neutral.png'
+            neutral: 'assets/images/fine_bg.svg',
+            low: 'assets/images/low-bg.svg',
+            medium: 'assets/images/medium-bg.svg',
+            high: 'assets/images/Gender high-bg.svg',
+            critical: 'assets/images/high-bg.svg'
         };
-        return images[riskLevel] || 'assets/images/neutral.png';
+        return images[riskLevel] || 'assets/images/fine_bg.svg';
     }
 
     // ─── Fallbacks de Seguridad ───────────────────────────────────────────────

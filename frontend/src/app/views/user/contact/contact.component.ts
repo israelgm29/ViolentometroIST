@@ -5,9 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { FooterComponent } from '../../../shared/footer/footer.component';
-import {ModalService} from "../../../services/modal.service";
 import {QuizResultService} from "../../../services/quiz-result.service";
-import {ResultsModalComponent} from "../../../components/results-modal/results-modal.component";
+import {ResultsComponent} from "../../../components/results/results.component";
 
 export interface EducationalInstitute {
     id: string;
@@ -40,86 +39,22 @@ interface Testimonial {
         MatCardModule,
         MatButtonModule,
         FooterComponent,
-        ResultsModalComponent
+        ResultsComponent
     ],
     templateUrl: './contact.component.html',
     styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent {
-    private  modalService = inject(ModalService);
     private quizResultService = inject(QuizResultService);
     currentTestimonialIndex: number = 0;
 
-    // Signals para el modal de resultados
-    showResultsModal = this.modalService.showResultsModal;
-    resultData = computed(() => this.quizResultService.getResultData());
+    resultData = computed(() =>
+        this.quizResultService.getResultData()
+    );
 
-
-
-    resources: Resource[] = [
-        {
-            title: 'Guía de Señales de Violencia',
-            description: 'Identifica los diferentes tipos de violencia y sus señales de alerta.',
-            type: 'pdf',
-            icon: 'picture_as_pdf',
-            url: '#'
-        },
-        {
-            title: 'Tus Derechos como Víctima',
-            description: 'Conoce tus derechos legales y cómo ejercerlos.',
-            type: 'pdf',
-            icon: 'picture_as_pdf',
-            url: '#'
-        },
-        {
-            title: 'Video: Cómo Pedir Ayuda',
-            description: 'Pasos seguros para buscar apoyo sin poner en riesgo tu seguridad.',
-            type: 'video',
-            icon: 'play_circle',
-            url: '#'
-        },
-        {
-            title: 'Plan de Seguridad Personal',
-            description: 'Crea tu propio plan de seguridad en caso de emergencia.',
-            type: 'article',
-            icon: 'article',
-            url: '#'
-        },
-        {
-            title: 'Ciclo de la Violencia',
-            description: 'Comprende las fases del ciclo de violencia y cómo romperlo.',
-            type: 'article',
-            icon: 'article',
-            url: '#'
-        },
-        {
-            title: 'Video: Recuperación y Sanación',
-            description: 'Testimonios y consejos para el proceso de recuperación.',
-            type: 'video',
-            icon: 'play_circle',
-            url: '#'
-        }
-    ];
-
-    testimonials: Testimonial[] = [
-        {
-            text: 'Gracias a la ayuda que recibí, pude salir de una situación que parecía imposible. Hoy soy libre y feliz.',
-            role: 'Sobreviviente anónima'
-        },
-        {
-            text: 'El apoyo psicológico me ayudó a recuperar mi autoestima y a entender que no era mi culpa.',
-            role: 'Persona en recuperación'
-        },
-        {
-            text: 'La asesoría legal fue fundamental. Me acompañaron en todo el proceso y nunca me sentí sola.',
-            role: 'Usuaria del servicio'
-        },
-        {
-            text: 'Encontré un lugar seguro para mí y mis hijos. Ahora estamos construyendo una nueva vida.',
-            role: 'Madre protegida'
-        }
-    ];
-
+    showResults = computed(() =>
+        this.resultData() !== null
+    );
     educationalInstitutes: EducationalInstitute[] = [
         { id: '2367', name: 'CONSERVATORIO SUPERIOR DE MÚSICA JOSÉ MARÍA RODRÍGUEZ', province: 'AZUAY', city: 'CUENCA' },
         { id: '3010', name: 'INSTITUTO SUPERIOR TECNOLÓGICO DEL AZUAY', province: 'AZUAY', city: 'CUENCA' },
@@ -296,45 +231,5 @@ export class ContactComponent {
 
     private scrollToTop(): void {
         // Optional: Implement smooth scroll to top of grid
-    }
-
-    get currentTestimonial(): Testimonial {
-        return this.testimonials[this.currentTestimonialIndex];
-    }
-
-    openWhatsApp(phone: string): void {
-        const message = encodeURIComponent('Hola, necesito información y ayuda.');
-        const whatsappUrl = `https://wa.me/${phone}?text=${message}`;
-        window.open(whatsappUrl, '_blank');
-    }
-
-    callPhone(phone: string): void {
-        window.location.href = `tel:${phone}`;
-    }
-
-    activatePanicButton(): void {
-        // Redirige a Google de forma discreta
-        window.location.replace('https://www.google.com');
-    }
-
-    downloadResource(url: string): void {
-        // En producción, esto descargaría el recurso real
-        window.open(url, '_blank');
-    }
-
-    nextTestimonial(): void {
-        this.currentTestimonialIndex = (this.currentTestimonialIndex + 1) % this.testimonials.length;
-    }
-
-    previousTestimonial(): void {
-        this.currentTestimonialIndex = this.currentTestimonialIndex === 0
-            ? this.testimonials.length - 1
-            : this.currentTestimonialIndex - 1;
-    }
-
-
-
-    closeResultsModal(): void {
-        this.modalService.closeResultsModal();
     }
 }

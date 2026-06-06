@@ -169,8 +169,8 @@
                 </mat-tab>
                 <mat-tab>
                     <ng-template mat-tab-label>
-                        <mat-icon style="color: #ef4444;">warning</mat-icon>
-                        <span style="color: #ef4444; font-weight: bold;">Casos Críticos</span>
+                        <mat-icon style="color: #dc2626;">warning</mat-icon>
+                        <span style="color: #dc2626; font-weight: bold;">Casos Críticos</span>
                     </ng-template>
                 </mat-tab>
             </mat-tab-group>
@@ -211,8 +211,8 @@
 
                         <!-- Participantes -->
                         <mat-card class="kpi-card">
-                            <div class="kpi-icon" style="background: #f3e5f5">
-                                <mat-icon style="color: #7b1fa2">people</mat-icon>
+                            <div class="kpi-icon" style="background: #e6faf0">
+                                <mat-icon style="color: #0066cc">people</mat-icon>
                             </div>
                             <div class="kpi-content">
                                 <span class="kpi-value">{{ totalVictimas() }}</span>
@@ -223,8 +223,8 @@
 
                         <!-- Zona Principal -->
                         <mat-card class="kpi-card">
-                            <div class="kpi-icon" style="background: #fff3e0">
-                                <mat-icon style="color: #f57c00">location_on</mat-icon>
+                            <div class="kpi-icon" style="background: #fef3c7">
+                                <mat-icon style="color: #d97706">location_on</mat-icon>
                             </div>
                             <div class="kpi-content">
                                 <span class="kpi-value zone">{{ zonaMasFrecuente() }}</span>
@@ -235,8 +235,8 @@
 
                         <!-- Total Alertas -->
                         <mat-card class="kpi-card">
-                            <div class="kpi-icon" style="background: #e3f2fd">
-                                <mat-icon style="color: #1976d2">notifications</mat-icon>
+                            <div class="kpi-icon" style="background: #e6f7ff">
+                                <mat-icon style="color: #00bfff">notifications</mat-icon>
                             </div>
                             <div class="kpi-content">
                                 <span class="kpi-value">{{ totalRespuestas() }}</span>
@@ -324,7 +324,7 @@
                                                 [series]="trendChartOptions()!.series"
                                                 [chart]="trendChartOptions()!.chart"
                                                 [stroke]="trendChartOptions()!.stroke || { curve: 'smooth', width: 3 }"
-                                                [colors]="trendChartOptions()!.colors || ['#6d28d9']">
+                                                [colors]="trendChartOptions()!.colors || ['#0066cc']">
                                         </apx-chart>
                                     }
                                 </mat-card-content>
@@ -349,7 +349,7 @@
                                         [chart]="topQuestionsOptions()!.chart"
                                         [plotOptions]="topQuestionsOptions()!.plotOptions || {}"
                                         [xaxis]="topQuestionsOptions()!.xaxis || {}"
-                                        [colors]="topQuestionsOptions()!.colors || ['#ef4444']">
+                                        [colors]="topQuestionsOptions()!.colors || ['#dc2626']">
                                 </apx-chart>
                             }
                         </mat-card-content>
@@ -418,7 +418,7 @@
                                         [chart]="etniaChartOptions()!.chart"
                                         [plotOptions]="etniaChartOptions()!.plotOptions || {}"
                                         [xaxis]="etniaChartOptions()!.xaxis || {}"
-                                        [colors]="etniaChartOptions()!.colors || ['#6d28d9', '#0d9488', '#d97706', '#8b5cf6', '#ec4899']">
+                                        [colors]="etniaChartOptions()!.colors || ['#0066cc', '#00cc66', '#ffb300', '#00bfff', '#ff3333']">
                                 </apx-chart>
                             }
                         </mat-card-content>

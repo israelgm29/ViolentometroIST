@@ -1,0 +1,526 @@
+// ══════════════════════════════════════════════════════════
+//  USER IDENTIFICATION — Violentómetro
+//  Paleta: Morado principal (#7c3aed) + Teal acento (#0d9488)
+//  Estructura: Página completa (no modal)
+// ══════════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+// ── Tokens ────────────────────────────────────────────────
+$purple      : #7c3aed;
+$purple-dark : #6d28d9;
+$purple-mid  : #8b5cf6;
+$purple-light: #ede9fe;
+$purple-pale : #faf5ff;
+
+$teal        : #0d9488;
+$teal-light  : #ccfbf1;
+$teal-pale   : #f0fdfa;
+
+$error       : #ef4444;
+$error-light : #fee2e2;
+$error-pale  : #fff1f2;
+
+$text-primary  : #111827;
+$text-secondary: #4b5563;
+$text-muted    : #9ca3af;
+$border        : #e5e7eb;
+$bg-page       : #f5f3ff;
+$font          : 'Plus Jakarta Sans', sans-serif;
+
+// ── Host / Página ─────────────────────────────────────────
+:host { display: block; }
+
+.ui-page {
+  background : $bg-page;
+  min-height : 100vh;
+  font-family: $font;
+}
+
+.ui-header { width: 100%; }
+
+// ══════════════════════════════════════════════════════════
+//  PASO 1
+// ══════════════════════════════════════════════════════════
+
+.step1-wrap {
+  max-width : 520px;
+  margin    : 0 auto;
+  padding   : 2.5rem 2rem;
+}
+
+// ── Hero ──────────────────────────────────────────────────
+.hero-section {
+  text-align   : center;
+  margin-bottom: 2rem;
+}
+
+.hero-icon-wrap {
+  display        : flex;
+  justify-content: center;
+  margin-bottom  : 1.5rem;
+}
+
+.hero-icon {
+  width        : 88px !important;
+  height       : 88px !important;
+  font-size    : 48px !important;
+  color        : #fff;
+  background   : linear-gradient(135deg, $purple-dark, $purple-mid);
+  border-radius: 24px;
+  padding      : 18px;
+  box-sizing   : border-box;
+  box-shadow   : 0 15px 35px rgba($purple, .28);
+}
+
+.main-title {
+  font-size    : 2rem;
+  font-weight  : 800;
+  color        : $text-primary;
+  margin-bottom: .5rem;
+  line-height  : 1.2;
+}
+
+.main-subtitle {
+  font-size  : .92rem;
+  color      : $text-secondary;
+  line-height: 1.55;
+  max-width  : 380px;
+  margin     : 0 auto .5rem;
+}
+
+// Chip de anonimato — blanco semitransparente sobre fondo claro
+// En paso 1 el fondo es $bg-page (lila muy pálido), así que usamos morado suave
+.anon-chip {
+  display        : inline-flex;
+  align-items    : center;
+  gap            : 6px;
+  margin-top     : 1rem;
+  padding        : 7px 16px;
+  background     : rgba($purple, .08);
+  border         : 1px solid rgba($purple, .2);
+  border-radius  : 20px;
+  font-size      : 11px;
+  font-weight    : 700;
+  color          : $purple-dark;
+  letter-spacing : .05em;
+
+  mat-icon {
+    font-size: 13px;
+    width    : 13px;
+    height   : 13px;
+    color    : $teal;
+  }
+}
+
+// ── Contenido paso 1 ──────────────────────────────────────
+.step1-content { padding: 0 !important; }
+
+.field-label {
+  display       : flex;
+  align-items   : center;
+  gap           : 5px;
+  font-size     : 11px;
+  font-weight   : 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color         : $text-secondary;
+  margin-bottom : 8px;
+
+  mat-icon {
+    font-size: 14px;
+    width    : 14px;
+    height   : 14px;
+    color    : $purple;
+  }
+}
+
+// ── Input cédula ──────────────────────────────────────────
+.input-row {
+  display      : flex;
+  align-items  : center;
+  border       : 2px solid $border;
+  border-radius: 16px;
+  background   : #fff;
+  overflow     : hidden;
+  transition   : all .25s ease;
+
+  &:focus-within {
+    border-color: $purple;
+    box-shadow  : 0 0 0 4px rgba($purple, .08);
+
+    .input-pre {
+      background  : $purple-light;
+      border-color: #c4b5fd;
+      mat-icon { color: $purple; }
+    }
+  }
+
+  &.input-ok {
+    border-color: $teal;
+    background  : $teal-pale;
+
+    .input-pre {
+      background  : $teal-light;
+      border-color: $teal;
+      mat-icon { color: $teal; }
+    }
+  }
+
+  &.input-err {
+    border-color: $error;
+    background  : $error-pale;
+
+    .input-pre {
+      background  : $error-light;
+      border-color: #fca5a5;
+      mat-icon { color: $error; }
+    }
+  }
+}
+
+.input-pre {
+  width          : 52px;
+  height         : 56px;
+  background     : #f3f4f6;
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
+  border-right   : 2px solid $border;
+  flex-shrink    : 0;
+  transition     : all .25s ease;
+
+  mat-icon {
+    font-size : 20px;
+    width     : 20px;
+    height    : 20px;
+    color     : $text-muted;
+    transition: color .25s;
+  }
+}
+
+.input-field {
+  flex       : 1;
+  border     : none;
+  outline    : none;
+  background : transparent;
+  padding    : 0 14px;
+  height     : 56px;
+  font-size  : 1rem;
+  font-weight: 600;
+  color      : $text-primary;
+  font-family: $font;
+
+  &::placeholder { color: #d1d5db; font-weight: 400; }
+  &:disabled { opacity: .6; cursor: not-allowed; }
+}
+
+.input-suf {
+  width          : 48px;
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
+  flex-shrink    : 0;
+}
+
+.ico-ok  { color: $teal  !important; font-size: 22px !important; width: 22px !important; height: 22px !important; }
+.ico-err { color: $error !important; font-size: 22px !important; width: 22px !important; height: 22px !important; }
+
+.input-feedback {
+  display        : flex;
+  justify-content: space-between;
+  align-items    : center;
+  margin-top     : .5rem;
+  padding        : 0 2px;
+}
+
+.counter {
+  font-size  : .8rem;
+  font-weight: 700;
+  color      : $text-muted;
+  &-done { color: $teal; }
+}
+
+.msg-ok, .msg-err {
+  display    : flex;
+  align-items: center;
+  gap        : 3px;
+  font-size  : .82rem;
+  font-weight: 700;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+}
+
+.msg-ok  { color: $teal; }
+.msg-err { color: $error; }
+
+.tip-box {
+  display      : flex;
+  gap          : 9px;
+  padding      : 1rem;
+  background   : #fff;
+  border       : 1px solid $border;
+  border-radius: 14px;
+  margin-top   : 1rem;
+  color        : $text-secondary;
+  font-size    : .88rem;
+
+  mat-icon {
+    font-size  : 18px;
+    width      : 18px;
+    height     : 18px;
+    color      : $purple;
+    flex-shrink: 0;
+  }
+}
+
+// ── Acciones paso 1 ───────────────────────────────────────
+.step1-actions { margin-top: 2rem; }
+
+// ══════════════════════════════════════════════════════════
+//  PASO 2
+// ══════════════════════════════════════════════════════════
+
+.step2-wrap {
+  max-width : 720px;
+  margin    : 0 auto;
+  padding   : 2rem;
+}
+
+// Header paso 2
+.step2-header {
+  display      : flex;
+  align-items  : center;
+  gap          : 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid $border;
+  margin-bottom: 0;
+}
+
+.step2-icon-wrap {
+  background   : linear-gradient(135deg, $purple-dark, $purple-mid);
+  border-radius: 16px;
+  padding      : 12px;
+  box-shadow   : 0 8px 20px rgba($purple, .25);
+  flex-shrink  : 0;
+}
+
+.step2-icon {
+  color    : #fff;
+  width    : 32px !important;
+  height   : 32px !important;
+  font-size: 32px !important;
+  display  : block;
+}
+
+.step2-title {
+  font-size    : 1.4rem;
+  font-weight  : 800;
+  color        : $text-primary;
+  margin-bottom: .2rem;
+}
+
+.step2-subtitle {
+  font-size: .88rem;
+  color    : $text-secondary;
+  margin   : 0;
+}
+
+// Barra de progreso teal
+.progress-bar {
+  height    : 3px;
+  background: rgba($purple, .08);
+  margin    : 0;
+}
+
+.progress-fill {
+  height       : 100%;
+  width        : 65%;
+  background   : linear-gradient(90deg, $teal, #14b8a6);
+  border-radius: 0 2px 2px 0;
+}
+
+// Grid del formulario
+.form-grid {
+  padding               : 1.5rem 0 !important;
+  display               : grid;
+  gap                   : 1.2rem;
+  grid-template-columns : repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.form-field {
+  display       : flex;
+  flex-direction: column;
+
+  &--full { grid-column: 1 / -1; }
+}
+
+// Material fields — fondo blanco para contrastar con bg-page lila
+.ui-field {
+  width: 100%;
+
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
+
+  // Fondo blanco + sombra sutil para que resalten sobre $bg-page
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background  : #ffffff !important;
+    border-radius: 14px !important;
+    box-shadow  : 0 1px 4px rgba(0, 0, 0, .06) !important;
+  }
+
+  ::ng-deep {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #d1d5db !important;
+    }
+    .mdc-notched-outline__leading  { border-radius: 14px 0 0 14px !important; }
+    .mdc-notched-outline__trailing { border-radius: 0 14px 14px 0 !important; }
+  }
+
+  &:focus-within ::ng-deep {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: $purple !important;
+      border-width: 2px !important;
+    }
+    .mat-mdc-text-field-wrapper {
+      box-shadow: 0 0 0 3px rgba($purple, .1) !important;
+    }
+  }
+
+  ::ng-deep .mat-mdc-select-value,
+  ::ng-deep input.mat-mdc-input-element {
+    font-family: $font;
+    font-size  : .92rem;
+    color      : $text-primary;
+  }
+}
+
+// Discapacidad
+.disability-field {
+  background   : #fff;
+  border       : 1px solid $border;
+  border-radius: 18px;
+  padding      : 1.25rem;
+}
+
+.radio-group {
+  display   : flex;
+  gap       : 1.5rem;
+  margin-top: .75rem;
+
+  ::ng-deep .mat-mdc-radio-button {
+    &.mat-mdc-radio-checked {
+      ::ng-deep .mdc-radio__outer-circle { border-color: $purple !important; }
+      ::ng-deep .mdc-radio__inner-circle { border-color: $purple !important; background-color: $purple !important; }
+    }
+  }
+}
+
+// Acciones paso 2 — misma fila, botones grandes
+.step2-actions {
+  padding-top    : 1.25rem;
+  gap            : .75rem;
+  display        : flex !important;
+  flex-direction : row !important;
+  align-items    : center;
+  justify-content: flex-end;
+  width          : 100%;
+}
+
+// ══════════════════════════════════════════════════════════
+//  BOTONES — compartidos
+// ══════════════════════════════════════════════════════════
+
+.btn-primary {
+  height        : 58px !important;
+  padding       : 0 32px !important;
+  border-radius : 16px !important;
+  background    : linear-gradient(135deg, $purple, $purple-dark) !important;
+  color         : #fff !important;
+  font-family   : $font !important;
+  font-size     : .95rem !important;
+  font-weight   : 700 !important;
+  box-shadow    : 0 8px 20px rgba($purple, .28) !important;
+  display       : flex !important;
+  align-items   : center !important;
+  gap           : 8px !important;
+  transition    : all .2s ease !important;
+
+  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+
+  &:hover:not([disabled]) {
+    transform: translateY(-2px) !important;
+    filter   : brightness(1.06) !important;
+  }
+
+  &[disabled] {
+    background : #e5e7eb !important;
+    color      : $text-muted !important;
+    box-shadow : none !important;
+    transform  : none !important;
+  }
+}
+
+.btn-full { width: 100%; }
+
+.btn-ghost {
+  height     : 58px !important;
+  padding    : 0 24px !important;
+  border-radius: 16px !important;
+  border     : 1.5px solid $border !important;
+  color      : $text-secondary !important;
+  font-family: $font !important;
+  font-size  : .95rem !important;
+  font-weight: 600 !important;
+  transition : all .2s !important;
+  display    : flex !important;
+  align-items: center !important;
+  gap        : 6px !important;
+
+  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+
+  &:hover {
+    color           : $purple !important;
+    background-color: $purple-pale !important;
+    border-color    : #c4b5fd !important;
+  }
+}
+
+.btn-spinner { margin-right: .4rem; }
+
+// ══════════════════════════════════════════════════════════
+//  ANIMACIÓN
+// ══════════════════════════════════════════════════════════
+
+.animate-fade-in {
+  animation: fadeSlideIn .35s ease both;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ══════════════════════════════════════════════════════════
+//  RESPONSIVE
+// ══════════════════════════════════════════════════════════
+
+@media (max-width: 768px) {
+  .step1-wrap { padding: 1.5rem; }
+  .step2-wrap { padding: 1.5rem; }
+  .main-title { font-size: 1.6rem; }
+  .hero-icon  { width: 72px !important; height: 72px !important; font-size: 40px !important; }
+  .form-grid  { grid-template-columns: 1fr; }
+  .radio-group { gap: .75rem; }
+}
+
+@media (max-width: 480px) {
+  .step1-wrap  { padding: 1.2rem; }
+  .step2-wrap  { padding: 1.2rem; }
+  .main-title  { font-size: 1.4rem; }
+  .anon-chip   { font-size: 10px; padding: 5px 12px; }
+  .input-feedback { flex-direction: column; align-items: flex-start; gap: .4rem; }
+}

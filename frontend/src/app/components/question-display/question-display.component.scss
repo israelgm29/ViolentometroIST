@@ -1,0 +1,193 @@
+// ══════════════════════════════════════════════════════
+//  QUESTION DISPLAY — Tarjeta de pregunta
+//  Paleta: Morado principal + Teal acento
+// ══════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+$purple     : #7c3aed;
+$purple-dark: #6d28d9;
+$teal       : #0d9488;
+$teal-pale  : #f0fdfa;
+$font       : 'Plus Jakarta Sans', sans-serif;
+
+// ── Tarjeta ───────────────────────────────────────────
+   .question-card {
+       position      : relative;
+       background    : #ffffff;
+       border-radius : 28px;
+       border        : 1px solid rgba($purple, .08);
+       box-shadow    : 0 8px 32px rgba($purple, .07), 0 2px 8px rgba(0,0,0,.04);
+       padding       : 3rem 2.5rem;
+       display       : flex;
+       flex-direction: column;
+       align-items   : center;
+       text-align    : center;
+       gap           : 1.75rem;
+       min-height    : 460px;
+       justify-content: center;
+       animation     : fadeInUp .4s ease-out both;
+       font-family   : $font;
+
+   // Barra de acento superior en morado
+   &::before {
+       content      : '';
+       position     : absolute;
+       top          : 0; left: 0; right: 0;
+       height       : 5px;
+       background   : linear-gradient(90deg, $purple-dark, #8b5cf6);
+       border-radius: 28px 28px 0 0;
+   }
+   }
+
+// ── Etiqueta de zona ──────────────────────────────────
+   .zone-tag {
+       display       : inline-flex;
+       align-items   : center;
+       padding       : .5rem 1.2rem;
+       border-radius : 999px;
+       border        : 1px solid;
+       font-size     : .72rem;
+       font-weight   : 800;
+       letter-spacing: .1em;
+       text-transform: uppercase;
+   }
+
+// ── Ícono ─────────────────────────────────────────────
+   .question-icon {
+       width        : 88px;
+       height       : 88px;
+       border-radius: 50%;
+       display      : flex;
+       align-items  : center;
+       justify-content: center;
+       background   : rgba($purple, .04);
+       border       : 1px solid;
+       transition   : all .3s ease;
+
+       mat-icon {
+           font-size: 50px !important;
+           width    : 50px !important;
+           height   : 50px !important;
+       }
+   }
+
+// ── Cuerpo de la pregunta ─────────────────────────────
+   .question-body { width: 100%; }
+
+.question-text {
+    font-size  : 1.75rem;
+    font-weight: 800;
+    color      : #111827;
+    line-height: 1.45;
+    max-width  : 640px;
+    margin     : 0 auto;
+}
+
+.question-hint {
+    display    : flex;
+    align-items: center;
+    justify-content: center;
+    gap        : 5px;
+    margin-top : .75rem;
+    font-size  : .82rem;
+    color      : #6b7280;
+
+    mat-icon {
+        font-size: 14px !important;
+        width    : 14px !important;
+        height   : 14px !important;
+        color    : $teal;
+    }
+}
+
+// ── Botones SÍ / NO ───────────────────────────────────
+                   .answer-buttons {
+                       display              : grid;
+                       grid-template-columns: repeat(2, 1fr);
+                       gap                  : 1.25rem;
+                       width                : 100%;
+                       max-width            : 560px;
+                   }
+
+.btn-answer {
+    min-height   : 80px;
+    border-radius: 18px !important;
+    font-size    : 1.05rem !important;
+    font-weight  : 700 !important;
+    display      : flex !important;
+    align-items  : center !important;
+    justify-content: center !important;
+    gap          : .6rem !important;
+    transition   : all .22s ease !important;
+    cursor       : pointer;
+    font-family  : $font !important;
+    letter-spacing: .02em;
+
+    mat-icon {
+        font-size: 26px !important;
+        width    : 26px !important;
+        height   : 26px !important;
+    }
+}
+
+// NO — teal (respuesta segura/negativa)
+.btn-no {
+    background  : #ffffff !important;
+    color       : $teal !important;
+    border      : 2px solid rgba($teal, .3) !important;
+    box-shadow  : 0 2px 8px rgba($teal, .06) !important;
+
+    &:hover {
+        background  : $teal-pale !important;
+        border-color: $teal !important;
+        transform   : translateY(-3px) !important;
+        box-shadow  : 0 10px 24px rgba($teal, .15) !important;
+    }
+}
+
+// SÍ — rojo (respuesta de alerta)
+.btn-yes {
+    background  : #ffffff !important;
+    color       : #dc2626 !important;
+    border      : 2px solid rgba(#dc2626, .25) !important;
+    box-shadow  : 0 2px 8px rgba(#dc2626, .06) !important;
+
+    &:hover {
+        background  : #fef2f2 !important;
+        border-color: #dc2626 !important;
+        transform   : translateY(-3px) !important;
+        box-shadow  : 0 10px 24px rgba(#dc2626, .15) !important;
+    }
+}
+
+// ── Animaciones de transición entre preguntas ─────────
+   .slide-left  { animation: slideLeft  .25s ease-out; }
+.slide-right { animation: slideRight .25s ease-out; }
+
+@keyframes slideLeft  { from{opacity:1;transform:translateX(0)}  to{opacity:0;transform:translateX(-24px)} }
+@keyframes slideRight { from{opacity:1;transform:translateX(0)}  to{opacity:0;transform:translateX(24px)} }
+@keyframes fadeInUp   { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+// ── Responsive ────────────────────────────────────────
+@media (max-width: 640px) {
+    .question-card {
+        padding   : 2rem 1.5rem;
+        min-height: auto;
+        gap       : 1.25rem;
+    }
+
+    .question-text { font-size: 1.3rem; }
+
+    .answer-buttons {
+        grid-template-columns: 1fr;
+        max-width            : 100%;
+    }
+
+    .btn-answer { min-height: 68px; }
+
+    .question-icon {
+        width: 72px; height: 72px;
+        mat-icon { font-size: 40px !important; width: 40px !important; height: 40px !important; }
+    }
+}

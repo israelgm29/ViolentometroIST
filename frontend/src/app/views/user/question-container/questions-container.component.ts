@@ -3,23 +3,24 @@ import { DecimalPipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+
 import { QuestionZone } from "../../../models/question-zone";
-import { ModalService } from "../../../services/modal.service";
 import { UserAnswerService } from '../../../services/user-answer.service';
 import { QuizResultService } from '../../../services/quiz-result.service';
 import { ToastrService } from 'ngx-toastr';
-import {QuizResult, QuizResultRequest, RiskLevel} from "../../../models/quiz-result";
+import { QuizResult, QuizResultRequest, RiskLevel } from "../../../models/quiz-result";
 import { QuestionDisplay } from "../../../components/question-display/question-display.component";
-import { from, map, switchMap } from "rxjs";
-import { EncryptionService } from "../../../services/encryption.service";
+
+import { map, switchMap } from "rxjs";
+
 import { SurveyService } from "../../../services/survey.service";
-import { ZoneService } from "../../../services/zone.service";
 import { ViolenceZoneInterface } from "../../../models/zone";
+import {ZoneService} from "../../../services/zone.service";
 
 @Component({
     selector: 'app-questions-container',
     standalone: true,
-    imports: [MatIconModule, MatButtonModule, QuestionDisplay, NgClass, DecimalPipe],
+    imports: [MatIconModule, MatButtonModule, QuestionDisplay, NgClass],
     templateUrl: './questions-container.component.html',
     styleUrls: ['./questions-container.component.scss']
 })
@@ -27,44 +28,34 @@ export class QuestionsContainerComponent implements OnInit {
 
     @Input() userId!: number;
     @Input() userDni!: string;
-    @Input() surveyId!: number;  // ✅ recibido desde HomeComponent — evita doble llamada
+    @Input() surveyId!: number;
 
-    // Servicios
-    private modalService = inject(ModalService);
     private userAnswerService = inject(UserAnswerService);
     private toastr = inject(ToastrService);
     private router = inject(Router);
     private quizResultService = inject(QuizResultService);
-    private encryptionService = inject(EncryptionService);
     private surveyService = inject(SurveyService);
     private zoneService  = inject(ZoneService);
 
-    // Todas las zonas disponibles — para el caso "todo NO"
     allZones = signal<ViolenceZoneInterface[]>([]);
-
-    // Estado básico
     questions = signal<QuestionZone[]>([]);
     answers = signal<Map<number, boolean>>(new Map());
     currentIndex = signal(0);
     slideDirection = signal<'left' | 'right' | 'none'>('none');
     isSaving = signal(false);
 
-    // Pregunta actual
     currentQuestion = computed(() => this.questions()[this.currentIndex()] || null);
 
-    // Progreso (0-100)
     progress = computed(() => {
         const total = this.questions().length;
         return total > 0 ? (this.answers().size / total) * 100 : 0;
     });
 
-    // Navegación
     canGoNext = computed(() => this.currentIndex() < this.questions().length - 1);
     isLastQuestion = computed(() => this.currentIndex() === this.questions().length - 1);
 
     riskLevel = computed((): RiskLevel => {
         let maxSeverity = 0;
-
         this.answers().forEach((isYes, questionId) => {
             if (isYes) {
                 const pregunta = this.questions().find(q => q.id === questionId);
@@ -73,7 +64,6 @@ export class QuestionsContainerComponent implements OnInit {
                 }
             }
         });
-
         return this.mapSeverityToRiskLevel(maxSeverity);
     });
 
@@ -106,15 +96,12 @@ export class QuestionsContainerComponent implements OnInit {
     }
 
     private loadQuestionsAndResume() {
-        from(this.encryptionService.encrypt(this.userDni)).pipe(
-            switchMap(enc =>
-                this.surveyService.getActiveSurvey().pipe(
-                    switchMap(survey =>
-                        // ✅ getByDniAndSurveyToday — solo respuestas de HOY
-                        this.userAnswerService.getByDniAndSurveyToday(enc, survey.id).pipe(
-                            map(previous => ({ survey, previous }))
-                        )
-                    )
+        // FIX: eliminado encrypt() — no funciona sin HTTPS (crypto.subtle requiere contexto seguro)
+        // El DNI se pasa directamente sin encriptar
+        this.surveyService.getActiveSurvey().pipe(
+            switchMap(survey =>
+                this.userAnswerService.getByDniAndSurveyToday(this.userDni, survey.id).pipe(
+                    map(previous => ({ survey, previous }))
                 )
             )
         ).subscribe({
@@ -137,7 +124,7 @@ export class QuestionsContainerComponent implements OnInit {
 
                 if (previous.length > 0) {
                     const mapResp = new Map<number, boolean>();
-                    previous.forEach(a => mapResp.set(a.idQuestion, a.answer));
+                    previous.forEach(a => mapResp.set(a.questionId, a.answer));
                     this.answers.set(mapResp);
 
                     if (previous.length >= questions.length) {
@@ -166,7 +153,6 @@ export class QuestionsContainerComponent implements OnInit {
             next: () => {
                 this.answers.update(map => new Map(map).set(question.id, answer));
                 this.isSaving.set(false);
-
                 if (this.isLastQuestion()) {
                     this.finishQuestionnaire();
                 } else {
@@ -180,10 +166,6 @@ export class QuestionsContainerComponent implements OnInit {
         });
     }
 
-    /**
-     * CÁLCULO FINAL DEL RESULTADO
-     * Determina qué zona (mensajes del admin) se enviará al modal
-     */
     private calculateResult(): QuizResult {
         let yesCount = 0;
         let dominantZone: any = null;
@@ -200,7 +182,6 @@ export class QuestionsContainerComponent implements OnInit {
             }
         });
 
-        // Si nadie respondio SI, usar la zona de menor severidad de TODAS las zonas
         if (!dominantZone) {
             const all = this.allZones();
             if (all.length > 0) {
@@ -231,11 +212,10 @@ export class QuestionsContainerComponent implements OnInit {
         return 'critical';
     }
 
+    private finishQuestionnaire(): void {
 
-    private finishQuestionnaire() {
         const localResult = this.calculateResult();
 
-        // ✅ Creamos el objeto usando la interfaz QuizResultRequest
         const dataToSave: QuizResultRequest = {
             idAppUser: this.userId,
             idSurvey: this.surveyId,
@@ -244,23 +224,32 @@ export class QuestionsContainerComponent implements OnInit {
             dominantZoneId: localResult.zone?.id
         };
 
-        // 1. Guardamos localmente para que el modal funcione
+        // Guardamos resultado local para mostrarlo en Welfare
         this.quizResultService.saveResult(localResult);
 
-        // 2. Enviamos al backend para activar el bloqueo de "una vez al día"
         this.quizResultService.saveToBackend(dataToSave).subscribe({
+
             next: () => {
+
                 setTimeout(() => {
+
                     this.router.navigate(['/welfare']);
-                    this.modalService.openResultsModal();
+
                 }, 800);
+
             },
-            error: (err) => {
-                console.error('Error al persistir el resultado final:', err);
-                // Navegamos de todos modos para no arruinar la experiencia del usuario
+
+            error: () => {
+
+                this.toastr.warning(
+                    'No se pudo registrar el resultado en el servidor, pero se mostrará el análisis local.',
+                    'Advertencia'
+                );
+
                 this.router.navigate(['/welfare']);
-                this.modalService.openResultsModal();
+
             }
+
         });
     }
 
@@ -284,4 +273,38 @@ export class QuestionsContainerComponent implements OnInit {
         };
         return colors[risk][intensity];
     }
+
+    // ─────────────────────────────────────────────────────────
+//  Agrega estos computed signals en questions-container.ts
+//  (dentro de la clase, junto a los demás signals)
+// ─────────────────────────────────────────────────────────
+
+// Calcula el offset del arco SVG del gauge (283 = longitud total del arco)
+    gaugeDashOffset = computed(() => {
+        const arc = 283;
+        return arc - (this.progress() / 100) * arc;
+    });
+
+// Posición X de la aguja (radio = 77, centro cx = 110, cy = 110)
+    gaugeNeedleX = computed(() => {
+        const angle = -180 + (this.progress() / 100) * 180; // de -180° a 0°
+        const rad   = angle * (Math.PI / 180);
+        return (110 + 77 * Math.cos(rad)).toFixed(2);
+    });
+
+// Posición Y de la aguja
+    gaugeNeedleY = computed(() => {
+        const angle = -180 + (this.progress() / 100) * 180;
+        const rad   = angle * (Math.PI / 180);
+        return (110 + 77 * Math.sin(rad)).toFixed(2);
+    });
+
+// Segmentos de progreso (muestra máx. 30 segmentos)
+    progressSegments = computed(() => {
+        const total   = this.questions().length;
+        const current = this.currentIndex();
+        return Array.from({ length: total }, (_, i) =>
+            i < current ? 'done' : i === current ? 'active' : 'idle'
+        );
+    });
 }

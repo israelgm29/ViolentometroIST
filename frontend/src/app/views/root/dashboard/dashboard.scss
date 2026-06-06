@@ -1,77 +1,152 @@
-$primary: #6d28d9;
-$primary-light: #8b5cf6;
-$success: #10b981;
-$warning: #f59e0b;
-$danger: #ef4444;
-$info: #3b82f6;
+// ═══════════════════════════════════════════════════════════════
+// VIOLENTÓMETRO — Dashboard · Paleta Institucional
+// Diseño profesional para herramienta institucional
+// ═══════════════════════════════════════════════════════════════
 
-$bg-primary: #faf8ff;
-$bg-elevated: #ffffff;
-$text-primary: #111827;
-$text-secondary: #6b7280;
-$text-muted: #9ca3af;
-$border-color: rgba(109, 40, 217, 0.12);
+// ── Paleta Institucional ──────────────────────────────────────
+$primary:           #0066cc;
+$primary-dark:      #004499;
+$primary-light:     #3385dd;
+$primary-subtle:    #e6f2ff;
+$primary-gradient:  linear-gradient(135deg, #0066cc 0%, #0099ff 100%);
 
-$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-$shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+$danger:            #ff3333;
+$danger-dark:       #cc0000;
+$danger-subtle:     #ffe6e6;
+$danger-border:     #ff9999;
 
+$warning:           #ffb300;
+$warning-dark:      #cc8800;
+$warning-subtle:    #fff5e6;
+$warning-border:    #ffd699;
+
+$success:           #00cc66;
+$success-dark:      #009944;
+$success-subtle:    #e6faf0;
+$success-border:    #99ddbb;
+
+$info:              #00bfff;
+$info-dark:         #0099cc;
+$info-subtle:       #e6f7ff;
+$info-border:       #99e6ff;
+
+// Fondos y superficies
+$bg-page:           #f5f7fa;
+$bg-surface:        #ffffff;
+$bg-elevated:       #fafbfc;
+
+// Texto
+$text-primary:      #1a2332;
+$text-secondary:    #495057;
+$text-muted:        #868e96;
+$text-inverse:      #ffffff;
+
+// Bordes
+$border-color:      #dee2e6;
+$border-light:      #e9ecef;
+
+// Sombras — tinte azul marino para cohesión
+$shadow-xs:  0 1px 2px rgba(0, 102, 204, 0.04);
+$shadow-sm:  0 1px 3px rgba(0, 102, 204, 0.06), 0 1px 2px rgba(0, 102, 204, 0.04);
+$shadow-md:  0 4px 6px -1px rgba(0, 102, 204, 0.07), 0 2px 4px -2px rgba(0, 102, 204, 0.05);
+$shadow-lg:  0 10px 15px -3px rgba(0, 102, 204, 0.08), 0 4px 6px -4px rgba(0, 102, 204, 0.04);
+$shadow-xl:  0 20px 25px -5px rgba(0, 102, 204, 0.08), 0 8px 10px -6px rgba(0, 102, 204, 0.04);
+
+// Radios
+$radius-sm:  8px;
+$radius-md:  12px;
+$radius-lg:  16px;
+$radius-xl:  20px;
+
+// Transiciones
+$transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-hover: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ── Mixins ────────────────────────────────────────────────────
 @mixin flex-center {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-@mixin card-hover {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+@mixin card-base {
+    background: $bg-surface;
+    border: 1px solid $border-color;
+    border-radius: $radius-lg;
+    transition: $transition-hover;
+    box-shadow: $shadow-sm;
+
+    &:hover {
+        box-shadow: $shadow-md;
+        border-color: darken($border-color, 3%);
+    }
+}
+
+@mixin card-interactive {
+    @include card-base;
+    cursor: pointer;
+
     &:hover {
         transform: translateY(-2px);
         box-shadow: $shadow-lg;
     }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: $shadow-sm;
+    }
 }
 
 
+// ═══════════════════════════════════════════════════════════════
+// CONTAINER
+// ═══════════════════════════════════════════════════════════════
+.dashboard-container {
+    min-height: 100vh;
+    background: $bg-page;
+    padding: 28px 32px;
+    width: 100%;
 
-   .dashboard-container {
-       min-height: 100vh;
-       background: linear-gradient(180deg, $bg-primary 0%, #ffffff 50%);
-       padding: 24px;
-       max-width: 1400px;
-       margin: 0 auto;
+    @media (max-width: 768px) {
+        padding: 16px;
+    }
+}
 
-       @media (max-width: 768px) {
-           padding: 16px;
-       }
-   }
 
+// ═══════════════════════════════════════════════════════════════
+// LOADING
+// ═══════════════════════════════════════════════════════════════
 .loading-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(4px);
+    background: rgba(241, 243, 248, 0.92);
+    backdrop-filter: blur(6px);
     @include flex-center;
     flex-direction: column;
     gap: 16px;
     z-index: 1000;
     color: $text-secondary;
+    font-weight: 500;
 }
 
 
+// ═══════════════════════════════════════════════════════════════
+// VISTA 1: SELECTOR DE CUESTIONARIO
+// ═══════════════════════════════════════════════════════════════
 
-   .page-header {
-       display: flex;
-       justify-content: space-between;
-       align-items: center;
-       margin-bottom: 32px;
-       padding: 0 8px;
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding: 0 4px;
 
-       @media (max-width: 768px) {
-           flex-direction: column;
-           align-items: flex-start;
-           gap: 16px;
-       }
-   }
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+}
 
 .header-content {
     display: flex;
@@ -80,73 +155,79 @@ $shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
 }
 
 .header-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+    width: 52px;
+    height: 52px;
+    border-radius: $radius-md;
+    background: $primary-gradient;
     @include flex-center;
-    box-shadow: 0 10px 25px rgba($primary, 0.25);
+    box-shadow: 0 8px 20px rgba($primary, 0.25);
 
     mat-icon {
-        color: white;
-        font-size: 28px;
-        width: 28px;
-        height: 28px;
+        color: $text-inverse;
+        font-size: 26px;
+        width: 26px;
+        height: 26px;
     }
 }
 
 h1 {
-    font-size: 1.75rem;
-    font-weight: 800;
+    font-size: 1.625rem;
+    font-weight: 700;
     color: $text-primary;
     margin: 0;
     letter-spacing: -0.02em;
+    line-height: 1.2;
 }
 
 .header-subtitle {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     color: $text-secondary;
     margin: 4px 0 0;
+    font-weight: 400;
 }
 
 .count-badge {
     display: inline-flex;
     align-items: center;
-    padding: 8px 16px;
-    background: $bg-elevated;
+    padding: 8px 18px;
+    background: $bg-surface;
     border: 1px solid $border-color;
     border-radius: 50px;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     color: $text-secondary;
-    box-shadow: $shadow-sm;
+    box-shadow: $shadow-xs;
+    letter-spacing: 0.01em;
 }
 
 
-   .survey-selector {
-       display: grid;
-       grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-       gap: 16px;
+// ── Survey Selector Grid ──────────────────────────────────────
+.survey-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 16px;
 
-       @media (max-width: 768px) {
-           grid-template-columns: 1fr;
-       }
-   }
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
 
 .survey-card {
+    @include card-interactive;
     display: flex;
     align-items: center;
     gap: 16px;
     padding: 20px;
-    border-radius: 16px;
-    cursor: pointer;
-    @include card-hover;
     border: 2px solid transparent;
-    background: $bg-elevated;
 
     &.survey-active {
         border-color: $primary;
-        background: linear-gradient(135deg, rgba($primary, 0.05) 0%, $bg-elevated 100%);
+        background: linear-gradient(135deg, rgba($primary, 0.03) 0%, $bg-surface 100%);
+
+        .survey-card-icon {
+            background: $primary;
+            mat-icon { color: $text-inverse; }
+        }
     }
 
     @media (max-width: 600px) {
@@ -156,26 +237,23 @@ h1 {
 }
 
 .survey-card-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    background: #f3f4f6;
+    width: 52px;
+    height: 52px;
+    border-radius: $radius-md;
+    background: $bg-page;
     @include flex-center;
     flex-shrink: 0;
 
     mat-icon {
-        font-size: 28px;
-        width: 28px;
-        height: 28px;
-        color: $text-secondary;
+        font-size: 26px;
+        width: 26px;
+        height: 26px;
+        color: $text-muted;
     }
 
     &.active {
         background: $primary;
-
-        mat-icon {
-            color: white;
-        }
+        mat-icon { color: $text-inverse; }
     }
 }
 
@@ -187,46 +265,48 @@ h1 {
 .survey-card-header {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 8px;
     flex-wrap: wrap;
 
     h3 {
-        font-size: 1.125rem;
+        font-size: 1rem;
         font-weight: 700;
         color: $text-primary;
         margin: 0;
-
+        letter-spacing: -0.01em;
     }
 }
 
 .status-chip {
-    height: 24px;
-    font-size: 0.75rem;
+    height: 22px;
+    font-size: 0.6875rem;
     font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
 
     &.active {
-        --mdc-chip-container-color: #dbeafe;
-        --mdc-chip-label-text-color: #1e40af;
+        --mdc-chip-container-color: #{$primary-subtle};
+        --mdc-chip-label-text-color: #{$primary-dark};
     }
 
     &.inactive {
-        --mdc-chip-container-color: #f3f4f6;
-        --mdc-chip-label-text-color: #6b7280;
+        --mdc-chip-container-color: #{$bg-page};
+        --mdc-chip-label-text-color: #{$text-muted};
     }
 }
 
 .survey-description {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: $text-secondary;
     margin: 0 0 12px;
-
+    line-height: 1.5;
 }
 
 .survey-meta {
     display: flex;
     gap: 16px;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     color: $text-muted;
 
     span {
@@ -236,16 +316,18 @@ h1 {
     }
 
     mat-icon {
-        font-size: 16px;
-        width: 16px;
-        height: 16px;
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
     }
 }
 
 .survey-action {
     opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.3s ease;
+    transform: translateX(-8px);
+    transition: $transition-base;
+
+    mat-icon { color: $primary; }
 }
 
 .survey-card:hover .survey-action {
@@ -254,28 +336,36 @@ h1 {
 }
 
 
-   .dashboard-header {
-       display: flex;
-       justify-content: space-between;
-       align-items: flex-start;
-       margin-bottom: 24px;
-       gap: 24px;
-       flex-wrap: wrap;
+// ═══════════════════════════════════════════════════════════════
+// VISTA 2: DASHBOARD HEADER
+// ═══════════════════════════════════════════════════════════════
 
-       @media (max-width: 1024px) {
-           flex-direction: column;
-       }
-   }
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    gap: 20px;
+    flex-wrap: wrap;
+
+    @media (max-width: 1024px) {
+        flex-direction: column;
+    }
+}
 
 .header-main {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+
+    button mat-icon {
+        color: $text-secondary;
+    }
 }
 
 .header-info {
     h1 {
-        font-size: 1.5rem;
+        font-size: 1.375rem;
         margin-bottom: 4px;
     }
 }
@@ -283,15 +373,15 @@ h1 {
 .breadcrumb {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.875rem;
+    gap: 6px;
+    font-size: 0.8125rem;
     color: $text-muted;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 
     mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
     }
 
     .current {
@@ -303,87 +393,164 @@ h1 {
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex-wrap: wrap;
 
     .date-field {
-        width: 220px;
+        width: 210px;
+
+        ::ng-deep .mdc-notched-outline__leading,
+        ::ng-deep .mdc-notched-outline__trailing {
+            border-color: $border-color !important;
+        }
+
+        ::ng-deep .mat-mdc-form-field-focus-overlay {
+            background-color: rgba($primary, 0.04);
+        }
     }
 
     .action-divider {
-        height: 40px;
+        height: 36px;
         margin: 0 4px;
+        border-color: $border-color;
     }
 
     .btn-reports {
-        height: 44px;
+        height: 42px;
         padding: 0 20px;
         font-weight: 600;
-        border-radius: 10px;
+        border-radius: $radius-sm;
+        background: $primary-gradient;
+        letter-spacing: 0.01em;
+
+        mat-icon { color: $text-inverse; }
+
+        &:hover {
+            box-shadow: 0 4px 12px rgba($primary, 0.3);
+        }
+    }
+
+    // Botones outline
+    button[mat-stroked-button] {
+        border-color: $border-color;
+        color: $text-secondary;
+        font-weight: 500;
+        font-size: 0.8125rem;
+
+        mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+            color: $text-muted;
+            margin-right: 4px;
+        }
+
+        &:hover {
+            border-color: $primary;
+            color: $primary;
+            background: $primary-subtle;
+
+            mat-icon { color: $primary; }
+        }
     }
 }
 
 
-   .dashboard-tabs {
-       margin-bottom: 24px;
+// ═══════════════════════════════════════════════════════════════
+// TABS — Estilo Underline Institucional
+// ═══════════════════════════════════════════════════════════════
 
-       ::ng-deep {
-           .mat-mdc-tab-header {
-               background: $bg-elevated;
-               border-radius: 12px;
-               padding: 4px;
-               border: 1px solid $border-color;
-           }
+.dashboard-tabs {
+    margin-bottom: 28px;
 
-           .mat-mdc-tab {
-               height: 48px;
-               border-radius: 8px;
-               transition: all 0.2s ease;
+    ::ng-deep {
+        .mat-mdc-tab-header {
+            background: $bg-surface;
+            border-radius: $radius-md;
+            padding: 0;
+            border: 1px solid $border-color;
+            box-shadow: $shadow-xs;
+        }
 
-               &.mdc-tab--active {
-                   background: $primary;
-                   --mdc-tab-indicator-color: transparent;
+        .mat-mdc-tab {
+            height: 46px;
+            border-radius: 0;
+            transition: $transition-base;
+            opacity: 0.7;
 
-                   .mdc-tab__text-label {
-                       color: white !important;
-                   }
+            &.mdc-tab--active {
+                opacity: 1;
 
-                   mat-icon {
-                       color: white !important;
-                   }
-               }
-           }
+                .mdc-tab__text-label {
+                    color: $primary !important;
+                    font-weight: 700;
+                }
 
-           .mat-mdc-tab-label-content {
-               display: flex;
-               align-items: center;
-               gap: 8px;
-               font-weight: 600;
-           }
+                mat-icon {
+                    color: $primary !important;
+                }
+            }
 
-           mat-icon {
-               font-size: 20px;
-               width: 20px;
-               height: 20px;
-           }
-       }
-   }
+            &:hover:not(.mdc-tab--active) {
+                opacity: 1;
+                background: rgba($primary, 0.03);
+            }
+        }
+
+        // Indicador underline
+        .mat-mdc-tab-indicator {
+            .mdc-tab-indicator__content--underline {
+                border-color: $primary !important;
+                border-top-width: 3px !important;
+                border-radius: 3px 3px 0 0;
+            }
+        }
+
+        .mat-mdc-tab-label-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            letter-spacing: 0.01em;
+        }
+
+        mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+
+        // Tab de casos críticos — siempre visible en rojo
+        .mdc-tab--active .critical-tab {
+            color: $danger !important;
+            mat-icon { color: $danger !important; }
+        }
+    }
+}
 
 
+// ═══════════════════════════════════════════════════════════════
+// TAB CONTENT
+// ═══════════════════════════════════════════════════════════════
 
-   .tab-content {
-       animation: fadeIn 0.4s ease;
-   }
+.tab-content {
+    animation: fadeIn 0.35s ease;
+}
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 
-   .kpi-section {
-       margin-bottom: 24px;
-   }
+// ═══════════════════════════════════════════════════════════════
+// KPI SECTION — Diseño Institucional
+// ═══════════════════════════════════════════════════════════════
+
+.kpi-section {
+    margin-bottom: 28px;
+}
 
 .kpi-grid {
     display: grid;
@@ -400,26 +567,35 @@ h1 {
 }
 
 .kpi-card {
+    @include card-base;
     display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 20px;
-    border-radius: 16px;
-    @include card-hover;
-    border-left: 4px solid transparent;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+    border-left: 4px solid $primary;
+    border-radius: $radius-md;
+    background: $bg-surface;
+    position: relative;
 
+    // Card crítica — borde rojo + pulso
     &.critical {
         border-left-color: $danger;
     }
 
     &.has-alerts {
-        animation: pulse-border 2s infinite;
+        animation: pulse-glow 2.5s infinite;
     }
+
+    // Diferentes colores de borde
+    &:nth-child(1) { border-left-color: #0066cc; }
+    &:nth-child(2) { border-left-color: #00cc66; }
+    &:nth-child(3) { border-left-color: #ffb300; }
+    &:nth-child(4) { border-left-color: #00bfff; }
 }
 
-@keyframes pulse-border {
-    0%, 100% { box-shadow: 0 0 0 0 rgba($danger, 0.2); }
-    50% { box-shadow: 0 0 0 8px rgba($danger, 0); }
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: $shadow-sm, 0 0 0 0 rgba($danger, 0.15); }
+    50% { box-shadow: $shadow-md, 0 0 0 6px rgba($danger, 0); }
 }
 
 .kpi-visual {
@@ -427,65 +603,75 @@ h1 {
 }
 
 .kpi-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     @include flex-center;
+    flex-shrink: 0;
 
     mat-icon {
-        font-size: 26px;
-        width: 26px;
-        height: 26px;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
     }
 }
 
 .alert-pulse {
     position: absolute;
     inset: -4px;
-    border-radius: 50%;
+    border-radius: $radius-sm;
     border: 2px solid $danger;
-    animation: ripple 1.5s infinite;
+    animation: ripple 2s infinite;
 }
 
 @keyframes ripple {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(1.3); opacity: 0; }
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.2); opacity: 0; }
 }
 
 .kpi-content {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 0;
+    flex: 1;
 }
 
 .kpi-value {
-    font-size: 1.875rem;
+    font-size: 2.25rem;
     font-weight: 800;
     color: $text-primary;
     line-height: 1;
+    letter-spacing: -0.03em;
 
     &.critical-text {
         color: $danger;
     }
 
     &.zone {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        font-weight: 700;
     }
 }
 
 .kpi-label {
-    font-size: 0.875rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    color: $text-secondary;
+    color: $text-muted;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
 }
 
 .kpi-trend {
-    font-size: 0.8125rem;
+    font-size: 0.8rem;
     color: $text-muted;
+    font-weight: 500;
+    margin-top: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 
     &.urgent {
         color: $danger;
@@ -494,14 +680,18 @@ h1 {
 
     &.stable {
         color: $success;
+        font-weight: 600;
     }
 }
 
 
+// ═══════════════════════════════════════════════════════════════
+// CHARTS — Diseño Institucional
+// ═══════════════════════════════════════════════════════════════
 
-   .main-charts {
-       margin-bottom: 24px;
-   }
+.main-charts {
+    margin-bottom: 28px;
+}
 
 .chart-layout {
     display: grid;
@@ -514,34 +704,45 @@ h1 {
 }
 
 .chart-card {
-    border-radius: 20px;
-    @include card-hover;
+    @include card-base;
+    border-radius: $radius-md;
+    border-left: 5px solid $primary;
+    overflow: hidden;
 
     &.primary {
-        min-height: 450px;
+        min-height: 420px;
+        border-left-color: #0066cc;
     }
 
     ::ng-deep mat-card-header {
-        padding: 20px 20px 0;
+        padding: 20px 24px;
+        align-items: center;
+        border-bottom: 1px solid $border-light;
     }
 
     mat-card-title {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 1.125rem;
+        gap: 10px;
+        font-size: 1.05rem;
         font-weight: 700;
+        color: $text-primary;
+        letter-spacing: -0.01em;
 
         mat-icon {
             color: $primary;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
         }
     }
 }
 
 .chart-content {
-    padding: 16px;
+    padding: 20px 24px;
 }
 
+// ── Side Panel ────────────────────────────────────────────────
 .side-panel {
     display: flex;
     flex-direction: column;
@@ -549,11 +750,46 @@ h1 {
 }
 
 .summary-card {
-    border-radius: 16px;
-    flex: 1;
+    @include card-base;
+    border-radius: $radius-md;
+    border-left: 5px solid #00bfff;
+    overflow: hidden;
+
+    mat-card-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid $border-light;
+    }
+
+    mat-card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: $text-primary;
+    }
 
     mat-card-content {
-        padding: 20px;
+        padding: 16px 20px;
+    }
+}
+
+.mini-trend-card {
+    @include card-base;
+    border-radius: $radius-md;
+    border-left: 5px solid #00cc66;
+    overflow: hidden;
+
+    mat-card-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid $border-light;
+    }
+
+    mat-card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: $text-primary;
+    }
+
+    mat-card-content {
+        padding: 16px 20px;
     }
 }
 
@@ -564,34 +800,41 @@ h1 {
     padding: 12px 0;
 
     &:not(:last-child) {
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid $border-light;
     }
 }
 
 .summary-label {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: $text-secondary;
+    font-weight: 500;
 }
 
 .summary-value {
     font-weight: 700;
     color: $text-primary;
+    font-size: 0.875rem;
 }
 
+// Chips de alerta institucional
 .alert-chip {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+
     &.alert-critico {
-        --mdc-chip-container-color: #fee2e2;
-        --mdc-chip-label-text-color: #991b1b;
+        --mdc-chip-container-color: #{$danger-subtle};
+        --mdc-chip-label-text-color: #{$danger-dark};
     }
 
     &.alert-estable {
-        --mdc-chip-container-color: #d1fae5;
-        --mdc-chip-label-text-color: #065f46;
+        --mdc-chip-container-color: #{$success-subtle};
+        --mdc-chip-label-text-color: #{$success-dark};
     }
 
     &.alert-moderado {
-        --mdc-chip-container-color: #fef3c7;
-        --mdc-chip-label-text-color: #92400e;
+        --mdc-chip-container-color: #{$warning-subtle};
+        --mdc-chip-label-text-color: #{$warning-dark};
     }
 }
 
@@ -600,51 +843,98 @@ h1 {
 
     button {
         width: 100%;
-        height: 44px;
-        border-radius: 10px;
+        height: 42px;
+        border-radius: $radius-sm;
+        font-weight: 600;
+        font-size: 0.8125rem;
+        border-color: $primary;
+        color: $primary;
+
+        mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+            margin-right: 6px;
+        }
+
+        &:hover {
+            background: $primary-subtle;
+        }
     }
 }
 
 .mini-trend-card {
-    border-radius: 16px;
+    @include card-base;
+    border-radius: $radius-lg;
 
     mat-card-header {
-        padding: 16px 16px 0;
+        padding: 16px 20px 0;
     }
 
     mat-card-title {
-        font-size: 1rem;
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: $text-primary;
     }
 }
 
 
-   .bottom-section {
-       margin-bottom: 24px;
-   }
+// ═══════════════════════════════════════════════════════════════
+// BOTTOM SECTION — Señales de Alerta
+// ═══════════════════════════════════════════════════════════════
+
+.bottom-section {
+    margin-bottom: 28px;
+}
 
 .full-width-card {
-    border-radius: 20px;
-    @include card-hover;
+    @include card-base;
+    border-radius: $radius-md;
+    overflow: hidden;
 
     mat-card-header {
-        padding: 20px 20px 0;
+        padding: 20px 24px;
+        border-bottom: 1px solid $border-light;
     }
+
+    mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: $text-primary;
+        letter-spacing: -0.01em;
+
+        mat-icon {
+            color: $danger;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+    }
+
 }
 
 
-   .demo-grid {
-       display: grid;
-       grid-template-columns: repeat(2, 1fr);
-       gap: 20px;
+// ═══════════════════════════════════════════════════════════════
+// TAB 2: ANÁLISIS DEMOGRÁFICO
+// ═══════════════════════════════════════════════════════════════
 
-       @media (max-width: 900px) {
-           grid-template-columns: 1fr;
-       }
-   }
+.demo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
 
 .demo-card {
-    border-radius: 20px;
-    @include card-hover;
+    @include card-base;
+    border-radius: $radius-md;
+    overflow: hidden;
 
     &.wide {
         grid-column: 1 / -1;
@@ -654,23 +944,41 @@ h1 {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 20px 20px 0;
+        padding: 16px 20px;
+        border-bottom: 1px solid $border-light;
     }
 
     mat-card-title {
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 1.125rem;
+        font-size: 1rem;
+        font-weight: 700;
+        color: $text-primary;
+
+        mat-icon {
+            color: $primary;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    mat-card-content {
+        padding: 16px 20px;
     }
 }
 
 
+// ═══════════════════════════════════════════════════════════════
+// PLACEHOLDER / EMPTY STATES
+// ═══════════════════════════════════════════════════════════════
 
-   .placeholder-card {
-       border-radius: 20px;
-       min-height: 400px;
-   }
+.placeholder-card {
+    @include card-base;
+    border-radius: $radius-xl;
+    min-height: 400px;
+}
 
 .placeholder-content {
     @include flex-center;
@@ -680,15 +988,15 @@ h1 {
     text-align: center;
 
     mat-icon {
-        font-size: 64px;
-        width: 64px;
-        height: 64px;
+        font-size: 56px;
+        width: 56px;
+        height: 56px;
         color: $text-muted;
-        opacity: 0.5;
+        opacity: 0.4;
     }
 
     h3 {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         font-weight: 700;
         color: $text-primary;
         margin: 0;
@@ -698,82 +1006,78 @@ h1 {
         color: $text-secondary;
         max-width: 400px;
         margin: 0;
+        line-height: 1.6;
     }
 }
 
-.full-chart-card {
-    border-radius: 20px;
-    @include card-hover;
+.empty-state {
+    @include flex-center;
+    flex-direction: column;
+    gap: 20px;
+    padding: 80px 20px;
+    text-align: center;
 
-    mat-card-content {
-        padding: 20px;
+    .empty-icon {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        background: $primary-subtle;
+        @include flex-center;
+
+        mat-icon {
+            font-size: 40px;
+            width: 40px;
+            height: 40px;
+            color: $primary;
+        }
+    }
+
+    h3 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 0;
+    }
+
+    p {
+        color: $text-secondary;
+        margin: 0;
+        font-size: 0.875rem;
     }
 }
 
 
+// ═══════════════════════════════════════════════════════════════
+// MENÚ DE REPORTES
+// ═══════════════════════════════════════════════════════════════
 
-   .empty-state {
-       @include flex-center;
-       flex-direction: column;
-       gap: 20px;
-       padding: 80px 20px;
-       text-align: center;
+::ng-deep .reports-menu {
+    min-width: 240px;
+    border-radius: $radius-md !important;
+    border: 1px solid $border-color;
 
-       .empty-icon {
-           width: 100px;
-           height: 100px;
-           border-radius: 50%;
-           background: #f3f4f6;
-           @include flex-center;
+    mat-divider {
+        margin: 6px 0;
+    }
 
-           mat-icon {
-               font-size: 48px;
-               width: 48px;
-               height: 48px;
-               color: $text-muted;
-           }
-       }
+    .mat-mdc-menu-item {
+        font-size: 0.8125rem;
+        font-weight: 500;
 
-       h3 {
-           font-size: 1.25rem;
-           font-weight: 700;
-           color: $text-primary;
-           margin: 0;
-       }
+        mat-icon {
+            color: $text-muted;
+        }
 
-       p {
-           color: $text-secondary;
-           margin: 0;
-       }
-   }
-
-
-
-@mixin line-clamp($lines) {
-    display: -webkit-box;
-    -webkit-line-clamp: $lines;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+        &:hover {
+            background: $primary-subtle;
+        }
+    }
 }
 
-// Menu de reportes
-   ::ng-deep .reports-menu {
-       min-width: 240px;
 
-       mat-divider {
-           margin: 8px 0;
-       }
-
-       .mat-mdc-menu-item {
-           mat-icon {
-               color: $text-secondary;
-           }
-       }
-   }
-
-/* ═══════════════════════════════════════════════════════
-TAB GEOGRÁFICO
-═══════════════════════════════════════════════════════ */
+// ═══════════════════════════════════════════════════════════════
+// TAB 3: ANÁLISIS GEOGRÁFICO
+// ═══════════════════════════════════════════════════════════════
 
 .geo-layout {
     display: grid;
@@ -782,22 +1086,24 @@ TAB GEOGRÁFICO
     align-items: start;
 }
 
-/* Header chip */
 .header-chip {
-    font-size: 12px;
-    font-weight: 600;
-    background: #ede9fe;
-    color: #5b21b6;
-    padding: 3px 10px;
-    border-radius: 20px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    background: $primary-subtle;
+    color: $primary-dark;
+    padding: 4px 12px;
+    border-radius: 50px;
     margin-left: auto;
     align-self: center;
+    letter-spacing: 0.02em;
 }
 
-/* Tabla resumen */
 .geo-table-card {
+    @include card-base;
     position: sticky;
     top: 80px;
+    border-radius: $radius-md;
+    overflow: hidden;
 }
 
 .table-content {
@@ -807,53 +1113,61 @@ TAB GEOGRÁFICO
 .geo-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .geo-table thead tr {
-    background: #fafafa;
+    background: $bg-elevated;
 }
 
 .geo-table th {
     padding: 10px 14px;
     text-align: left;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 0.6875rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .05em;
-    color: #757575;
-    border-bottom: 1px solid #eee;
+    letter-spacing: 0.06em;
+    color: $text-muted;
+    border-bottom: 1px solid $border-color;
 }
 
 .geo-table td {
     padding: 10px 14px;
-    border-bottom: 1px solid #f5f5f5;
-    color: #424242;
+    border-bottom: 1px solid $border-light;
+    color: $text-secondary;
     vertical-align: middle;
 }
 
-.geo-table tbody tr:hover td { background: #fafafa; }
-.geo-table tbody tr:last-child td { border-bottom: none; }
+.geo-table tbody tr:hover td {
+    background: $primary-subtle;
+}
+
+.geo-table tbody tr:last-child td {
+    border-bottom: none;
+}
 
 .geo-table tfoot tr {
-    background: #fafafa;
+    background: $bg-elevated;
     font-weight: 700;
 }
 
 .geo-table tfoot td {
-    border-top: 2px solid #eee;
-    font-size: 12px;
-    color: #616161;
+    border-top: 2px solid $border-color;
+    font-size: 0.75rem;
+    color: $text-primary;
 }
 
 .rank {
-    color: #bdbdbd;
-    font-size: 12px;
+    color: $text-muted;
+    font-size: 0.75rem;
     width: 28px;
     text-align: center;
+    font-weight: 600;
 }
 
-.province-name { min-width: 140px; }
+.province-name {
+    min-width: 140px;
+}
 
 .province-bar-wrap {
     display: flex;
@@ -863,31 +1177,31 @@ TAB GEOGRÁFICO
 
 .province-bar {
     height: 3px;
-    background: #ede9fe;
+    background: $primary-subtle;
     border-radius: 2px;
     overflow: hidden;
 }
 
 .province-bar-fill {
     height: 100%;
-    background: #6d28d9;
+    background: $primary-gradient;
     border-radius: 2px;
-    transition: width .4s ease;
+    transition: width 0.4s ease;
 }
 
 .count {
-    font-weight: 600;
+    font-weight: 700;
     text-align: right;
+    color: $text-primary;
 }
 
 .pct {
-    color: #757575;
-    font-size: 12px;
+    color: $text-muted;
+    font-size: 0.75rem;
     text-align: right;
     white-space: nowrap;
 }
 
-/* Empty state */
 .empty-tab {
     display: flex;
     flex-direction: column;
@@ -895,21 +1209,21 @@ TAB GEOGRÁFICO
     justify-content: center;
     padding: 80px 0;
     gap: 12px;
-    color: #bdbdbd;
+    color: $text-muted;
+
+    mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        opacity: 0.4;
+    }
+
+    p {
+        font-size: 0.875rem;
+        margin: 0;
+    }
 }
 
-.empty-tab mat-icon {
-    font-size: 48px;
-    width: 48px;
-    height: 48px;
-}
-
-.empty-tab p {
-    font-size: 14px;
-    margin: 0;
-}
-
-/* Responsive */
 @media (max-width: 900px) {
     .geo-layout {
         grid-template-columns: 1fr;
@@ -920,52 +1234,70 @@ TAB GEOGRÁFICO
     }
 }
 
-/* ═══════════════════════════════════════════════════════
-   TAB TENDENCIAS
-═══════════════════════════════════════════════════════ */
+
+// ═══════════════════════════════════════════════════════════════
+// TAB 4: TENDENCIAS
+// ═══════════════════════════════════════════════════════════════
 
 .trend-kpis {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 14px;
     margin-bottom: 20px;
 }
 
 .trend-kpi {
-    background: #fff;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    padding: 16px 20px;
+    @include card-base;
+    padding: 18px 20px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
+    border-radius: $radius-md;
+
+    &.danger {
+        border-left: 3px solid $danger;
+        background: linear-gradient(135deg, $danger-subtle 0%, $bg-surface 40%);
+    }
+
+    &.info {
+        border-left: 3px solid $info;
+        background: linear-gradient(135deg, $info-subtle 0%, $bg-surface 40%);
+    }
+
+    &.warning {
+        border-left: 3px solid $warning;
+        background: linear-gradient(135deg, $warning-subtle 0%, $bg-surface 40%);
+    }
 }
 
 .trend-kpi-num {
-    font-size: 28px;
-    font-weight: 700;
-    color: #424242;
+    font-size: 1.625rem;
+    font-weight: 800;
+    color: $text-primary;
     line-height: 1;
+    letter-spacing: -0.02em;
 }
 
 .trend-kpi-lbl {
-    font-size: 12px;
-    color: #757575;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
-.trend-kpi.danger  .trend-kpi-num { color: #c62828; }
-.trend-kpi.info    .trend-kpi-num { color: #1565c0; }
-.trend-kpi.warning .trend-kpi-num { color: #e65100; }
+.trend-kpi.danger  .trend-kpi-num { color: $danger-dark; }
+.trend-kpi.info    .trend-kpi-num { color: $info-dark; }
+.trend-kpi.warning .trend-kpi-num { color: $warning-dark; }
 
-/* Header hint */
 .header-hint {
-    font-size: 12px;
-    color: #9e9e9e;
+    font-size: 0.6875rem;
+    color: $text-muted;
     margin-left: auto;
     align-self: center;
+    font-weight: 500;
 }
 
-/* Grid inferior */
 .trend-bottom-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -978,19 +1310,23 @@ TAB GEOGRÁFICO
     align-items: center;
     justify-content: center;
     height: 200px;
-    color: #bdbdbd;
-    font-size: 13px;
+    color: $text-muted;
+    font-size: 0.8125rem;
 }
 
 @media (max-width: 900px) {
-    .trend-kpis        { grid-template-columns: repeat(2, 1fr); }
-    .trend-bottom-grid { grid-template-columns: 1fr; }
+    .trend-kpis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .trend-bottom-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-/* ═══════════════════════════════════════════════════════
-   ESTADO VACÍO — sin datos en el período seleccionado
-   Usar en todos los tabs de manera consistente
-═══════════════════════════════════════════════════════ */
+
+// ═══════════════════════════════════════════════════════════════
+// EMPTY PERIOD STATE
+// ═══════════════════════════════════════════════════════════════
 
 .empty-period {
     display: flex;
@@ -1003,32 +1339,32 @@ TAB GEOGRÁFICO
 }
 
 .empty-period-icon {
-    width: 72px;
-    height: 72px;
+    width: 68px;
+    height: 68px;
     border-radius: 50%;
-    background: #f5f5f5;
+    background: $primary-subtle;
     display: flex;
     align-items: center;
     justify-content: center;
-}
 
-.empty-period-icon mat-icon {
-    font-size: 36px;
-    width: 36px;
-    height: 36px;
-    color: #bdbdbd;
+    mat-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: $primary;
+    }
 }
 
 .empty-period h3 {
-    font-size: 18px;
-    font-weight: 600;
-    color: #424242;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: $text-primary;
     margin: 0;
 }
 
 .empty-period p {
-    font-size: 14px;
-    color: #9e9e9e;
+    font-size: 0.875rem;
+    color: $text-muted;
     margin: 0;
     line-height: 1.6;
 }
@@ -1037,34 +1373,35 @@ TAB GEOGRÁFICO
     margin-top: 8px;
 }
 
-/* ═══════════════════════════════════════════════════════
-   INDICADOR DE PERÍODO ACTIVO
-═══════════════════════════════════════════════════════ */
+
+// ═══════════════════════════════════════════════════════════════
+// PERIOD INDICATOR
+// ═══════════════════════════════════════════════════════════════
 
 .period-indicator {
     display: flex;
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    background: rgba($primary, 0.06);
-    border: 1px solid rgba($primary, 0.15);
+    background: $primary-subtle;
+    border: 1px solid rgba($primary, 0.12);
     border-radius: 50px;
-    font-size: 13px;
+    font-size: 0.8125rem;
     color: $text-secondary;
     margin-bottom: 16px;
     width: fit-content;
 
     mat-icon {
-        font-size: 15px;
-        width: 15px;
-        height: 15px;
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
         color: $primary;
         flex-shrink: 0;
     }
 
     strong {
-        color: $primary;
-        font-weight: 600;
+        color: $primary-dark;
+        font-weight: 700;
     }
 }
 
@@ -1080,12 +1417,13 @@ TAB GEOGRÁFICO
     align-items: center;
     gap: 4px;
     color: $text-muted;
-    font-size: 12px;
+    font-size: 0.6875rem;
+    font-weight: 500;
 
     mat-icon {
-        font-size: 13px;
-        width: 13px;
-        height: 13px;
+        font-size: 12px;
+        width: 12px;
+        height: 12px;
         color: $text-muted;
     }
 }
@@ -1093,10 +1431,25 @@ TAB GEOGRÁFICO
 @media (max-width: 768px) {
     .period-indicator {
         flex-wrap: wrap;
-        border-radius: 12px;
+        border-radius: $radius-sm;
         width: 100%;
     }
 
     .period-divider { display: none; }
-    .period-survey  { width: 100%; }
+    .period-survey { width: 100%; }
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// FULL CHART CARD (genérico)
+// ═══════════════════════════════════════════════════════════════
+
+.full-chart-card {
+    @include card-base;
+    border-radius: $radius-md;
+    overflow: hidden;
+
+    mat-card-content {
+        padding: 20px;
+    }
 }
