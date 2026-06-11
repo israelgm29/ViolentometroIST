@@ -1,8 +1,8 @@
 package ec.edu.istr.violentometro.controller;
 
-import ec.edu.istr.violentometro.dto.ViolenceZoneDTO;
+import ec.edu.istr.violentometro.model.ViolenceZone;
 import ec.edu.istr.violentometro.service.ViolenceZoneService;
-import jakarta.validation.Valid;
+import ec.edu.istr.violentometro.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,39 +13,45 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/violence-zones")
 @RequiredArgsConstructor
-class ViolenceZoneController {
+public class ViolenceZoneController {
 
-    private final ViolenceZoneService violenceZoneService;
+    private final ViolenceZoneService zoneService;
+    private final SecurityUtils       securityUtils;
 
+    // Listar zonas del instituto autenticado
     @GetMapping
-    public ResponseEntity<List<ViolenceZoneDTO>> getAll() {
-        List<ViolenceZoneDTO> violenceZones = violenceZoneService.findAll();
-        return ResponseEntity.ok(violenceZones);
+    public ResponseEntity<List<ViolenceZone>> getByInstituto() {
+        Integer idInstituto = securityUtils.getIdInstituto();
+        return ResponseEntity.ok(zoneService.findByInstituto(idInstituto));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ViolenceZoneDTO> getById(@PathVariable("id") Integer id) {
-        // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
-        return ResponseEntity.ok(violenceZoneService.findById(id));
+    // Listar plantillas globales (para referencia o copia manual)
+    @GetMapping("/plantillas")
+    public ResponseEntity<List<ViolenceZone>> getPlantillas() {
+        return ResponseEntity.ok(zoneService.findPlantillas());
     }
 
+    // Crear zona propia
     @PostMapping
-    public ResponseEntity<ViolenceZoneDTO> create(@RequestBody @Valid ViolenceZoneDTO violenceZoneDTO) {
-        ViolenceZoneDTO savedViolenceZone = violenceZoneService.save(violenceZoneDTO);
-        return new ResponseEntity<>(savedViolenceZone, HttpStatus.CREATED);
+    public ResponseEntity<ViolenceZone> create(@RequestBody ViolenceZone zone) {
+        Integer idInstituto = securityUtils.getIdInstituto();
+        return new ResponseEntity<>(zoneService.create(zone, idInstituto), HttpStatus.CREATED);
     }
 
+    // Actualizar zona propia
     @PutMapping("/{id}")
-    public ResponseEntity<ViolenceZoneDTO> update(@PathVariable("id") Integer id, @RequestBody @Valid ViolenceZoneDTO violenceZoneDTO) {
-        // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
-        ViolenceZoneDTO updatedViolenceZone = violenceZoneService.updateOne(id, violenceZoneDTO);
-        return ResponseEntity.ok(updatedViolenceZone);
+    public ResponseEntity<ViolenceZone> update(
+            @PathVariable Integer id,
+            @RequestBody ViolenceZone zone) {
+        Integer idInstituto = securityUtils.getIdInstituto();
+        return ResponseEntity.ok(zoneService.update(id, zone, idInstituto));
     }
 
+    // Eliminar zona propia
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
-        // El Service lanza EntityNotFoundException si no existe (mapeado a 404)
-        violenceZoneService.deleteById(id);
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        Integer idInstituto = securityUtils.getIdInstituto();
+        zoneService.delete(id, idInstituto);
         return ResponseEntity.noContent().build();
     }
 }

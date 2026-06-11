@@ -32,6 +32,12 @@ public class Survey {
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
+    // ── NUEVO: relación con Institute ─────────────────────────────
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_instituto", nullable = false)
+    private Institute institute;
+    // ─────────────────────────────────────────────────────────────
+
     @PrePersist
     protected void onCreate() {
         createdAt = OffsetDateTime.now();

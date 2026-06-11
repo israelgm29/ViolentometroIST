@@ -3,11 +3,14 @@ package ec.edu.istr.violentometro.service;
 import ec.edu.istr.violentometro.components.SurveyMapper;
 import ec.edu.istr.violentometro.dto.ActiveSurveyDTO;
 import ec.edu.istr.violentometro.dto.SurveyDTO;
+import ec.edu.istr.violentometro.model.Institute;
 import ec.edu.istr.violentometro.model.Question;
 import ec.edu.istr.violentometro.model.Survey;
+import ec.edu.istr.violentometro.repository.InstituteRepository;
 import ec.edu.istr.violentometro.repository.QuestionRepository;
 import ec.edu.istr.violentometro.repository.SurveyRepository;
 import ec.edu.istr.violentometro.repository.ViolenceZoneRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,31 +22,35 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SurveyService {
-    private final SurveyRepository surveyRepository;
-    private final QuestionRepository questionRepository;
-    private final ViolenceZoneRepository zoneRepository;
-    private final SurveyMapper surveyMapper;
 
-    // ========== LISTAR TODOS ==========
-    public List<SurveyDTO> findAll() {
-        return surveyRepository.findAll().stream()
+    private final SurveyRepository    surveyRepository;
+    private final QuestionRepository  questionRepository;
+    private final ViolenceZoneRepository zoneRepository;
+    private final InstituteRepository instituteRepository;
+    private final SurveyMapper        surveyMapper;
+
+    // ── Listar cuestionarios del instituto ────────────────────────
+    public List<SurveyDTO> findAll(Integer idInstituto) {
+        return surveyRepository.findAllByInstitute_Id(idInstituto).stream()
                 .map(survey -> surveyMapper.toDto(survey, null))
                 .collect(Collectors.toList());
     }
 
-    // ========== OBTENER POR ID ==========
-    public SurveyDTO findById(Integer id) {
-        Survey survey = surveyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cuestionario no encontrado con ID: " + id));
-
+    // ── Obtener por ID (validando pertenencia) ────────────────────
+    public SurveyDTO findById(Integer id, Integer idInstituto) {
+        Survey survey = getSurveyValidado(id, idInstituto);
         List<Question> questions = questionRepository.findBySurveyIdOrderByQuestionNumberAsc(id);
         return surveyMapper.toDto(survey, questions);
     }
 
-    // ========== CREAR NUEVO ==========
+    // ── Crear cuestionario asignando el instituto ─────────────────
     @Transactional
-    public SurveyDTO createFullSurvey(SurveyDTO dto) {
+    public SurveyDTO createFullSurvey(SurveyDTO dto, Integer idInstituto) {
+        Institute institute = instituteRepository.findById(idInstituto)
+                .orElseThrow(() -> new EntityNotFoundException("Instituto no encontrado: " + idInstituto));
+
         Survey survey = surveyMapper.toEntity(dto);
+        survey.setInstitute(institute);                     // ← asignar instituto
         Survey savedSurvey = surveyRepository.save(survey);
 
         if (dto.getQuestions() != null) {
@@ -51,113 +58,87 @@ public class SurveyService {
             questionRepository.saveAll(questions);
             return surveyMapper.toDto(savedSurvey, questions);
         }
-
         return surveyMapper.toDto(savedSurvey, null);
     }
 
-    // ========== ACTUALIZAR (OPCIÓN 2 - INTELIGENTE) ==========
+    // ── Actualizar cuestionario (solo del propio instituto) ───────
     @Transactional
-    public SurveyDTO updateFullSurvey(Integer id, SurveyDTO dto) {
-        // 1. Buscar survey existente
-        Survey survey = surveyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cuestionario no encontrado con ID: " + id));
+    public SurveyDTO updateFullSurvey(Integer id, SurveyDTO dto, Integer idInstituto) {
+        Survey survey = getSurveyValidado(id, idInstituto);
 
-        // 2. Actualizar campos básicos del survey
         survey.setTitle(dto.getTitle());
         survey.setDescription(dto.getDescription());
         surveyRepository.save(survey);
 
-        // 3. Obtener preguntas existentes
         List<Question> existingQuestions = questionRepository.findBySurveyIdOrderByQuestionNumberAsc(id);
-
-        // 4. Procesar preguntas del DTO
-        List<Question> updatedQuestions = new ArrayList<>();
-        List<Integer> processedIds = new ArrayList<>();
+        List<Question> updatedQuestions  = new ArrayList<>();
+        List<Integer>  processedIds      = new ArrayList<>();
 
         for (SurveyDTO.QuestionDTO qDto : dto.getQuestions()) {
             Question question;
-
             if (qDto.getId() != null) {
-                // ACTUALIZAR pregunta existente
                 question = existingQuestions.stream()
                         .filter(q -> q.getId().equals(qDto.getId()))
                         .findFirst()
                         .orElseThrow(() -> new RuntimeException("Pregunta no encontrada: " + qDto.getId()));
-
                 processedIds.add(qDto.getId());
             } else {
-                // CREAR nueva pregunta
                 question = new Question();
                 question.setSurvey(survey);
                 question.setStatus(true);
             }
-
-            // Actualizar datos de la pregunta
             question.setQuestion(qDto.getQuestion());
             question.setQuestionNumber(qDto.getQuestionNumber());
             question.setIdZone(zoneRepository.findById(qDto.getIdZone())
                     .orElseThrow(() -> new RuntimeException("Zona no encontrada: " + qDto.getIdZone())));
-
             updatedQuestions.add(question);
         }
 
-        // 5. ELIMINAR preguntas que ya no están en el DTO
-        List<Question> questionsToDelete = existingQuestions.stream()
+        List<Question> toDelete = existingQuestions.stream()
                 .filter(q -> !processedIds.contains(q.getId()))
                 .collect(Collectors.toList());
+        if (!toDelete.isEmpty()) questionRepository.deleteAll(toDelete);
 
-        if (!questionsToDelete.isEmpty()) {
-            questionRepository.deleteAll(questionsToDelete);
-        }
-
-        // 6. Guardar todas las preguntas (nuevas y actualizadas)
         List<Question> savedQuestions = questionRepository.saveAll(updatedQuestions);
-
-        // 7. Retornar DTO completo
         return surveyMapper.toDto(survey, savedQuestions);
     }
 
-    // ========== ACTIVAR ==========
+    // ── Activar (solo desactiva los del mismo instituto) ──────────
     @Transactional
-    public void activateOnlyThis(Integer id) {
-        surveyRepository.deactivateAllSurveys();
-        Survey survey = surveyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cuestionario no encontrado con ID: " + id));
+    public void activateOnlyThis(Integer id, Integer idInstituto) {
+        surveyRepository.deactivateAllByInstituto(idInstituto);     // ← solo su instituto
+        Survey survey = getSurveyValidado(id, idInstituto);
         survey.setIsActive(true);
         surveyRepository.save(survey);
     }
 
-    // ========== ELIMINAR ==========
+    // ── Eliminar (solo del propio instituto) ──────────────────────
     @Transactional
-    public void deleteSurvey(Integer id) {
-        Survey survey = surveyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cuestionario no encontrado con ID: " + id));
+    public void deleteSurvey(Integer id, Integer idInstituto) {
+        Survey survey = getSurveyValidado(id, idInstituto);
 
-        // Validación: no eliminar cuestionario activo
         if (survey.getIsActive()) {
-            throw new RuntimeException("No se puede eliminar el cuestionario activo. Primero active otro cuestionario.");
+            throw new RuntimeException("No se puede eliminar el cuestionario activo.");
         }
-
-        // Nota: Si tienes UserResponse, agrega validación aquí
-        // boolean hasResponses = userResponseRepository.existsBySurveyId(id);
-        // if (hasResponses) {
-        //     throw new RuntimeException("No se puede eliminar este cuestionario porque ya tiene respuestas de usuarios.");
-        // }
-
-        // Eliminar preguntas primero (si no tienes CASCADE en BD)
         questionRepository.deleteBySurveyId(id);
-
-        // Eliminar el survey
         surveyRepository.deleteById(id);
     }
 
-    public ActiveSurveyDTO findActive() {
-        Survey survey = surveyRepository.findByIsActiveTrue()
-                .orElseThrow(() -> new RuntimeException("No hay ningún cuestionario activo."));
-
-        List<Question> questions = questionRepository
-                .findBySurveyIdOrderByQuestionNumberAsc(survey.getId());
-
+    // ── Obtener cuestionario activo del instituto ─────────────────
+    public ActiveSurveyDTO findActive(Integer idInstituto) {
+        Survey survey = surveyRepository.findByIsActiveTrueAndInstitute_Id(idInstituto)
+                .orElseThrow(() -> new RuntimeException("No hay cuestionario activo para este instituto."));
+        List<Question> questions = questionRepository.findBySurveyIdOrderByQuestionNumberAsc(survey.getId());
         return surveyMapper.toActiveDto(survey, questions);
+    }
+
+    // ── Helper: buscar survey y validar que pertenezca al instituto ──
+    private Survey getSurveyValidado(Integer id, Integer idInstituto) {
+        Survey survey = surveyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cuestionario no encontrado: " + id));
+        if (!survey.getInstitute().getId().equals(idInstituto)) {
+            throw new SecurityException("No tienes permiso para acceder a este cuestionario.");
+        }
+        return survey;
     }
 }

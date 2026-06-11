@@ -15,12 +15,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InstituteService {
 
-    private final InstituteRepository instituteRepository;
-    private final InstituteMapper instituteMapper;
+    private final InstituteRepository  instituteRepository;
+    private final InstituteMapper      instituteMapper;
+    private final ViolenceZoneService  violenceZoneService;   // ← NUEVO
 
+    // ── Crear instituto + copiar zonas plantilla automáticamente ──
+    @Transactional
     public InstituteDTO save(InstituteDTO dto) {
         Institute newInstitute = instituteMapper.toEntity(dto);
-        return instituteMapper.toDto(instituteRepository.save(newInstitute));
+        Institute saved = instituteRepository.save(newInstitute);
+
+        // ← NUEVO: copia automática de zonas plantilla
+        violenceZoneService.copiarPlantillasAInstituto(saved.getId());
+
+        return instituteMapper.toDto(saved);
     }
 
     public List<InstituteDTO> findAll() {
@@ -35,14 +43,9 @@ public class InstituteService {
 
     @Transactional
     public InstituteDTO updateOne(Integer id, InstituteDTO dto) {
-        // 1. Obtener la entidad existente (lanza 404 si no existe)
         Institute existingInstitute = instituteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Instituto no encontrado con ID: " + id));
-
-        // 2. Mapeo seguro: Solo actualiza campos non-null
         instituteMapper.updateEntityFromDto(dto, existingInstitute);
-
-        // 3. Guardar y devolver DTO
         return instituteMapper.toDto(instituteRepository.save(existingInstitute));
     }
 
@@ -61,22 +64,11 @@ public class InstituteService {
         instituteRepository.save(institute);
     }
 
-    /**
-     * Obtiene los bytes del logo.
-     */
     public byte[] getLogo(Integer id) {
-        return instituteRepository.findById(id)
-                .map(Institute::getLogo)
-                .orElse(null);
+        return instituteRepository.findById(id).map(Institute::getLogo).orElse(null);
     }
 
-    /**
-     * Obtiene el content type del logo.
-     */
     public String getLogoContentType(Integer id) {
-        return instituteRepository.findById(id)
-                .map(Institute::getLogoContentType)
-                .orElse(null);
+        return instituteRepository.findById(id).map(Institute::getLogoContentType).orElse(null);
     }
-
 }
