@@ -1,191 +1,155 @@
-<div class="dashboard-container">
-    <header class="dashboard-header">
-        <h1 class="page-title">Banco de preguntas del violentometro</h1>
-    </header>
+<div class="questions-container">
 
-    <div class="widgets-grid">
+    <!-- ═══════════════════════════════════════════════════
+         PAGE HEADER
+    ═══════════════════════════════════════════════════ -->
+    <div class="page-header">
+        <div class="ph-left">
+            <div>
+                <div class="breadcrumb">
+                    <span>Inicio</span>
+                    <mat-icon>chevron_right</mat-icon>
+                    <span class="cur">Banco de Preguntas</span>
+                </div>
+                <h1 class="page-title">Gestión de Preguntas</h1>
+            </div>
+        </div>
 
-        <mat-card class="widget-card border-left-blue">
-            <mat-card-content>
-                <div class="widget-icon bg-light-blue">
-                    <mat-icon color="primary">visibility</mat-icon>
-                </div>
-                <div class="widget-info">
-                    <span class="stat-label">Estado de Publicación</span>
-                    <div class="stat-main-value">
-                        <span class="widget-value">{{ getVisibilityStats().publicas }}</span>
-                        <span class="widget-label">Públicas de {{ dataSource.data.length }}</span>
-                    </div>
-                    <mat-progress-bar mode="determinate" color="primary"
-                                      [value]="getVisibilityStats().porcentaje">
-                    </mat-progress-bar>
-                    <span class="stat-help-text">{{ getVisibilityStats().ocultas }} preguntas ocultas</span>
-                </div>
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="widget-card border-left-purple">
-            <mat-card-content>
-                <div class="widget-icon bg-light-purple">
-                    <mat-icon style="color: #7b1fa2;">analytics</mat-icon>
-                </div>
-                <div class="stat-label-container">
-                    <span class="widget-info">Distribución de Alertas</span>
-                </div>
-                <div class="stat-footer scroll-container">
-                    <div class="alert-list">
-                        @for (alert of getAlertSummary(); track alert.name) {
-                            <div class="alert-item">
-                                <span class="alert-badge">{{ alert.name }}</span>
-                                <span class="alert-name">{{ alert.count }} preguntas</span>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </mat-card-content>
-
-        </mat-card>
-
-        <mat-card class="widget-card border-left-orange">
-            <mat-card-content>
-                <div class="widget-icon bg-light-orange">
-                    <mat-icon style="color: #ef6c00;">trending_up</mat-icon>
-                </div>
-                <div class="widget-info">
-                    <span class="stat-label">Alerta Predominante</span>
-                    <div class="stat-main-value">
-                    <span  [style.color]="getMainAlert().color">
-                        {{ getMainAlert().name }}
-                    </span>
-                    </div>
-                    <span class="widget-label">Nivel con mayor frecuencia de preguntas en el banco actual.</span>
-                </div>
-            </mat-card-content>
-        </mat-card>
-
+        <button mat-flat-button class="ph-btn-primary" (click)="openDialog()">
+            <mat-icon>add</mat-icon>
+            Nueva Pregunta
+        </button>
     </div>
 
-    <mat-card class="table-card mat-elevation-z2">
+    <!-- ═══════════════════════════════════════════════════
+         MAIN CONTENT
+    ═══════════════════════════════════════════════════ -->
+    <div class="main-content">
+        <!-- LEFT PANEL - Filters & Distribution -->
+        <div class="left-panel">
+            <mat-card class="filter-card">
+                <div class="filter-section">
+                    <div class="search-wrapper">
+                        <mat-icon>search</mat-icon>
+                        <input type="text" (keyup)="applyFilter($event)"
+                               placeholder="Buscar..."
+                               #input>
+                    </div>
+                </div>
 
-        <div class="table-toolbar">
-            <div class="search-box">
-                <mat-icon>search</mat-icon>
-                <input type="text" (keyup)="applyFilter($event)" placeholder="Buscar pregunta..." #input>
-            </div>
+                <div class="filter-section">
+                    <div class="risk-filters">
+                        <button mat-stroked-button class="risk-btn"
+                                [class.active]="currentFilter === 'all'"
+                                (click)="filterByZone('all')">
+                            Todas
+                        </button>
+                        <button mat-stroked-button class="risk-btn"
+                                [class.active]="currentFilter === 'alerta amarilla'"
+                                (click)="filterByZone('alerta amarilla')">
+                            Amarilla
+                        </button>
+                        <button mat-stroked-button class="risk-btn"
+                                [class.active]="currentFilter === 'alerta naranja'"
+                                (click)="filterByZone('alerta naranja')">
+                            Naranja
+                        </button>
+                        <button mat-stroked-button class="risk-btn"
+                                [class.active]="currentFilter === 'alerta roja'"
+                                (click)="filterByZone('alerta roja')">
+                            Roja
+                        </button>
+                    </div>
+                </div>
 
-            <div class="toolbar-acctions">
-                <button mat-icon-button matTooltip="Nueva pregunta" color="primary" (click)="openDialog()">
-                    <mat-icon>add_circle</mat-icon>
-                </button>
+                <div class="filter-section">
+                    <div class="visibility-filters">
+                        <button mat-stroked-button class="vis-btn"
+                                [class.active]="visibilityFilter === 'all'"
+                                (click)="setVisibilityFilter('all')">
+                            Todas
+                        </button>
+                        <button mat-stroked-button class="vis-btn"
+                                [class.active]="visibilityFilter === 'public'"
+                                (click)="setVisibilityFilter('public')">
+                            Públicas
+                        </button>
+                        <button mat-stroked-button class="vis-btn"
+                                [class.active]="visibilityFilter === 'hidden'"
+                                (click)="setVisibilityFilter('hidden')">
+                            Ocultas
+                        </button>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
 
-                <button mat-icon-button [matMenuTriggerFor]="filterMenu" matTooltip="Filtrar por alerta">
-                    <mat-icon>filter_list</mat-icon>
-                </button>
-
-                <mat-menu #filterMenu="matMenu">
-                    <button mat-menu-item (click)="filterByZone('all')">
-                        <mat-icon>list</mat-icon>
-                        <span>Mostrar todas</span>
-                    </button>
-                    <button mat-menu-item (click)="filterByZone('alerta amarilla')">
-                        <mat-icon style="color: #2e7d32;">check circle</mat-icon>
-                        <span>Alerta Amarilla</span>
-                    </button>
-                    <button mat-menu-item (click)="filterByZone('alerta naranja')">
-                        <mat-icon style="color: #fa7921">error_outlined</mat-icon>
-                        <span>Alerta Naranja</span>
-                    </button>
-                    <button mat-menu-item (click)="filterByZone('alerta roja')">
-                        <mat-icon style="color: #e53935">dangerous</mat-icon>
-                        <span>Alerta Roja</span>
-                    </button>
-                </mat-menu>
-                <button mat-icon-button (click)="exportToExcel()" matTooltip="Exportar a Excel">
+        <!-- RIGHT PANEL - Questions Grid -->
+        <div class="right-panel">
+            <div class="panel-header">
+                <h3 class="panel-title">Preguntas</h3>
+                <button mat-icon-button (click)="exportToExcel()" matTooltip="Exportar">
                     @if (!isExporting) {
-                        <mat-icon style="color: #2e7d32;">article</mat-icon>
+                        <mat-icon>download</mat-icon>
                     } @else {
                         <mat-icon class="spin-animation">sync</mat-icon>
                     }
-
                 </button>
             </div>
-        </div>
-        <mat-card-content class="p-0 d-flex flex-column h-100">
-            <div class="table-container">
-                <table mat-table [dataSource]="dataSource" matSort>
 
-                    <ng-container matColumnDef="number">
-                        <th mat-header-cell *matHeaderCellDef> No.</th>
-                        <td mat-cell *matCellDef="let element"><b>{{ element.questionNumber }}</b></td>
-                    </ng-container>
+            <div class="questions-grid">
+                @for (question of pagedQuestions; track question.id) {
+                    <div class="question-card">
+                        <div class="q-header">
+                            <span class="q-number">#{{ question.questionNumber }}</span>
+                        </div>
 
-                    <ng-container matColumnDef="question">
-                        <th mat-header-cell *matHeaderCellDef> Pregunta del Violentómetro</th>
-                        <td mat-cell *matCellDef="let element" class="text-wrap"> {{ element.question }}</td>
-                    </ng-container>
+                        <div class="q-body">
+                            <p class="q-text">{{ question.question }}</p>
+                        </div>
 
-
-                    <ng-container matColumnDef="zone">
-                        <th mat-header-cell *matHeaderCellDef> Nivel de Riesgo</th>
-                        <td mat-cell *matCellDef="let element">
-                            <div class="table-progress-container">
-                                <span class="zone-label-table">
-                                    {{ element.zone.name }}
-                                </span>
-
-                                <div class="table-bar-wrapper">
-                                    <mat-progress-bar
-                                            mode="determinate"
-                                            [value]="(element.zone.severity / 3) * 100"
-                                            [style.--bar-color]="getColorHex(element.zone.color)">
-                                    </mat-progress-bar>
-                                </div>
-                            </div>
-                        </td>
-                    </ng-container>
-
-
-                    <ng-container matColumnDef="status">
-                        <th mat-header-cell *matHeaderCellDef> Visibilidad</th>
-                        <td mat-cell *matCellDef="let element">
-                            <span [class]="element.status ? 'text-success' : 'text-danger'">
-                                {{ element.status ? 'Pública' : 'Oculta' }}
+                        <div class="q-footer">
+                            <span class="zone-badge" [style.background]="question.zone.color + '20'"
+                                  [style.color]="question.zone.color">
+                                {{ question.zone.name }}
                             </span>
-                        </td>
-                    </ng-container>
 
-                    <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef> Acciones</th>
-                        <td mat-cell *matCellDef="let element">
-                            <button mat-icon-button (click)="viewDetail(element)" matTooltip="Ver detalles">
-                                <mat-icon color="primary">visibility</mat-icon>
-                            </button>
-                            <button mat-icon-button (click)="openDialog(element)" matTooltip="Editar pregunta">
-                                <mat-icon>edit_outline</mat-icon>
-                            </button>
-                            <button mat-icon-button (click)="deleteQuestion(element.id)" matTooltip="Eliminar pregunta">
-                                <mat-icon>delete_outline</mat-icon>
-                            </button>
-
-                        </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-                    <tr class="mat-row" *matNoDataRow>
-                        <td class="mat-cell text-center p-5" colspan="5">
-                            <div class="no-results-container">
-                                <mat-icon style="font-size: 40px; color: #ccc;">manage_search</mat-icon>
-                                <p>No se encontraron preguntas que coincidan con los criterios.</p>
-                                <button mat-button color="warn" (click)="resetFilters()">Limpiar filtros</button>
+                            <div class="q-actions">
+                                <button mat-icon-button class="btn-view" matTooltip="Ver"
+                                        (click)="viewDetail(question)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-edit" matTooltip="Editar"
+                                        (click)="openDialog(question)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-delete" matTooltip="Eliminar"
+                                        (click)="deleteQuestion(question.id)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
                             </div>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                    </div>
+                }
+
+                @if (filteredQuestions.length === 0) {
+                    <div class="empty-state">
+                        <mat-icon>search_off</mat-icon>
+                        <h3>Sin resultados</h3>
+                        <p>No se encontraron preguntas con los filtros aplicados.</p>
+                    </div>
+                }
             </div>
-            <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons
-                           aria-label="Seleccionar página"></mat-paginator>
-        </mat-card-content>
-    </mat-card>
+
+            <mat-paginator
+                    [length]="filteredQuestions.length"
+                    [pageIndex]="currentPage"
+                    [pageSize]="pageSize"
+                    [pageSizeOptions]="[12, 24, 48]"
+                    (page)="onPageChange($event)"
+                    showFirstLastButtons>
+            </mat-paginator>
+        </div>
+    </div>
+
 </div>

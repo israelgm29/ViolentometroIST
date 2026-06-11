@@ -9,6 +9,7 @@ $purple      : #7c3aed;
 $purple-dark : #6d28d9;
 $purple-pale : #faf5ff;
 $teal        : #0d9488;
+$teal-pale   : #f0fdfa;
 $text-primary: #111827;
 $text-muted  : #6b7280;
 $border      : #e5e7eb;
@@ -76,85 +77,33 @@ $font        : 'Plus Jakarta Sans', sans-serif;
   padding      : 4px 12px;
 }
 
-// ── Gauge body ────────────────────────────────────────
-.gauge-body {
-  display        : flex;
-  align-items    : center;
-  justify-content: space-between;
-  gap            : 1.5rem;
-}
+// ── Frase de confianza fija ───────────────────────────
+.trust-phrase {
+  display      : flex;
+  align-items  : flex-start;
+  gap          : 10px;
+  padding      : 12px 16px;
+  background   : $teal-pale;
+  border       : 1px solid #99f6e4;
+  border-radius: 14px;
 
-.gauge-svg-wrap {
-  display       : flex;
-  flex-direction: column;
-  align-items   : center;
-  flex-shrink   : 0;
-}
-
-.gauge-svg {
-  width   : 200px;
-  height  : auto;
-  overflow: visible;
-}
-
-.gauge-needle {
-  transition: all .6s cubic-bezier(.4, 0, .2, 1);
-}
-
-.gauge-zone-labels {
-  display        : flex;
-  justify-content: space-between;
-  width          : 180px;
-  margin-top     : -6px;
-}
-
-.gz-label {
-  font-size     : 10px;
-  font-weight   : 700;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-}
-
-.gz-low  { color: #16a34a; }
-.gz-med  { color: #ca8a04; }
-.gz-high { color: #ea580c; }
-.gz-crit { color: #dc2626; }
-
-// ── Risk chip ─────────────────────────────────────────
-.risk-chip {
-  display      : inline-flex;
-  align-items  : center;
-  gap          : 7px;
-  padding      : 8px 18px;
-  border-radius: 20px;
-  font-size    : .82rem;
-  font-weight  : 700;
-  border       : 1px solid;
-  transition   : all .3s ease;
-  flex-shrink  : 0;
-
-  &-icon { font-size: 18px !important; width: 18px !important; height: 18px !important; }
-
-  &--neutral, &--low {
-    background: #f0fdf4; color: #166534; border-color: #bbf7d0;
-    .risk-chip-icon { color: #16a34a; }
-  }
-  &--medium {
-    background: #fefce8; color: #854d0e; border-color: #fde68a;
-    .risk-chip-icon { color: #ca8a04; }
-  }
-  &--high {
-    background: #fff7ed; color: #9a3412; border-color: #fed7aa;
-    .risk-chip-icon { color: #ea580c; }
-  }
-  &--critical {
-    background: #fef2f2; color: #991b1b; border-color: #fecaca;
-    animation : pulseCrit 2s infinite;
-    .risk-chip-icon { color: #dc2626; }
+  span {
+    font-size  : .82rem;
+    font-weight: 600;
+    color      : #0f766e;
+    line-height: 1.5;
+    font-style : italic;
   }
 }
 
-@keyframes pulseCrit { 0%,100%{opacity:1} 50%{opacity:.7} }
+.trust-icon {
+  font-size  : 18px !important;
+  width      : 18px !important;
+  height     : 18px !important;
+  color      : $teal;
+  flex-shrink: 0;
+  margin-top : 1px;
+}
 
 // ── Progress segments ─────────────────────────────────
 .progress-segments {

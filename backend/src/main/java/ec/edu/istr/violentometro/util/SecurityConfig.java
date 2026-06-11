@@ -52,6 +52,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,  "/api/v1/app-users").permitAll()
                         .requestMatchers(HttpMethod.PUT,   "/api/v1/app-users/**").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/app-users/**").permitAll()
+                        // Busca esta sección y asegúrate de que sea permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/questions/**").permitAll()
+
 
                         // ── Encuesta (flujo público) ────────────────────────────
                         .requestMatchers(HttpMethod.POST, "/api/v1/user-answers").permitAll()

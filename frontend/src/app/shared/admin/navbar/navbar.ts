@@ -1,44 +1,37 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
-import {Router, RouterLink} from "@angular/router";
-import {MatIcon} from "@angular/material/icon";
-import {MatToolbar} from "@angular/material/toolbar";
-import {AuthService} from "../../../services/auth.service";
-import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {MatDivider} from "@angular/material/list";
-import {MatIconButton} from "@angular/material/button";
-
-interface Notification {
-  icon: string;
-  iconColor: string;
-  message: string;
-}
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatDivider } from '@angular/material/list';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-navbar-admin',
+  standalone: true,
   imports: [
     MatIcon,
-    MatToolbar,
     MatMenuTrigger,
     MatMenu,
-    MatDivider,
     MatMenuItem,
+    MatDivider,
     RouterLink,
-    MatIconButton
+    RouterLinkActive,
+    NgOptimizedImage,
   ],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css',
+  styleUrl: './navbar.scss',
 })
 export class Navbar {
-  @Input()  drawerOpened = false;
-  @Output() menuToggle   = new EventEmitter<void>();
-  @Output() logoutClick  = new EventEmitter<void>();
+  @Output() logoutClick = new EventEmitter<void>();
 
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
 
   get currentUser() {
     return this.authService.user();
   }
 
-  toggle()  { this.menuToggle.emit();  }
-  logout()  { this.logoutClick.emit(); }
+  logout(): void {
+    this.logoutClick.emit();
+  }
 }

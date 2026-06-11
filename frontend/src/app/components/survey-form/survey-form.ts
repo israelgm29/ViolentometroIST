@@ -15,6 +15,7 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatTooltip} from "@angular/material/tooltip";
 import {toSignal} from "@angular/core/rxjs-interop";
 import {ToastrService} from "ngx-toastr";
+import {ViolenceZoneInterface} from "../../models/zone";
 
 @Component({
   selector: 'app-survey-form',
@@ -25,18 +26,19 @@ import {ToastrService} from "ngx-toastr";
     MatChipsModule, RouterLink, MatTooltip
   ],
   templateUrl: './survey-form.html',
-  styleUrl: './survey-form.css',
+  styleUrl: './survey-form.scss',
 })
 export class SurveyForm {
-  private fb = inject(FormBuilder);
-  private toastr = inject(ToastrService);
+  private fb            = inject(FormBuilder);
+  private toastr        = inject(ToastrService);
   private surveyService = inject(SurveyService);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private zoneService   = inject(ZoneService);
+  private route         = inject(ActivatedRoute);
+  private router        = inject(Router);
 
   surveyId = signal<number | null>(null);
 
-  zones = toSignal(inject(ZoneService).getAllZones(), { initialValue: [] });
+  zones = toSignal(this.zoneService.getAllZones(), { initialValue: [] as ViolenceZoneInterface[] });
 
   isEditMode = computed(() => this.surveyId() !== null);
 
@@ -50,7 +52,6 @@ export class SurveyForm {
       this.surveyId.set(Number(id));
       this.loadSurveyData(this.surveyId()!);
     } else {
-      // Solo agregamos una pregunta vacía si estamos creando un nuevo cuestionario
       this.addQuestion();
     }
   }
@@ -58,21 +59,18 @@ export class SurveyForm {
   loadSurveyData(id: number) {
     this.surveyService.getSurveyById(id).subscribe({
       next: (survey) => {
-        // Llenamos el formulario
         this.surveyForm.patchValue({
-          title: survey.title,
+          title:       survey.title,
           description: survey.description
         });
 
-        // Limpiamos el array antes de cargar las preguntas
         this.questions.clear();
 
-        // Mapeamos las preguntas desde el backend
         survey.questions.forEach(q => {
           this.questions.push(this.fb.group({
-            id: [q.id || null], // ID de la pregunta si existe
-            question: [q.question, Validators.required],
-            idZone: [q.idZone, Validators.required],
+            id:             [q.id || null],
+            question:       [q.question, Validators.required],
+            idZone:         [q.idZone,   Validators.required],
             questionNumber: [q.questionNumber]
           }));
         });
@@ -87,21 +85,21 @@ export class SurveyForm {
 
   initForm() {
     this.surveyForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(5)]],
+      title:       ['', [Validators.required, Validators.minLength(5)]],
       description: [''],
-      questions: this.fb.array([])
+      questions:   this.fb.array([])
     });
   }
 
-  get questions() {
+  get questions(): FormArray {
     return this.surveyForm.get('questions') as FormArray;
   }
 
   addQuestion() {
     const questionGroup = this.fb.group({
-      id: [null], // Para nuevas preguntas
-      question: ['', Validators.required],
-      idZone: [null, Validators.required],
+      id:             [null],
+      question:       ['', Validators.required],
+      idZone:         [null, Validators.required],
       questionNumber: [this.questions.length + 1]
     });
     this.questions.push(questionGroup);
@@ -114,32 +112,56 @@ export class SurveyForm {
     }
   }
 
-  // Si borras la pregunta 2, la 3 pasa a ser la 2 automáticamente
   reorderQuestions() {
     this.questions.controls.forEach((control, index) => {
       control.patchValue({ questionNumber: index + 1 });
     });
   }
 
+  // ── Helpers para el panel lateral ────────────────────
+
+  /** Zonas únicas que ya tienen al menos una pregunta asignada */
+  zonesUsed(): ViolenceZoneInterface[] {
+    const usedIds = new Set<number>(
+      this.questions.controls
+        .map(c => c.get('idZone')?.value)
+        .filter((v): v is number => v !== null && v !== undefined)
+    );
+    return (this.zones() as ViolenceZoneInterface[]).filter(z => usedIds.has(z.id));
+  }
+
+  /** Cuántas preguntas usa una zona específica */
+  countByZone(zoneId: number): number {
+    return this.questions.controls.filter(c => c.get('idZone')?.value === zoneId).length;
+  }
+
+  /** Devuelve el objeto Zone dado un idZone, o null si no está seleccionado */
+  getZoneName(idZone: number | null): ViolenceZoneInterface | null {
+    if (idZone == null) return null;
+    return (this.zones() as ViolenceZoneInterface[]).find(z => z.id === idZone) ?? null;
+  }
+
+  // ── Guardar ──────────────────────────────────────────
+
   saveSurvey() {
     if (this.surveyForm.valid) {
       const payload = {
         ...this.surveyForm.value,
-        id: this.surveyId() // Incluimos el ID si estamos editando
+        id: this.surveyId()
       };
 
       this.surveyService.saveFullSurvey(payload).subscribe({
-        next: (response) => {
+        next: () => {
           const message = this.isEditMode()
-              ? 'Cuestionario actualizado con éxito'
-              : 'Cuestionario creado con éxito';
+            ? 'Cuestionario actualizado con éxito'
+            : 'Cuestionario creado con éxito';
           this.toastr.success(message, 'Éxito');
           this.router.navigate(['/admin/surveys']);
         },
         error: (err) => {
           const errorMsg = this.isEditMode()
-              ? 'Error al actualizar el cuestionario'
-              : 'Error al crear el cuestionario';
+            ? 'Error al actualizar el cuestionario'
+            : 'Error al crear el cuestionario';
           this.toastr.error(errorMsg, 'Error');
           console.error(err);
         }

@@ -1,0 +1,275 @@
+// ══════════════════════════════════════════════════════
+//  USER DETAIL DIALOG — Estilo Panelix
+//  Paleta: Morado (#7c3aed) + Teal (#0d9488)
+//  Misma base que institute-detail-dialog
+// ══════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+$purple      : #7c3aed;
+$teal        : #0d9488;
+$red         : #ef4444;
+$green       : #10b981;
+$green-pale  : #f0fdf4;
+$text-primary: #111827;
+$text-muted  : #6b7280;
+$border      : #f1f0fb;
+$bg          : #f8f7ff;
+$font        : 'Plus Jakarta Sans', sans-serif;
+
+// ── Host ─────────────────────────────────────────────
+:host { font-family: $font; }
+
+// ══════════════════════════════════════════════════════
+//  DIALOG TITLE
+// ══════════════════════════════════════════════════════
+
+.dialog-title {
+    display    : flex;
+    align-items: center;
+    gap        : 10px;
+    font-family: $font !important;
+    font-size  : 1.1rem !important;
+    font-weight: 800 !important;
+    color      : $text-primary;
+    padding    : 20px 24px 12px !important;
+    margin     : 0 !important;
+    border-bottom: 1px solid $border;
+
+    mat-icon {
+        font-size: 22px !important;
+        width    : 22px !important;
+        height   : 22px !important;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  DIALOG CONTENT
+// ══════════════════════════════════════════════════════
+
+.dialog-content {
+    padding   : 20px 24px !important;
+    max-height: 68vh !important;
+    overflow-y: auto;
+}
+
+// ══════════════════════════════════════════════════════
+//  USER HEADER
+// ══════════════════════════════════════════════════════
+
+.user-header {
+    display        : flex;
+    align-items    : center;
+    gap           : 16px;
+    padding       : 16px;
+    background    : linear-gradient(135deg, $bg 0%, #fff 100%);
+    border        : 1px solid $border;
+    border-radius : 12px;
+    margin-bottom : 16px;
+}
+
+.user-avatar {
+    width       : 56px;
+    height      : 56px;
+    background  : $purple;
+    color       : #fff;
+    border-radius: 50%;
+    display     : flex;
+    align-items : center;
+    justify-content: center;
+    font-size  : 20px;
+    font-weight: 800;
+    flex-shrink : 0;
+}
+
+.user-info {
+    display       : flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.user-name {
+    margin     : 0;
+    font-size  : 1.1rem;
+    font-weight: 700;
+    color      : $text-primary;
+}
+
+.role-badge {
+    display        : inline-flex;
+    align-items    : center;
+    gap           : 4px;
+    padding       : 4px 12px;
+    background    : $purple;
+    color         : #fff;
+    border-radius : 12px;
+    font-size     : 11px;
+    font-weight   : 700;
+    width         : fit-content;
+}
+
+.user-meta {
+    margin     : 0;
+    font-size  : 12px;
+    color      : $text-muted;
+    font-weight: 500;
+}
+
+// ══════════════════════════════════════════════════════
+//  SECTION DIVIDER
+// ══════════════════════════════════════════════════════
+
+.section-divider {
+    display       : flex;
+    align-items   : center;
+    gap           : 8px;
+    padding       : 10px 0 6px;
+    font-size     : 11px;
+    font-weight   : 700;
+    color         : $text-muted;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    border-bottom : 1px solid $border;
+    margin-bottom : 12px;
+}
+
+.section-divider mat-icon {
+    font-size: 15px;
+    width    : 15px;
+    height   : 15px;
+    color    : $purple;
+}
+
+.full-width { grid-column: span 1; }
+
+// ══════════════════════════════════════════════════════
+//  INFO LIST
+// ══════════════════════════════════════════════════════
+
+.info-list {
+    display       : flex;
+    flex-direction: column;
+    gap           : 8px;
+}
+
+.info-item {
+    display       : flex;
+    flex-direction: column;
+    gap           : 2px;
+    padding       : 8px 0;
+    border-bottom : 1px solid #f5f5f5;
+}
+
+.info-item:last-child { border-bottom: none; }
+
+.info-label {
+    font-size  : 11px;
+    color      : $text-muted;
+    font-weight: 600;
+}
+
+.info-value {
+    font-size  : 13px;
+    color      : $text-primary;
+    font-weight: 500;
+}
+
+// ══════════════════════════════════════════════════════
+//  INFO CARDS
+// ══════════════════════════════════════════════════════
+
+.info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap   : 12px;
+    margin-top: 12px;
+}
+
+.info-card {
+    display        : flex;
+    align-items    : center;
+    gap           : 12px;
+    padding       : 12px 15px;
+    background    : #fff;
+    border        : 1px solid $border;
+    border-left   : 3px solid $purple;
+    border-radius : 12px;
+    transition    : all .2s ease;
+}
+
+.info-card:hover {
+    background: $bg;
+    transform : translateY(-1px);
+    box-shadow: 0 4px 12px rgba($purple, .08);
+}
+
+.info-card mat-icon {
+    color    : $purple;
+    font-size: 24px;
+    width    : 24px;
+    height   : 24px;
+}
+
+.info-content {
+    display       : flex;
+    flex-direction: column;
+    gap           : 2px;
+}
+
+.info-card .info-label {
+    font-size     : 10px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+// ══════════════════════════════════════════════════════
+//  STATUS BADGE
+// ══════════════════════════════════════════════════════
+
+.si-badge {
+    display        : inline-flex;
+    align-items    : center;
+    gap           : 4px;
+    padding       : 4px 10px;
+    border-radius : 12px;
+    font-size     : 11px;
+    font-weight   : 700;
+}
+
+.si-badge.on {
+    background: $green-pale;
+    color     : $green;
+}
+
+.si-badge.off {
+    background: #fef2f2;
+    color     : $red;
+}
+
+.si-badge mat-icon {
+    font-size: 14px;
+    width    : 14px;
+    height   : 14px;
+}
+
+// ══════════════════════════════════════════════════════
+//  DIALOG ACTIONS
+// ══════════════════════════════════════════════════════
+
+.dialog-actions {
+    padding      : 14px 24px !important;
+    border-top   : 1px solid $border;
+}
+
+.save-btn {
+    height       : 36px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 700 !important;
+    background   : $purple !important;
+    color        : #fff !important;
+    box-shadow   : 0 4px 12px rgba($purple, .25) !important;
+}
+
+.save-btn mat-icon { font-size: 16px; width: 16px; height: 16px; }

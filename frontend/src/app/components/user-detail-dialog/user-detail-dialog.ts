@@ -16,7 +16,7 @@ import {SysUserInterface} from "../../models/sys-user";
     MatListModule,
     MatDividerModule],
   templateUrl: './user-detail-dialog.html',
-  styleUrl: './user-detail-dialog.css',
+  styleUrl: './user-detail-dialog.scss',
 })
 export class UserDetailDialog {
   constructor(@Inject(MAT_DIALOG_DATA) public user: SysUserInterface) {}

@@ -15,66 +15,10 @@
                     </div>
                 </div>
 
-                <div class="gauge-body">
-
-                    <!-- Gauge SVG semicircular -->
-                    <div class="gauge-svg-wrap">
-                        <svg viewBox="0 0 220 130" class="gauge-svg" aria-hidden="true">
-                            <defs>
-                                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%"   stop-color="#22c55e"/>
-                                    <stop offset="35%"  stop-color="#facc15"/>
-                                    <stop offset="65%"  stop-color="#f97316"/>
-                                    <stop offset="100%" stop-color="#ef4444"/>
-                                </linearGradient>
-                            </defs>
-
-                            <!-- Track fondo -->
-                            <path d="M 20 110 A 90 90 0 0 1 200 110"
-                                  fill="none" stroke="#e5e7eb"
-                                  stroke-width="14" stroke-linecap="round"/>
-
-                            <!-- Fill dinámico -->
-                            <path d="M 20 110 A 90 90 0 0 1 200 110"
-                                  fill="none" stroke="url(#gaugeGrad)"
-                                  stroke-width="14" stroke-linecap="round"
-                                  stroke-dasharray="283"
-                                  [attr.stroke-dashoffset]="gaugeDashOffset()"/>
-
-                            <!-- Aguja -->
-                            <line [attr.x2]="gaugeNeedleX()"
-                                  [attr.y2]="gaugeNeedleY()"
-                                  x1="110" y1="110"
-                                  stroke="#1f2937"
-                                  stroke-width="2.5"
-                                  stroke-linecap="round"
-                                  class="gauge-needle"/>
-
-                            <!-- Centro de la aguja -->
-                            <circle cx="110" cy="110" r="6" fill="#1f2937"/>
-                            <circle cx="110" cy="110" r="3" fill="#ffffff"/>
-                        </svg>
-
-                        <div class="gauge-zone-labels">
-                            <span class="gz-label gz-low">Bajo</span>
-                            <span class="gz-label gz-med">Medio</span>
-                            <span class="gz-label gz-high">Alto</span>
-                            <span class="gz-label gz-crit">Crítico</span>
-                        </div>
-                    </div>
-
-                    <!-- Chip nivel de riesgo -->
-                    <div class="risk-chip" [ngClass]="'risk-chip--' + riskLevel()">
-                        <mat-icon class="risk-chip-icon">{{ riskIcon() }}</mat-icon>
-                        <span>
-                            @if (riskLevel() === 'neutral') { Nivel inicial }
-                            @else if (riskLevel() === 'low') { Nivel bajo }
-                            @else if (riskLevel() === 'medium') { Nivel medio }
-                            @else if (riskLevel() === 'high') { Nivel alto }
-                            @else { Nivel crítico }
-                        </span>
-                    </div>
-
+                <!-- Frase de confianza fija -->
+                <div class="trust-phrase">
+                    <mat-icon class="trust-icon">lock</mat-icon>
+                    <span>No hay respuestas correctas o incorrectas. Solo tú conoces tu realidad — responde con honestidad.</span>
                 </div>
 
                 <!-- Segmentos de progreso -->

@@ -15,6 +15,7 @@ import {SurveyService} from '../../../services/survey.service';
 import {ReportService} from '../../../services/report.service';
 import {Survey} from '../../../models/survey';
 import {Observable} from 'rxjs';
+import {MatCard} from "@angular/material/card";
 
 interface ReportCard {
     id: string;
@@ -32,10 +33,10 @@ interface ReportCard {
         CommonModule, FormsModule,
         MatIconModule, MatButtonModule, MatTooltipModule,
         MatProgressSpinnerModule, MatFormFieldModule,
-        MatDatepickerModule, MatNativeDateModule, MatSelectModule
+        MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatCard
     ],
     templateUrl: './reports.component.html',
-    styleUrl: './reports.component.css'
+    styleUrl: './reports.component.scss'
 })
 export class ReportsComponent {
     public dataShared = inject(DataSharedService);

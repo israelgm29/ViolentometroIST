@@ -1,0 +1,301 @@
+/* ══════════════════════════════════════════════════════
+   NAVBAR ADMIN — Estilo Panelix
+   Paleta: Morado (#7c3aed) + Teal (#0d9488) + Blanco
+   ══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+.main-navbar {
+    height      : 54px;
+    background  : #ffffff;
+    border-bottom: 1px solid #f1f0fb;
+    box-shadow  : 0 1px 8px rgba(124, 58, 237, .06);
+    display     : flex;
+    align-items : center;
+    padding     : 0 16px;
+    gap         : 0;
+    font-family : 'Plus Jakarta Sans', sans-serif;
+    position    : sticky;
+    top         : 0;
+    z-index     : 100;
+}
+
+/* ── Brand ── */
+.nb-brand {
+    display     : flex;
+    align-items : center;
+    gap         : 10px;
+    padding-right: 18px;
+    border-right: 1px solid #f1f0fb;
+    margin-right: 12px;
+    flex-shrink : 0;
+}
+
+.nb-brand-logo {
+    width        : 60px;
+    height       : 60px;
+    object-fit   : contain;
+    display      : block;
+}
+
+.nb-brand-name {
+    display    : block;
+    font-size  : 13px;
+    font-weight: 800;
+    color      : #111827;
+    line-height: 1.2;
+}
+
+.nb-brand-sub {
+    display       : block;
+    font-size     : 9px;
+    font-weight   : 600;
+    color         : #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+}
+
+/* ── Links ── */
+.nb-links {
+    display    : flex;
+    align-items: center;
+    gap        : 2px;
+    flex       : 1;
+    overflow-x : auto;
+    scrollbar-width: none;
+}
+
+.nb-links::-webkit-scrollbar { display: none; }
+
+.nb-link {
+    display        : flex;
+    align-items    : center;
+    gap            : 5px;
+    padding        : 6px 10px;
+    border-radius  : 8px;
+    text-decoration: none;
+    font-size      : 12px;
+    font-weight    : 500;
+    color          : #6b7280;
+    white-space    : nowrap;
+    transition     : all .15s ease;
+    cursor         : pointer;
+}
+
+.nb-link mat-icon {
+    font-size: 16px !important;
+    width    : 16px !important;
+    height   : 16px !important;
+    flex-shrink: 0;
+}
+
+.nb-link:hover {
+    background: #f5f3ff;
+    color     : #7c3aed;
+}
+
+.nb-link:hover mat-icon { color: #7c3aed; }
+
+.nb-link.active {
+    background : #f5f3ff;
+    color      : #7c3aed;
+    font-weight: 700;
+}
+
+.nb-link.active mat-icon { color: #7c3aed; }
+
+.nb-divider {
+    width     : 1px;
+    height    : 20px;
+    background: #f1f0fb;
+    margin    : 0 6px;
+    flex-shrink: 0;
+}
+
+/* ── Derecha ── */
+.nb-right {
+    display    : flex;
+    align-items: center;
+    gap        : 8px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* Buscador */
+.nb-search {
+    display    : flex;
+    align-items: center;
+    gap        : 6px;
+    background : #f8f7ff;
+    border     : 1px solid #ede9fe;
+    border-radius: 8px;
+    padding    : 5px 11px;
+    cursor     : pointer;
+    transition : all .2s;
+    width      : 160px;
+}
+
+.nb-search:hover { border-color: #c4b5fd; }
+
+.nb-search mat-icon {
+    font-size: 15px !important;
+    width    : 15px !important;
+    height   : 15px !important;
+    color    : #9ca3af;
+}
+
+.nb-search span {
+    font-size: 11px;
+    color    : #9ca3af;
+    flex     : 1;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.nb-search kbd {
+    font-size    : 10px;
+    color        : #c4b5fd;
+    background   : #ede9fe;
+    padding      : 1px 5px;
+    border-radius: 4px;
+}
+
+/* Estado del sistema */
+.nb-status {
+    display    : flex;
+    align-items: center;
+    gap        : 5px;
+    padding    : 4px 10px;
+    background : #f0fdfa;
+    border     : 1px solid #99f6e4;
+    border-radius: 20px;
+    font-size  : 11px;
+    font-weight: 600;
+    color      : #0d9488;
+    white-space: nowrap;
+}
+
+.nb-status-dot {
+    width        : 6px;
+    height       : 6px;
+    border-radius: 50%;
+    background   : #0d9488;
+    animation    : blink 2s infinite;
+}
+
+.nb-status-txt { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* Usuario */
+.nb-user {
+    display    : flex;
+    align-items: center;
+    gap        : 8px;
+    padding    : 5px 10px;
+    border-radius: 10px;
+    border     : 1px solid #f1f0fb;
+    background : transparent;
+    cursor     : pointer;
+    transition : all .18s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.nb-user:hover { background: #f8f7ff; border-color: #e9d5ff; }
+
+.nb-avatar {
+    width        : 28px;
+    height       : 28px;
+    border-radius: 50%;
+    background   : linear-gradient(135deg, #7c3aed, #0d9488);
+    display      : flex;
+    align-items  : center;
+    justify-content: center;
+    font-size    : 12px;
+    font-weight  : 800;
+    color        : #ffffff;
+    flex-shrink  : 0;
+}
+
+.nb-user-info {
+    display       : flex;
+    flex-direction: column;
+    align-items   : flex-start;
+    line-height   : 1.2;
+}
+
+.nb-user-name {
+    font-size  : 12px;
+    font-weight: 700;
+    color      : #111827;
+}
+
+.nb-user-role {
+    font-size     : 10px;
+    color         : #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.nb-chevron {
+    font-size: 16px !important;
+    width    : 16px !important;
+    height   : 16px !important;
+    color    : #9ca3af !important;
+}
+
+/* ── Menú desplegable ── */
+::ng-deep .nb-user-menu {
+    margin-top  : 6px !important;
+    min-width   : 190px !important;
+    border-radius: 12px !important;
+    border      : 1px solid #f1f0fb !important;
+    box-shadow  : 0 8px 24px rgba(124, 58, 237, .1) !important;
+    overflow    : hidden;
+}
+
+::ng-deep .nb-user-menu .mat-mdc-menu-content { padding: 6px !important; }
+
+::ng-deep .nb-user-menu .mat-mdc-menu-item {
+    border-radius: 8px !important;
+    margin       : 2px 0 !important;
+    font-family  : 'Plus Jakarta Sans', sans-serif !important;
+    font-size    : 13px !important;
+    font-weight  : 500 !important;
+    color        : #374151 !important;
+    height       : 40px !important;
+}
+
+::ng-deep .nb-user-menu .mat-mdc-menu-item mat-icon {
+    color    : #9ca3af !important;
+    font-size: 18px !important;
+    width    : 18px !important;
+    height   : 18px !important;
+}
+
+::ng-deep .nb-user-menu .mat-mdc-menu-item:hover {
+    background: #f5f3ff !important;
+    color     : #7c3aed !important;
+}
+
+::ng-deep .nb-user-menu .mat-mdc-menu-item:hover mat-icon { color: #7c3aed !important; }
+
+::ng-deep .nb-user-menu .mat-divider { margin: 4px 0 !important; border-color: #f1f0fb !important; }
+
+/* ── Animaciones ── */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: .4; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+    .nb-search  { display: none; }
+    .nb-status  { display: none; }
+}
+
+@media (max-width: 768px) {
+    .nb-brand-text { display: none; }
+    .nb-user-info  { display: none; }
+    .nb-chevron    { display: none !important; }
+
+    .nb-link span  { display: none; }
+    .nb-link       { padding: 6px 8px; }
+}

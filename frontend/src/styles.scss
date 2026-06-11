@@ -70,3 +70,62 @@ a {
   padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
+
+
+// ══════════════════════════════════════════════════════
+//  OVERRIDE MATERIAL M3 — Eliminar tinte rosado/lavanda
+//  M3 aplica "tonal surfaces" automáticamente desde la
+//  paleta primary (violet). Los forzamos a blanco puro.
+// ══════════════════════════════════════════════════════
+
+// Mat-Card: fondo blanco, sin tinte
+.mat-mdc-card,
+.mdc-card {
+  background-color: #ffffff !important;
+  --mdc-elevated-card-container-color:  #ffffff;
+  --mdc-filled-card-container-color:    #ffffff;
+  --mdc-outlined-card-container-color:  #ffffff;
+}
+
+// Mat-Table: header y filas sin tinte
+.mat-mdc-table,
+.mdc-data-table__table {
+  background-color: #ffffff !important;
+  --mdc-data-table-header-row-item-label-text-color: inherit;
+}
+
+.mat-mdc-header-row,
+.mdc-data-table__header-row {
+  background-color: transparent !important;
+}
+
+.mat-mdc-row,
+.mdc-data-table__row {
+  background-color: #ffffff !important;
+
+  &:hover {
+    background-color: rgba(124, 58, 237, 0.025) !important;
+  }
+}
+
+// Mat-Dialog y overlays
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: #ffffff !important;
+}
+
+// Mat-Menu
+.mat-mdc-menu-panel {
+  background-color: #ffffff !important;
+  --mat-menu-container-color: #ffffff;
+}
+
+// Mat-Select panel
+.mat-mdc-select-panel {
+  background-color: #ffffff !important;
+}
+
+// Chips (badges de estado en tablas)
+.mat-mdc-chip,
+.mdc-evolution-chip {
+  --mdc-chip-elevated-container-color: transparent;
+}

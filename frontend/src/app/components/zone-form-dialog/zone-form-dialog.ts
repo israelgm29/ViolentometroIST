@@ -1,14 +1,14 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {CommonModule} from "@angular/common";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatSelectModule} from "@angular/material/select";
-import {MatButtonModule} from "@angular/material/button";
-import {MatIconModule} from "@angular/material/icon";
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {ColorPickerDirective} from 'ngx-color-picker';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { CommonModule } from "@angular/common";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ColorPickerDirective } from 'ngx-color-picker';
 
 @Component({
   selector: 'app-zone-form-dialog',
@@ -26,24 +26,24 @@ import {ColorPickerDirective} from 'ngx-color-picker';
     ColorPickerDirective
   ],
   templateUrl: './zone-form-dialog.html',
-  styleUrl: './zone-form-dialog.css',
+  styleUrl: './zone-form-dialog.scss',
 })
 export class ZoneFormDialog implements OnInit {
   form: FormGroup;
   isEdit: boolean = false;
 
   constructor(
-      private fb: FormBuilder,
-      private dialogRef: MatDialogRef<ZoneFormDialog>,
-      @Inject(MAT_DIALOG_DATA) public data: any
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<ZoneFormDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.form = this.fb.group({
-      name:            ['', [Validators.required, Validators.minLength(3)]],
-      description:     ['', Validators.required],
-      color:           ['#3f51b5', Validators.required],
-      severity:        [1, [Validators.required, Validators.min(1), Validators.max(10)]],
-      resultTitle:     [''],
-      resultMessage:   [''],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', Validators.required],
+      color: ['#3f51b5', Validators.required],
+      severity: [1, [Validators.required, Validators.min(1), Validators.max(10)]],
+      resultTitle: [''],
+      resultMessage: [''],
       recommendations: this.fb.array([])
     });
   }
@@ -53,11 +53,11 @@ export class ZoneFormDialog implements OnInit {
       this.isEdit = true;
 
       this.form.patchValue({
-        name:          this.data.name,
-        description:   this.data.description,
-        color:         this.data.color,
-        severity:      this.data.severity,
-        resultTitle:   this.data.resultTitle   || '',
+        name: this.data.name,
+        description: this.data.description,
+        color: this.data.color,
+        severity: this.data.severity,
+        resultTitle: this.data.resultTitle || '',
         resultMessage: this.data.resultMessage || '',
       });
 

@@ -1,26 +1,9 @@
-<mat-sidenav-container class="admin-wrapper">
+<div class="admin-wrapper">
 
-    <mat-sidenav #drawer
-                 [mode]="isLargeScreen ? 'side' : 'over'"
-                 [opened]="isLargeScreen"
-                 class="main-sidebar">
-        <app-sidebar-admin
-                (closeRequested)="isLargeScreen ? null : drawer.close()">
-        </app-sidebar-admin>
-    </mat-sidenav>
+    <app-navbar-admin (logoutClick)="logout()"></app-navbar-admin>
 
-    <mat-sidenav-content class="main-content-area">
+    <div class="router-container">
+        <router-outlet></router-outlet>
+    </div>
 
-        <app-navbar-admin
-                [drawerOpened]="drawer.opened"
-                (menuToggle)="drawer.toggle()"
-                (logoutClick)="logout()">
-        </app-navbar-admin>
-
-        <div class="router-container">
-            <router-outlet></router-outlet>
-        </div>
-
-    </mat-sidenav-content>
-
-</mat-sidenav-container>
+</div>

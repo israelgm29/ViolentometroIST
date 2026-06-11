@@ -1,38 +1,130 @@
-<mat-toolbar class="main-navbar">
-    <button mat-icon-button (click)="toggle()" class="menu-toggle">
-        <mat-icon>{{ drawerOpened ? 'menu_open' : 'menu' }}</mat-icon>
-    </button>
+<nav class="main-navbar">
 
-    <span class="spacer"></span>
-
-    <div class="user-profile">
-        <div class="user-info">
-            <span class="user-name">{{ currentUser?.username }}</span>
-            <span class="user-role">
-    @if (currentUser?.role === 'ROLE_ADMIN') {
-        Admin
-    } @else if (currentUser?.role === 'ROLE_ANALYST') {
-        Analista
-    } @else if (currentUser?.role === 'ROLE_WELFARE') {
-        Bienestar Institucional
-    } @else {
-        {{ currentUser?.role }}
-    }
-</span>
+    <!-- Brand -->
+    <div class="nb-brand">
+        <img class="nb-brand-logo" ngSrc="/assets/logo-transparente.png" alt="Logo" width="100" height="100">
+        <div class="nb-brand-text">
+            <span class="nb-brand-name">Violentómetro</span>
         </div>
-        <button mat-icon-button [matMenuTriggerFor]="menu" class="avatar-button">
-            <mat-icon>account_circle</mat-icon>
+    </div>
+
+    <!-- Links de navegación -->
+    <div class="nb-links">
+
+        @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+            <a class="nb-link" routerLink="/admin/dashboard" routerLinkActive="active">
+                <mat-icon>dashboard</mat-icon>
+                <span>Panel</span>
+            </a>
+        }
+
+        @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+            <a class="nb-link" routerLink="/admin/surveys" routerLinkActive="active">
+                <mat-icon>list_alt</mat-icon>
+                <span>Cuestionarios</span>
+            </a>
+        }
+
+        @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+            <a class="nb-link" routerLink="/admin/questions" routerLinkActive="active">
+                <mat-icon>analytics</mat-icon>
+                <span>Preguntas</span>
+            </a>
+        }
+
+        @if (authService.hasRole('ROLE_ADMIN')) {
+            <a class="nb-link" routerLink="/admin/violence-zones" routerLinkActive="active">
+                <mat-icon>crisis_alert</mat-icon>
+                <span>Alertas</span>
+            </a>
+        }
+
+        @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_ANALYST', 'ROLE_WELFARE')) {
+            <a class="nb-link" routerLink="/admin/users" routerLinkActive="active">
+                <mat-icon>group</mat-icon>
+                <span>Usuarios</span>
+            </a>
+        }
+
+        @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+            <a class="nb-link" routerLink="/admin/campaigns" routerLinkActive="active">
+                <mat-icon>campaign</mat-icon>
+                <span>Campañas</span>
+            </a>
+        }
+
+        @if (authService.hasRole('ROLE_ADMIN')) {
+            <div class="nb-divider"></div>
+
+            <a class="nb-link" routerLink="/admin/institutes" routerLinkActive="active">
+                <mat-icon>apartment</mat-icon>
+                <span>Institutos</span>
+            </a>
+
+            <a class="nb-link" routerLink="/admin/sys-users" routerLinkActive="active">
+                <mat-icon>remember_me</mat-icon>
+                <span>Sistema</span>
+            </a>
+        }
+
+        @if (authService.hasAnyRole('ROLE_ADMIN', 'ROLE_WELFARE')) {
+            <a class="nb-link" routerLink="/admin/reports" routerLinkActive="active">
+                <mat-icon>summarize</mat-icon>
+                <span>Reportes</span>
+            </a>
+        }
+
+    </div>
+
+    <!-- Derecha: búsqueda + acciones + usuario -->
+    <div class="nb-right">
+
+        <div class="nb-search">
+            <mat-icon>search</mat-icon>
+            <span>Buscar...</span>
+            <kbd>Ctrl+K</kbd>
+        </div>
+
+        <div class="nb-status">
+            <span class="nb-status-dot"></span>
+            <span class="nb-status-txt">Operativo</span>
+        </div>
+
+        <!-- Usuario -->
+        <button class="nb-user" [matMenuTriggerFor]="userMenu">
+            <div class="nb-avatar">
+                {{ currentUser?.username?.charAt(0)?.toUpperCase() || 'U' }}
+            </div>
+            <div class="nb-user-info">
+                <span class="nb-user-name">{{ currentUser?.username }}</span>
+                <span class="nb-user-role">
+                    @if (currentUser?.role === 'ROLE_ADMIN') { Admin }
+                    @else if (currentUser?.role === 'ROLE_ANALYST') { Analista }
+                    @else if (currentUser?.role === 'ROLE_WELFARE') { Bienestar }
+                    @else { {{ currentUser?.role }} }
+                </span>
+            </div>
+            <mat-icon class="nb-chevron">expand_more</mat-icon>
         </button>
-        <mat-menu #menu="matMenu" class="user-menu">
-            <button mat-menu-item routerLink="/admin/profile">
-                <mat-icon>person</mat-icon>
+
+        <mat-menu #userMenu="matMenu" class="nb-user-menu">
+            <a mat-menu-item routerLink="/admin/profile">
+                <mat-icon>account_circle</mat-icon>
                 <span>Mi Perfil</span>
-            </button>
+            </a>
+            @if (authService.hasRole('ROLE_ADMIN')) {
+                <a mat-menu-item routerLink="/admin/settings">
+                    <mat-icon>settings</mat-icon>
+                    <span>Configuración</span>
+                </a>
+            }
             <mat-divider></mat-divider>
             <button mat-menu-item (click)="logout()">
                 <mat-icon>logout</mat-icon>
                 <span>Cerrar Sesión</span>
             </button>
         </mat-menu>
+
     </div>
-</mat-toolbar>
+
+</nav>

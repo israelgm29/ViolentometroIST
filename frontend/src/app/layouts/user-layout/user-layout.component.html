@@ -1,10 +1,11 @@
 <div class="user-theme">
     <mat-drawer-container class="main-container" autosize>
 
-        <mat-drawer #drawer
-                    [mode]="isMobile ? 'over' : 'side'"
-                    [opened]="!isMobile"
-                    class="user-sidebar">
+        <mat-drawer
+            #drawer
+            [mode]="isMobile() ? 'over' : 'side'"
+            [opened]="!isMobile()"
+            class="user-sidebar">
             <app-sidebar (closeRequested)="drawer.close()"></app-sidebar>
         </mat-drawer>
 
@@ -28,8 +29,8 @@
                 </div>
             </header>
 
-            <div class="page-content" [@routeAnimations]="prepareRoute(outlet)">
-                <router-outlet #outlet="outlet"></router-outlet>
+            <div class="page-content">
+                <router-outlet></router-outlet>
             </div>
 
         </mat-drawer-content>

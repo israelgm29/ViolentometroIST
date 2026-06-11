@@ -62,7 +62,7 @@ interface StatWidget {
         MatTooltipModule,
     ],
     templateUrl: './campaing.html',
-    styleUrls: ['./campaing.css'],
+    styleUrls: ['./campaing.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CampaingComponent implements OnInit, AfterViewInit {
@@ -71,8 +71,6 @@ export class CampaingComponent implements OnInit, AfterViewInit {
     private dialog = inject(MatDialog);
     private toastr = inject(ToastrService);
 
-
-    // Signals - ELIMINADO previewCampaign signal
     campaigns = signal<CampaignDTO[]>([]);
     categories = signal<CampaignCategory[]>([]);
     loading = signal(false);
@@ -193,7 +191,6 @@ export class CampaingComponent implements OnInit, AfterViewInit {
         this.dataSource.data = this.filteredCampaigns();
     }
 
-    // ========== VISTA PREVIA CON MAT DIALOG ==========
 
     openPreview(campaign: CampaignDTO, event?: MouseEvent) {
         if (event) {

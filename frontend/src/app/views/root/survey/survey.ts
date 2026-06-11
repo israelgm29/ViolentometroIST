@@ -22,7 +22,7 @@ import { ConfirmDialog } from '../../../components/confirm-dialog/confirm-dialog
     MatCardModule, MatSlideToggleModule, MatTooltipModule, MatChipsModule
   ],
   templateUrl: './survey.html',
-  styleUrl: './survey.css'
+  styleUrl: './survey.scss'
 })
 export class SurveyManagerComponent implements OnInit {
   private router = inject(Router);

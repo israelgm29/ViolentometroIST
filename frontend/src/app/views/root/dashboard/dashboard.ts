@@ -216,7 +216,7 @@ export class Dashboard implements OnInit {
             series: zones.map(z => z.totalAnswers || z.count || 0),
             chart: {type: 'donut', height: 380, animations: {enabled: true, speed: 800}},
             labels: zones.map(z => z.zoneName || z.label),
-            colors: ['#6d28d9', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe'],
+            colors: zones.map(z => z.color || '#94a3b8'),
             plotOptions: {pie: {donut: {size: '65%'}}},
             legend: {position: 'right', fontSize: '12px'}
         });

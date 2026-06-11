@@ -1,0 +1,543 @@
+// ══════════════════════════════════════════════════════
+//  REPORTS VIEW — Estilo Panelix
+//  Paleta: Morado (#7c3aed) + Teal (#0d9488)
+//  Diseño reimaginado para centro de reportes
+// ══════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+$purple      : #7c3aed;
+$purple-dark : #6d28d9;
+$purple-pale : #faf5ff;
+$purple-light: #ede9fe;
+$teal        : #0d9488;
+$teal-pale   : #f0fdfa;
+$red         : #ef4444;
+$amber       : #f59e0b;
+$green       : #10b981;
+$green-pale  : #f0fdf4;
+$text-primary: #111827;
+$text-muted  : #6b7280;
+$border      : #f1f0fb;
+$bg          : #f8f7ff;
+$font        : 'Plus Jakarta Sans', sans-serif;
+
+// ── Host ─────────────────────────────────────────────
+:host { font-family: $font; }
+
+// ══════════════════════════════════════════════════════
+//  CONTAINER
+// ══════════════════════════════════════════════════════
+
+.reports-container {
+    padding: 20px 24px;
+    background: linear-gradient(180deg, #f8f7ff 0%, #fff 100%);
+    min-height: 100vh;
+}
+
+// ══════════════════════════════════════════════════════
+//  PAGE HEADER
+// ══════════════════════════════════════════════════════
+
+.page-header {
+    display    : flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding    : 8px 0;
+}
+
+.ph-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.breadcrumb {
+    display    : flex;
+    align-items: center;
+    gap        : 6px;
+    font-size  : 11px;
+    color      : $text-muted;
+    font-weight: 600;
+
+    mat-icon {
+        font-size: 14px;
+        width    : 14px;
+        height   : 14px;
+    }
+
+    .cur { color: $purple; }
+}
+
+.page-title {
+    margin     : 0;
+    font-size  : 1.4rem;
+    font-weight: 800;
+    color      : $text-primary;
+}
+
+.count-badge {
+    display        : inline-flex;
+    align-items    : center;
+    gap           : 6px;
+    padding       : 6px 14px;
+    background    : #fff;
+    border        : 1px solid $border;
+    border-radius : 20px;
+    font-size     : 12px;
+    font-weight   : 700;
+    color         : $text-primary;
+
+    mat-icon {
+        font-size: 16px;
+        width    : 16px;
+        height   : 16px;
+        color    : $purple;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  WELCOME CARD
+// ══════════════════════════════════════════════════════
+
+.welcome-card {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+    padding       : 20px 24px;
+    background    : linear-gradient(135deg, $purple-pale 0%, #fff 100%);
+    border        : 1px solid $purple-light;
+    border-radius : 16px;
+    margin-bottom : 20px;
+}
+
+.wc-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.wc-title {
+    margin     : 0;
+    font-size  : 1.1rem;
+    font-weight: 700;
+    color      : $text-primary;
+}
+
+.wc-sub {
+    margin     : 0;
+    font-size  : 13px;
+    color      : $text-muted;
+    font-weight: 500;
+}
+
+.wc-deco {
+    width       : 50px;
+    height      : 50px;
+    background  : $purple;
+    border-radius: 12px;
+    display     : flex;
+    align-items : center;
+    justify-content: center;
+
+    mat-icon {
+        font-size: 28px;
+        color    : #fff;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  CONFIG CARD
+// ══════════════════════════════════════════════════════
+
+.config-card {
+    border-radius: 16px !important;
+    overflow    : hidden;
+    border      : 1px solid $border;
+    margin-bottom: 20px;
+}
+
+.config-header {
+    display        : flex;
+    align-items    : center;
+    gap           : 8px;
+    padding       : 14px 20px;
+    background    : #fafafa;
+    border-bottom : 1px solid $border;
+    font-size     : 12px;
+    font-weight   : 700;
+    color         : $text-muted;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+
+    mat-icon {
+        font-size: 16px;
+        color    : $purple;
+    }
+}
+
+.config-grid {
+    display              : grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap                  : 16px;
+    padding              : 20px;
+}
+
+.config-item {
+    display       : flex;
+    flex-direction: column;
+    gap           : 8px;
+}
+
+.config-label {
+    display        : flex;
+    align-items    : center;
+    gap           : 6px;
+    font-size      : 11px;
+    font-weight    : 700;
+    color          : $text-muted;
+    text-transform : uppercase;
+    letter-spacing: .06em;
+
+    mat-icon {
+        font-size: 14px;
+        color    : $purple;
+    }
+}
+
+.config-field {
+    width: 100% !important;
+
+    ::ng-deep .mat-mdc-text-field-wrapper { border-radius: 10px !important; }
+    ::ng-deep .mdc-notched-outline__leading,
+    ::ng-deep .mdc-notched-outline__notch,
+    ::ng-deep .mdc-notched-outline__trailing { border-color: $border !important; }
+
+    &:focus-within ::ng-deep {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing { border-color: $purple !important; }
+    }
+}
+
+.config-actions {
+    display        : flex;
+    align-items    : flex-end;
+    gap           : 8px;
+    padding-bottom: 2px;
+}
+
+.quick-btn {
+    height       : 42px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 600 !important;
+    color        : $text-muted !important;
+    border-color : $border !important;
+    transition   : all .2s !important;
+
+    &:hover {
+        border-color: $purple !important;
+        color      : $purple !important;
+        background : $purple-pale !important;
+    }
+
+    mat-icon { font-size: 16px; }
+}
+
+.active-config {
+    display        : flex;
+    align-items    : center;
+    gap           : 8px;
+    padding       : 12px 20px;
+    background    : $teal-pale;
+    border-top    : 1px solid $border;
+    font-size     : 12px;
+    color         : $text-primary;
+    font-weight   : 500;
+
+    mat-icon {
+        font-size: 16px;
+        color    : $teal;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  WARNING BANNER
+// ══════════════════════════════════════════════════════
+
+.warning-banner {
+    display        : flex;
+    align-items    : center;
+    gap           : 10px;
+    padding       : 14px 20px;
+    background    : #fef3c7;
+    border        : 1px solid #fde68a;
+    border-radius : 12px;
+    margin-bottom : 20px;
+    font-size     : 13px;
+    color         : #92400e;
+    font-weight   : 500;
+
+    mat-icon {
+        font-size: 20px;
+        color    : #f59e0b;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  SECTION LABEL
+// ══════════════════════════════════════════════════════
+
+.section-label {
+    display       : flex;
+    align-items   : center;
+    gap           : 8px;
+    padding       : 8px 0;
+    font-size     : 12px;
+    font-weight   : 700;
+    color         : $text-muted;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+
+    mat-icon {
+        font-size: 16px;
+        width    : 16px;
+        height   : 16px;
+        color    : $purple;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  REPORTS GRID
+// ══════════════════════════════════════════════════════
+
+.reports-grid {
+    display              : grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap                  : 16px;
+}
+
+// ══════════════════════════════════════════════════════
+//  REPORT CARD
+// ══════════════════════════════════════════════════════
+
+.report-card {
+    display        : flex;
+    flex-direction: column;
+    padding       : 20px;
+    background    : #fff;
+    border        : 1px solid $border;
+    border-radius : 14px;
+    transition    : all .2s ease;
+    gap           : 14px;
+
+    &:hover:not(.unavailable) {
+        transform : translateY(-2px);
+        box-shadow: 0 8px 20px rgba($purple, .1);
+        border-color: $purple-light;
+    }
+
+    &.unavailable {
+        opacity: .6;
+        background: #fafafa;
+    }
+}
+
+.card-header {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+}
+
+.card-icon {
+    width       : 48px;
+    height      : 48px;
+    border-radius: 12px;
+    display     : flex;
+    align-items : center;
+    justify-content: center;
+
+    mat-icon {
+        font-size: 24px;
+    }
+
+    &.icon-available {
+        background: $purple-pale;
+        color    : $purple;
+    }
+
+    &.icon-unavailable {
+        background: #f5f5f5;
+        color    : $text-muted;
+    }
+}
+
+.coming-soon {
+    padding       : 4px 10px;
+    background    : #fef3c7;
+    color         : #92400e;
+    border-radius : 12px;
+    font-size     : 10px;
+    font-weight   : 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.card-body {
+    display       : flex;
+    flex-direction: column;
+    gap           : 6px;
+}
+
+.card-title {
+    margin     : 0;
+    font-size  : 15px;
+    font-weight: 700;
+    color      : $text-primary;
+    line-height: 1.3;
+}
+
+.card-desc {
+    margin     : 0;
+    font-size  : 12px;
+    color      : $text-muted;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.card-footer {
+    margin-top: auto;
+}
+
+// ══════════════════════════════════════════════════════
+//  BUTTONS
+// ══════════════════════════════════════════════════════
+
+.btn-soon {
+    width       : 100% !important;
+    height      : 38px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 600 !important;
+}
+
+.btn-download {
+    width       : 100% !important;
+    height      : 38px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 700 !important;
+    background   : $purple !important;
+    color        : #fff !important;
+    box-shadow   : 0 4px 12px rgba($purple, .25) !important;
+    transition   : all .2s !important;
+
+    &:hover:not([disabled]) {
+        filter    : brightness(1.08) !important;
+        transform : translateY(-1px) !important;
+    }
+
+    &[disabled] {
+        opacity   : .55 !important;
+        transform : none !important;
+        box-shadow: none !important;
+    }
+
+    &.btn-excel {
+        background: $teal !important;
+        box-shadow: 0 4px 12px rgba($teal, .25) !important;
+    }
+
+    mat-icon { font-size: 16px; }
+}
+
+// ══════════════════════════════════════════════════════
+//  TRACKING INPUT
+// ══════════════════════════════════════════════════════
+
+.tracking-input {
+    display       : flex;
+    flex-direction: column;
+    gap           : 10px;
+}
+
+.dni-input {
+    width        : 100%;
+    padding      : 10px 14px;
+    border       : 1px solid $border;
+    border-radius: 10px;
+    font-family  : $font;
+    font-size    : 13px;
+    outline      : none;
+    transition   : all .2s;
+
+    &:focus {
+        border-color: $purple;
+        box-shadow  : 0 0 0 3px rgba($purple, .1);
+    }
+
+    &::placeholder {
+        color: $text-muted;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  COMPARISON INPUTS
+// ══════════════════════════════════════════════════════
+
+.comparison-inputs {
+    display       : flex;
+    flex-direction: column;
+    gap           : 12px;
+}
+
+.period-group {
+    display       : flex;
+    flex-direction: column;
+    gap           : 6px;
+}
+
+.period-label {
+    font-size     : 11px;
+    font-weight   : 700;
+    color         : $text-muted;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.period-field {
+    width: 100% !important;
+
+    ::ng-deep .mat-mdc-text-field-wrapper { border-radius: 10px !important; }
+    ::ng-deep .mdc-notched-outline__leading,
+    ::ng-deep .mdc-notched-outline__notch,
+    ::ng-deep .mdc-notched-outline__trailing { border-color: $border !important; }
+
+    &:focus-within ::ng-deep {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing { border-color: $purple !important; }
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  RESPONSIVE
+// ══════════════════════════════════════════════════════
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items   : flex-start;
+        gap          : 12px;
+    }
+
+    .config-grid { grid-template-columns: 1fr; }
+    .config-actions { flex-direction: row; }
+
+    .reports-grid { grid-template-columns: 1fr; }
+}

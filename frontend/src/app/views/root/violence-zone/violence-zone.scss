@@ -1,0 +1,539 @@
+// ══════════════════════════════════════════════════════
+//  VIOLENCE ZONE VIEW — Estilo Panelix
+//  Paleta: Morado (#7c3aed) + Teal (#0d9488) + Blanco
+//  Misma base que survey.scss
+// ══════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+$purple      : #7c3aed;
+$purple-dark : #6d28d9;
+$purple-pale : #faf5ff;
+$purple-light: #ede9fe;
+$teal        : #0d9488;
+$teal-pale   : #f0fdfa;
+$red         : #ef4444;
+$green       : #16a34a;
+$green-pale  : #f0fdf4;
+$blue        : #3b82f6;
+$text-primary: #111827;
+$text-muted  : #6b7280;
+$border      : #f1f0fb;
+$bg          : #f8f7ff;
+$font        : 'Plus Jakarta Sans', sans-serif;
+
+:host { display: block; font-family: $font; }
+
+// ══════════════════════════════════════════════════════
+//  CONTENEDOR
+// ══════════════════════════════════════════════════════
+
+.zone-container {
+    min-height    : 100vh;
+    background    : $bg;
+    padding       : 24px 28px 48px;
+    display       : flex;
+    flex-direction: column;
+    gap           : 20px;
+    animation     : fadeInUp .35s ease both;
+}
+
+// ══════════════════════════════════════════════════════
+//  PAGE HEADER
+// ══════════════════════════════════════════════════════
+
+.page-header {
+    display        : flex;
+    align-items    : center;
+    justify-content: space-between;
+    gap            : 16px;
+    flex-wrap      : wrap;
+}
+
+.ph-left {
+    display    : flex;
+    align-items: center;
+    gap        : 12px;
+}
+
+.page-title {
+    font-size  : 1.5rem;
+    font-weight: 800;
+    color      : $text-primary;
+    margin     : 0 0 3px;
+    line-height: 1.2;
+}
+
+.breadcrumb {
+    display    : flex;
+    align-items: center;
+    gap        : 4px;
+    font-size  : 11px;
+    color      : $text-muted;
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+    .cur { color: $purple; font-weight: 600; }
+}
+
+.count-badge {
+    display      : inline-flex;
+    align-items  : center;
+    gap          : 5px;
+    padding      : 6px 14px;
+    background   : $purple-light;
+    color        : $purple;
+    border-radius: 20px;
+    font-size    : 12px;
+    font-weight  : 700;
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+.ph-btn-primary {
+    height       : 38px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 700 !important;
+    background   : $purple !important;
+    color        : #fff !important;
+    box-shadow   : 0 4px 12px rgba($purple, .25) !important;
+    transition   : all .2s !important;
+
+    &:hover { filter: brightness(1.08) !important; transform: translateY(-1px) !important; }
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+// ══════════════════════════════════════════════════════
+//  WELCOME / INFO CARD
+// ══════════════════════════════════════════════════════
+
+.welcome-card {
+    background   : linear-gradient(135deg, #f5f3ff 0%, $purple-light 55%, #e0e7ff 100%);
+    border       : 1px solid #e9d5ff;
+    border-radius: 20px;
+    padding      : 24px 28px;
+    display      : flex;
+    align-items  : center;
+    justify-content: space-between;
+    position     : relative;
+    overflow     : hidden;
+
+    &::before {
+        content      : '';
+        position     : absolute;
+        right        : -30px; top: -50px;
+        width        : 200px; height: 200px;
+        border-radius: 50%;
+        background   : rgba($purple, .06);
+        pointer-events: none;
+    }
+}
+
+.wc-title {
+    font-size    : 1.35rem;
+    font-weight  : 800;
+    color        : $text-primary;
+    margin-bottom: 6px;
+}
+
+.wc-sub {
+    font-size  : .88rem;
+    color      : $text-muted;
+    line-height: 1.5;
+}
+
+.wc-deco {
+    mat-icon {
+        font-size: 72px !important;
+        width    : 72px !important;
+        height   : 72px !important;
+        color    : rgba($purple, .12);
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  SECTION LABEL
+// ══════════════════════════════════════════════════════
+
+.section-label {
+    display       : flex;
+    align-items   : center;
+    gap           : 6px;
+    font-size     : 12px;
+    font-weight   : 700;
+    color         : $text-muted;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; color: $purple; }
+}
+
+// ══════════════════════════════════════════════════════
+//  KPI GRID
+// ══════════════════════════════════════════════════════
+
+.kpi-grid {
+    display              : grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap                  : 12px;
+}
+
+.kpi-card {
+    background   : #fff;
+    border       : 1px solid $border;
+    border-left  : 3px solid transparent;
+    border-radius: 16px;
+    padding      : 16px 18px;
+    display      : flex;
+    align-items  : center;
+    gap          : 14px;
+    transition   : box-shadow .2s;
+
+    &:hover { box-shadow: 0 4px 16px rgba(0,0,0,.05); }
+
+    &.c-purple { border-left-color: $purple; }
+    &.c-teal   { border-left-color: $teal;   }
+    &.c-red    { border-left-color: $red;    }
+}
+
+.kpi-icon {
+    width        : 40px; height: 40px;
+    border-radius: 10px;
+    display      : flex;
+    align-items  : center;
+    justify-content: center;
+    flex-shrink  : 0;
+
+    mat-icon { font-size: 20px !important; width: 20px !important; height: 20px !important; }
+
+    &.bg-purple { background: $purple-light; mat-icon { color: $purple; } }
+    &.bg-teal   { background: $teal-pale;   mat-icon { color: $teal;   } }
+    &.bg-red    { background: #fef2f2;       mat-icon { color: $red;    } }
+}
+
+.kpi-info { flex: 1; min-width: 0; }
+
+.kpi-value {
+    font-size  : 22px;
+    font-weight: 800;
+    color      : $text-primary;
+    line-height: 1;
+}
+
+.kpi-label {
+    font-size : 11px;
+    color     : $text-muted;
+    margin-top: 3px;
+}
+
+// Progress bar zona teal
+.kpi-progress {
+    margin-top: 6px;
+
+    ::ng-deep .mdc-linear-progress__bar-inner {
+        border-color: $teal !important;
+    }
+    ::ng-deep .mdc-linear-progress__track-bar {
+        background-color: $teal-pale !important;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  TABLE CARD
+// ══════════════════════════════════════════════════════
+
+.table-card {
+    border-radius: 16px !important;
+    border       : 1px solid $border !important;
+    box-shadow   : none !important;
+    overflow     : hidden;
+
+    ::ng-deep .mat-mdc-card-content { padding: 0 !important; }
+}
+
+// ── Toolbar ────────────────────────────────────────────
+.table-toolbar {
+    display        : flex;
+    align-items    : center;
+    justify-content: space-between;
+    padding        : 14px 18px;
+    background     : #fff;
+    border-bottom  : 1px solid $border;
+    gap            : 12px;
+}
+
+.search-box {
+    display      : flex;
+    align-items  : center;
+    gap          : 8px;
+    background   : $bg;
+    border       : 1px solid $border;
+    border-radius: 10px;
+    padding      : 7px 14px;
+    width        : 100%;
+    max-width    : 320px;
+    transition   : border-color .2s;
+
+    &:focus-within { border-color: $purple; }
+
+    mat-icon { font-size: 18px; width: 18px; height: 18px; color: $text-muted; }
+
+    input {
+        border    : none;
+        background: transparent;
+        outline   : none;
+        font-family: $font;
+        font-size : 13px;
+        color     : $text-primary;
+        width     : 100%;
+
+        &::placeholder { color: $text-muted; }
+    }
+}
+
+.toolbar-right {
+    display    : flex;
+    align-items: center;
+    gap        : 4px;
+}
+
+.tool-btn {
+    color     : $text-muted !important;
+    transition: all .2s !important;
+
+    &:hover { color: $purple !important; background: $purple-light !important; }
+
+    mat-icon { font-size: 18px !important; width: 18px !important; height: 18px !important; }
+}
+
+.tool-btn-add {
+    background   : $purple !important;
+    color        : #fff !important;
+    border-radius: 10px !important;
+    height       : 36px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 700 !important;
+    box-shadow   : 0 4px 12px rgba($purple, .25) !important;
+    transition   : all .2s !important;
+
+    &:hover { filter: brightness(1.08) !important; transform: translateY(-1px) !important; }
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+// ── Table ───────────────────────────────────────────────
+::ng-deep .zone-table th.mat-header-cell {
+    background    : $bg;
+    font-family   : $font;
+    font-size     : 10px !important;
+    font-weight   : 700 !important;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color         : $text-muted;
+    padding       : 12px 16px !important;
+    border-bottom : 1px solid $border !important;
+}
+
+::ng-deep .zone-table td.mat-cell {
+    padding      : 14px 16px !important;
+    font-family  : $font;
+    font-size    : 13px;
+    color        : $text-primary;
+    border-bottom: 1px solid #f8f7ff !important;
+    vertical-align: middle;
+}
+
+.zone-row {
+    transition: background .15s;
+
+    &:hover { background: rgba($purple, .025) !important; }
+
+    &:last-child ::ng-deep td.mat-cell { border-bottom: none !important; }
+}
+
+// Color pillar (izquierda de la fila)
+.color-pillar {
+    width        : 5px;
+    height       : 44px;
+    border-radius: 3px;
+    margin-left  : 8px;
+}
+
+// Zone info cell
+.zone-name {
+    font-size  : 13px;
+    font-weight: 700;
+    color      : $text-primary;
+    margin     : 0 0 2px;
+}
+
+.zone-desc {
+    font-size    : 11px;
+    color        : $text-muted;
+    margin       : 0;
+    white-space  : nowrap;
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    max-width    : 340px;
+}
+
+// Severity badge
+.severity-badge {
+    display      : inline-flex;
+    align-items  : center;
+    gap          : 4px;
+    padding      : 3px 10px;
+    border-radius: 20px;
+    font-size    : 11px;
+    font-weight  : 700;
+    background   : $purple-light;
+    color        : $purple;
+}
+
+// Status badge
+.si-badge {
+    display      : inline-flex;
+    align-items  : center;
+    gap          : 5px;
+    padding      : 3px 10px;
+    border-radius: 20px;
+    font-size    : 11px;
+    font-weight  : 700;
+
+    mat-icon { font-size: 13px; width: 13px; height: 13px; }
+
+    &.on  { background: $green-pale; color: $green; }
+    &.off { background: #f9fafb;     color: $text-muted; }
+}
+
+// Action buttons
+.actions-cell {
+    display    : flex;
+    align-items: center;
+    gap        : 2px;
+}
+
+// Ver
+.btn-view {
+    color     : $blue !important;
+    background: rgba($blue, .06) !important;
+    transition: all .2s !important;
+
+    mat-icon { color: $blue !important; }
+
+    &:hover {
+        background: rgba($blue, .14) !important;
+        transform : translateY(-1px);
+    }
+}
+
+// Editar
+.btn-editar {
+    color     : $purple !important;
+    background: rgba($purple, .06) !important;
+    transition: all .2s !important;
+
+    mat-icon { color: $purple !important; }
+
+    &:hover {
+        background: rgba($purple, .14) !important;
+        transform : translateY(-1px);
+    }
+}
+
+// Eliminar
+.btn-eliminar {
+    color     : $red !important;
+    background: rgba($red, .04) !important;
+    transition: all .2s !important;
+
+    mat-icon { color: $red !important; }
+
+    &:hover:not(:disabled) {
+        background: rgba($red, .12) !important;
+        transform : translateY(-1px);
+    }
+
+    &:disabled { opacity: .4; cursor: not-allowed; }
+}
+
+// ── Empty state ────────────────────────────────────────
+.empty-state {
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    justify-content: center;
+    gap            : 10px;
+    padding        : 60px 24px;
+    text-align     : center;
+    color          : $text-muted;
+
+    mat-icon { font-size: 48px !important; width: 48px !important; height: 48px !important; color: #d1d5db; }
+    h3 { font-size: 15px; font-weight: 700; color: $text-primary; margin: 0; }
+    p  { font-size: 13px; margin: 0; }
+}
+
+.btn-reset {
+    height       : 34px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 600 !important;
+    color        : $red !important;
+    border-color : rgba($red, .3) !important;
+    transition   : all .2s !important;
+    &:hover { border-color: $red !important; background: rgba($red, .05) !important; }
+}
+
+// Spin export
+.spin-animation {
+    animation: spin 1.5s linear infinite;
+    color    : $teal !important;
+}
+
+// ══════════════════════════════════════════════════════
+//  PAGINATOR
+// ══════════════════════════════════════════════════════
+
+::ng-deep mat-paginator {
+    background  : #fff;
+    border-top  : 1px solid $border;
+    font-family : $font;
+    font-size   : 12px !important;
+    color       : $text-muted;
+}
+
+// ══════════════════════════════════════════════════════
+//  ANIMACIONES
+// ══════════════════════════════════════════════════════
+
+@keyframes fadeInUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes spin     { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+// ══════════════════════════════════════════════════════
+//  RESPONSIVE
+// ══════════════════════════════════════════════════════
+
+@media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .zone-desc { max-width: 200px; }
+}
+
+@media (max-width: 768px) {
+    .zone-container { padding: 16px 14px 32px; }
+    .welcome-card   { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .wc-deco        { display: none; }
+    .zone-desc      { max-width: 180px; }
+}
+
+@media (max-width: 600px) {
+    .kpi-grid   { grid-template-columns: 1fr; }
+    .search-box { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .page-header { flex-direction: column; align-items: flex-start; }
+}

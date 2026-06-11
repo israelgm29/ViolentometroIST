@@ -419,6 +419,60 @@ $font          : 'Plus Jakarta Sans', sans-serif;
   }
 }
 
+// NEW: Consent Checkbox Container
+.consent-checkbox-container {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0 2rem;
+
+  ::ng-deep .mat-mdc-checkbox .mdc-form-field {
+    align-items: flex-start;
+  }
+
+  ::ng-deep .mat-mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background {
+    border-color: $purple;
+    background-color: $purple;
+  }
+
+  ::ng-deep .mat-mdc-checkbox .mdc-checkbox__native-control:enabled~.mdc-checkbox__background {
+    border-color: $text-muted;
+  }
+
+  ::ng-deep .mat-mdc-checkbox-label {
+    font-size: .9rem;
+    color: $text-secondary;
+    line-height: 1.4;
+  }
+}
+
+.consent-link {
+  margin-top: .75rem;
+  padding-left: 2.25rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: $teal;
+    font-size: .85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .2s ease;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      color: $purple;
+      text-decoration: underline;
+    }
+  }
+}
+
+
 // Acciones paso 2 — misma fila, botones grandes
 .step2-actions {
   padding-top    : 1.25rem;
@@ -515,6 +569,7 @@ $font          : 'Plus Jakarta Sans', sans-serif;
   .hero-icon  { width: 72px !important; height: 72px !important; font-size: 40px !important; }
   .form-grid  { grid-template-columns: 1fr; }
   .radio-group { gap: .75rem; }
+  .consent-checkbox-container { padding: 0 1.5rem; }
 }
 
 @media (max-width: 480px) {
@@ -523,4 +578,5 @@ $font          : 'Plus Jakarta Sans', sans-serif;
   .main-title  { font-size: 1.4rem; }
   .anon-chip   { font-size: 10px; padding: 5px 12px; }
   .input-feedback { flex-direction: column; align-items: flex-start; gap: .4rem; }
+  .consent-checkbox-container { padding: 0 1.2rem; }
 }

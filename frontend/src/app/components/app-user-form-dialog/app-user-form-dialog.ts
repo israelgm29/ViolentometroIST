@@ -29,7 +29,7 @@ import {
         MatInput, MatIcon, MatDatepickerModule, MatNativeDateModule
     ],
     templateUrl: './app-user-form-dialog.html',
-    styleUrl: './app-user-form-dialog.css',
+    styleUrl: './app-user-form-dialog.scss',
 })
 export class AppUserFormDialog {
     appUserForm: FormGroup;

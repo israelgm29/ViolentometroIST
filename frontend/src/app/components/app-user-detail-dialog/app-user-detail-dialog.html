@@ -1,93 +1,82 @@
-<div class="header-detail">
-    <div class="avatar-circle">
-        {{ getInitials() }}
-    </div>
-    <div class="header-text" style="padding: 10px;">
-        <h3>Estudiante - C.I: {{ appUser.dni }}</h3>
-        <span class="role-badge"
-              [style.background-color]="appUser.status ? '#c8e6c9' : '#ffcdd2'"
-              [style.color]="getStatusColor()">
-            {{ getStatusText() }}
-        </span>
-    </div>
-</div>
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon>person</mat-icon>
+    Detalle del Estudiante
+</h2>
 
-<mat-dialog-content class="mat-typography">
+<mat-dialog-content class="dialog-content">
     <div class="detail-grid">
         <div class="detail-column">
-            <h4><mat-icon inline>person</mat-icon> Datos Personales</h4>
-            <mat-list>
+            <div class="section-divider">
+                <mat-icon>person</mat-icon>
+                <span>Datos Personales</span>
+            </div>
+            <div class="info-list">
                 @for (item of personalInfo; track item.label) {
-                    <mat-list-item>
-                        <span matListItemTitle>{{ item.label }}</span>
-                        <span matListItemLine
-                              [style.font-weight]="item.isBold ? '600' : '400'"
-                              [style.color]="item.color">
-                            {{ item.value }}
-                        </span>
-                    </mat-list-item>
+                    <div class="info-item">
+                        <span class="info-label">{{ item.label }}</span>
+                        <span class="info-value" [style.font-weight]="item.isBold ? '600' : '400'">{{ item.value }}</span>
+                    </div>
                 }
-            </mat-list>
+            </div>
         </div>
 
         <div class="detail-column">
-            <h4><mat-icon inline>school</mat-icon> Información Institucional</h4>
-            <mat-list>
+            <div class="section-divider">
+                <mat-icon>school</mat-icon>
+                <span>Información Institucional</span>
+            </div>
+            <div class="info-list">
                 @for (item of institutionalInfo; track item.label) {
-                    <mat-list-item>
-                        <span matListItemTitle>{{ item.label }}</span>
-                        <span matListItemLine
-                              [style.font-weight]="item.isBold ? '600' : '400'"
-                              [style.color]="item.color">
-                            {{ item.value }}
-                        </span>
-                    </mat-list-item>
+                    <div class="info-item">
+                        <span class="info-label">{{ item.label }}</span>
+                        <span class="info-value" [style.font-weight]="item.isBold ? '600' : '400'">{{ item.value }}</span>
+                    </div>
                 }
-            </mat-list>
+            </div>
         </div>
     </div>
 
-    <mat-divider style="margin-top: 20px;"></mat-divider>
+    <div class="section-divider full-width">
+        <mat-icon>info</mat-icon>
+        <span>Información Adicional</span>
+    </div>
 
-    <div class="info-section">
-        <h4><mat-icon inline>info</mat-icon> Información Adicional</h4>
-        <div class="info-cards">
+    <div class="info-cards">
+        <div class="info-card">
+            <mat-icon>location_on</mat-icon>
+            <div class="info-content">
+                <span class="info-label">Región de origen</span>
+                <span class="info-value">{{ appUser.region.name || 'No especificado' }}</span>
+            </div>
+        </div>
+
+        @if (appUser.disability.id !== 0) {
             <div class="info-card">
-                <mat-icon>location_on</mat-icon>
+                <mat-icon>accessible</mat-icon>
                 <div class="info-content">
-                    <span class="info-label">Región de origen</span>
-                    <span class="info-value">{{ appUser.region.name }}</span>
+                    <span class="info-label">Necesidades especiales</span>
+                    <span class="info-value">{{ appUser.disability.name || 'No especificado' }}</span>
                 </div>
             </div>
+        }
 
-            @if (appUser.disability.id !== 0) {
-                <div class="info-card">
-                    <mat-icon>accessible</mat-icon>
-                    <div class="info-content">
-                        <span class="info-label">Necesidades especiales</span>
-                        <span class="info-value">{{ appUser.disability.name }}</span>
-                    </div>
-                </div>
-            }
-
-            <div class="info-card">
-                <mat-icon>diversity_3</mat-icon>
-                <div class="info-content">
-                    <span class="info-label">Identidad cultural</span>
-                    <span class="info-value">{{ appUser.ethnicity.name }}</span>
-                </div>
+        <div class="info-card">
+            <mat-icon>diversity_3</mat-icon>
+            <div class="info-content">
+                <span class="info-label">Identidad cultural</span>
+                <span class="info-value">{{ appUser.ethnicity.name || 'No especificado' }}</span>
             </div>
         </div>
     </div>
 </mat-dialog-content>
 
-<mat-divider></mat-divider>
-
-<mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>
-        <mat-icon>close</mat-icon> Cerrar
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button class="cancel-btn" mat-dialog-close>
+        <mat-icon>close</mat-icon>
+        Cerrar
     </button>
-    <button mat-raised-button color="primary" mat-dialog-close>
-        <mat-icon>check</mat-icon> Aceptar
+    <button mat-flat-button class="save-btn" mat-dialog-close>
+        <mat-icon>check_circle</mat-icon>
+        Aceptar
     </button>
 </mat-dialog-actions>

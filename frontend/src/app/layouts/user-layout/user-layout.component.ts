@@ -1,55 +1,66 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
-import {SidebarComponent} from '../../shared/sidebar/sidebar.component';
-import {fadeAnimation} from '../../route-animations';
-import {MatDrawer, MatDrawerContainer, MatDrawerContent} from "@angular/material/sidenav";
-import {MatIcon} from "@angular/material/icon";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
-import {NgIf} from "@angular/common";
+import {
+  Component,
+  ViewChild,
+  inject
+} from '@angular/core';
+
+import { RouterOutlet } from '@angular/router';
+
+import { SidebarComponent } from '../../shared/sidebar/sidebar.component';
+
+import {
+  MatDrawer,
+  MatDrawerContainer,
+  MatDrawerContent
+} from '@angular/material/sidenav';
+
+import { MatIcon } from '@angular/material/icon';
+
+import {
+  BreakpointObserver,
+  Breakpoints
+} from '@angular/cdk/layout';
+
+import { map } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-user-layout',
   standalone: true,
   imports: [
     RouterOutlet,
-    SidebarComponent,
     MatDrawerContainer,
     MatDrawer,
     MatDrawerContent,
-    MatIcon
+    MatIcon,
+    SidebarComponent
   ],
   templateUrl: './user-layout.component.html',
-  styleUrl: './user-layout.component.scss',
-  animations: [fadeAnimation]
+  styleUrl: './user-layout.component.scss'
 })
-export class UserLayoutComponent implements OnInit {
+export class UserLayoutComponent {
 
-  @ViewChild('drawer') drawer!: MatDrawer;
+  private breakpointObserver = inject(BreakpointObserver);
 
-  isMobile = false;
+  @ViewChild('drawer')
+  drawer!: MatDrawer;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  readonly isMobile = toSignal(
+      this.breakpointObserver
+          .observe([
+            Breakpoints.Handset,
+            Breakpoints.TabletPortrait,
+            '(max-width: 768px)'
+          ])
+          .pipe(
+              map(result => result.matches)
+          ),
+      {
+        initialValue: false
+      }
+  );
 
-  ngOnInit() {
-    this.breakpointObserver
-        .observe([Breakpoints.Handset, Breakpoints.TabletPortrait, '(max-width: 768px)'])
-        .subscribe(result => {
-          this.isMobile = result.matches;
-
-          // En móvil: cerramos el drawer automáticamente
-          if (this.isMobile) {
-            this.drawer?.close();
-          } else {
-            this.drawer?.open();
-          }
-        });
-  }
-
-  prepareRoute(outlet: RouterOutlet) {
-    return outlet?.activatedRouteData?.['animation'];
-  }
-
-  toggleDrawer() {
-    this.drawer.toggle();
+  toggleDrawer(): void {
+    this.drawer?.toggle();
   }
 }

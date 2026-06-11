@@ -1,5 +1,6 @@
 <div class="ui-page">
     <div class="ui-header">
+
         @if (step() === 1) {
 
             <!-- ══════════════════════════════
@@ -81,6 +82,15 @@
                         <span>Ingresa los 10 dígitos de tu cédula ecuatoriana sin espacios ni guiones.</span>
                     </div>
 
+                    <!-- NEW CONSENT CHECKBOX FOR STEP 1 -->
+                    <div class="consent-checkbox-container">
+                        <mat-checkbox [(ngModel)]="consentGiven" name="consent" required>
+                            Acepto el tratamiento de mis datos para verificar mi identidad y generar estadísticas de prevención.
+                        </mat-checkbox>
+
+                    </div>
+                    <!-- END NEW CONSENT CHECKBOX FOR STEP 1 -->
+
                 </mat-dialog-content>
 
                 <mat-dialog-actions align="center" class="step1-actions">
@@ -88,13 +98,15 @@
                             mat-raised-button
                             class="btn-primary btn-full"
                             (click)="checkUser()"
-                            [disabled]="!isDniValid() || loading()">
+                            [disabled]="!isDniValid() || loading() || !consentGiven"> <!-- MODIFIED DISABLED BINDING -->
                         @if (loading()) {
                             <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
                             <span>Verificando...</span>
                         } @else {
-                            <span>Continuar</span>
-                            <mat-icon>arrow_forward</mat-icon>
+                            <ng-container>
+                                <span>Continuar</span>
+                                <mat-icon>arrow_forward</mat-icon>
+                            </ng-container>
                         }
                     </button>
                 </mat-dialog-actions>
@@ -237,8 +249,10 @@
                                 <mat-spinner diameter="20" class="btn-spinner"></mat-spinner>
                                 <span>Guardando...</span>
                             } @else {
-                                <span>Iniciar Cuestionario</span>
-                                <mat-icon>bolt</mat-icon>
+                                <ng-container>
+                                    <span>Iniciar</span>
+                                    <mat-icon>bolt</mat-icon>
+                                </ng-container>
                             }
                         </button>
                     </mat-dialog-actions>

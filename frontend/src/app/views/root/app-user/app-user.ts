@@ -3,7 +3,7 @@ import {MatIconButton, MatButtonModule} from "@angular/material/button";
 import {
     MatCell, MatCellDef, MatColumnDef,
     MatHeaderCell, MatHeaderCellDef,
-    MatHeaderRow, MatHeaderRowDef,
+    MatHeaderRow, MatHeaderRowDef, MatNoDataRow,
     MatRow, MatRowDef, MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {MatIcon} from "@angular/material/icon";
@@ -28,6 +28,8 @@ import {
     BulkUploadConfirmDialogComponent
 } from "../../../components/bulk-upload-confirm-dialog/bulk-upload-confirm-dialog";
 import {AuthService} from "../../../services/auth.service";
+import {MatCard, MatCardContent} from "@angular/material/card";
+import {ExcelTemplateService} from "../../../services/excel-template.service";
 
 @Component({
     selector: 'app-app-user',
@@ -42,10 +44,10 @@ import {AuthService} from "../../../services/auth.service";
         MatTable, MatTooltip,
         NgTemplateOutlet, MatHeaderCellDef,
         MatSort, MatMenuItem, MatMenu, MatMenuTrigger,
-        MatDivider
+        MatDivider, MatCardContent, MatCard, MatNoDataRow
     ],
     templateUrl: './app-user.html',
-    styleUrl: './app-user.css',
+    styleUrl: './app-user.scss',
 })
 export class AppUser {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -64,6 +66,7 @@ export class AppUser {
     activeUsers = 0;
     inactiveUsers = 0;
     private bulkUploadService = inject(BulkUploadService);
+    private excelTemplateService = inject(ExcelTemplateService);
     authService = inject(AuthService);
 
     constructor(
@@ -102,12 +105,31 @@ export class AppUser {
 
 
     // ── CARGA MASIVA ─────────────────────────────────────────
+    downloadTemplate(): void {
+        this.excelTemplateService.downloadTemplate()
+            .then(() => {
+                this.toastr.success('Plantilla descargada exitosamente');
+            })
+            .catch(() => {
+                this.toastr.error('Error al descargar la plantilla', 'Error');
+            });
+    }
+
     onFileSelected(event: Event) {
         const input = event.target as HTMLInputElement;
         if (!input.files?.length) return;
 
         const file = input.files[0];
         input.value = '';
+
+        // Validar que sea un archivo Excel
+        const validExtensions = ['.xlsx', '.xls'];
+        const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+        
+        if (!validExtensions.includes(fileExtension)) {
+            this.toastr.error('Solo se permiten archivos Excel (.xlsx, .xls)', 'Formato inválido');
+            return;
+        }
 
         const size = file.size < 1024 * 1024
             ? (file.size / 1024).toFixed(1) + ' KB'
@@ -171,7 +193,13 @@ export class AppUser {
     setupFilterPredicate() {
         this.dataSource.filterPredicate = (data: AppUserResponse, filter: string) => {
             const searchTerms = JSON.parse(filter);
-            const searchStr = `${data.gender.name} ${data.ethnicity.name} ${data.dni} ${data.institute?.name || ''}`.toLowerCase();
+            const searchStr = [
+                data.gender?.name ?? '',
+                data.ethnicity?.name ?? '',
+                data.dni ?? '',
+                data.institute?.name ?? ''
+            ].join(' ').toLowerCase();
+
             const matchesSearch = searchStr.includes(searchTerms.text.toLowerCase());
             const matchesStatus = data.status === searchTerms.status;
             return matchesSearch && matchesStatus;

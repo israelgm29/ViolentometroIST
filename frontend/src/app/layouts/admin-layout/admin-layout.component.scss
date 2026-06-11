@@ -155,3 +155,16 @@ $radius-xl:  20px;
 @media (max-width: 600px) {
   .main-sidebar { width: 85vw; max-width: 300px; }
 }
+
+.admin-wrapper {
+  display       : flex;
+  flex-direction: column;
+  min-height    : 100vh;
+  background    : #f8f7ff;
+}
+
+.router-container {
+  flex      : 1;
+  overflow-y: auto;
+}
+

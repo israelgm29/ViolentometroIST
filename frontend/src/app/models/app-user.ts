@@ -23,4 +23,5 @@ export interface AppUserRequest {
 export interface MasterCatalog {
     id: number;
     name: string;
+    code?: string; // Código para institutos
 }

@@ -24,6 +24,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCheckboxModule } from '@angular/material/checkbox'; // NEW: Import MatCheckboxModule
 
 import { Observable } from 'rxjs';
 
@@ -53,7 +54,8 @@ import {MatDialogActions, MatDialogContent} from "@angular/material/dialog";
         MatProgressSpinnerModule,
         MatDatepickerModule,
         MatDialogContent,
-        MatDialogActions
+        MatDialogActions,
+        MatCheckboxModule // NEW: Add MatCheckboxModule to imports
     ],
     templateUrl: './user-identification.component.html',
     styleUrls: ['./user-identification.component.scss']
@@ -78,6 +80,7 @@ export class UserIdentificationComponent implements OnInit {
 
     private appUserService = inject(AppUserService);
     private toastr = inject(ToastrService);
+    private catalogService = inject(CatalogService); // NEW: Inject CatalogService
 
     // ─────────────────────────────────────────────
     // CATÁLOGOS
@@ -101,6 +104,8 @@ export class UserIdentificationComponent implements OnInit {
 
     private foundUser: AppUserResponse | null = null;
 
+    consentGiven: boolean = false; // NEW: Property to track consent checkbox
+
     // ─────────────────────────────────────────────
     // VALIDACIONES DNI
     // ─────────────────────────────────────────────
@@ -120,12 +125,10 @@ export class UserIdentificationComponent implements OnInit {
 
     constructor(
         private fb: FormBuilder,
-        private catalogService: CatalogService
+        // private catalogService: CatalogService // Removed from constructor as it's injected
     ) {
         this.infoForm = this.fb.group({
-            birthdate: ['', [Validators.required, this.birthdateValidator
-                ]
-            ],
+            birthdate: ['', [Validators.required, this.birthdateValidator]],
             idGender: ['', Validators.required],
             idRegion: ['', Validators.required],
             idEthnicity: ['', Validators.required],
@@ -246,6 +249,15 @@ export class UserIdentificationComponent implements OnInit {
             return;
         }
 
+        // NEW: Check if consent is given for Step 1
+        if (!this.consentGiven) {
+            this.toastr.warning(
+                'Debes aceptar la política de tratamiento de datos para continuar.',
+                'Consentimiento requerido'
+            );
+            return;
+        }
+
         this.loading.set(true);
 
         this.appUserService.validateAndLogUser(this.dni())
@@ -349,8 +361,21 @@ export class UserIdentificationComponent implements OnInit {
 
         if (this.infoForm.invalid) {
             this.infoForm.markAllAsTouched();
+            this.toastr.warning(
+                'Por favor, completa todos los campos requeridos.',
+                'Campos incompletos'
+            );
             return;
         }
+
+        // Removed consent check from Step 2 as it's now in Step 1
+        // if (!this.consentGiven) {
+        //     this.toastr.warning(
+        //         'Debes aceptar la política de tratamiento de datos para continuar.',
+        //         'Consentimiento requerido'
+        //     );
+        //     return;
+        // }
 
         const form = this.infoForm.value;
 

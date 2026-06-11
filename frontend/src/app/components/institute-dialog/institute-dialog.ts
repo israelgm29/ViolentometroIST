@@ -22,7 +22,7 @@ import { InstituteService } from '../../services/institute.service';
     MatButtonModule, MatIconModule, MatProgressSpinnerModule, MatTooltipModule
   ],
   templateUrl: './institute-dialog.html',
-  styleUrl:    './institute-dialog.css'
+  styleUrl:    './institute-dialog.scss'
 })
 export class InstituteDialog implements OnInit {
   form:        FormGroup;

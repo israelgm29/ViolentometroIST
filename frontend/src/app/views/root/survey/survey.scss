@@ -1,0 +1,396 @@
+// ══════════════════════════════════════════════════════
+//  SURVEY MANAGER — Estilo Panelix
+//  Paleta: Morado (#7c3aed) + Teal (#0d9488) + Blanco
+//  Misma base que dashboard.scss
+// ══════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+$purple      : #7c3aed;
+$purple-dark : #6d28d9;
+$purple-pale : #faf5ff;
+$purple-light: #ede9fe;
+$teal        : #0d9488;
+$teal-pale   : #f0fdfa;
+$red         : #ef4444;
+$green       : #16a34a;
+$green-pale  : #f0fdf4;
+$text-primary: #111827;
+$text-muted  : #6b7280;
+$border      : #f1f0fb;
+$bg          : #f8f7ff;
+$font        : 'Plus Jakarta Sans', sans-serif;
+
+// ── Host ─────────────────────────────────────────────
+:host { display: block; font-family: $font; }
+
+// ── Contenedor principal ──────────────────────────────
+.survey-container {
+    min-height     : 100vh;
+    background     : $bg;
+    padding        : 24px 28px 48px;
+    display        : flex;
+    flex-direction : column;
+    gap            : 20px;
+    position       : relative;
+}
+
+// ══════════════════════════════════════════════════════
+//  PAGE HEADER
+// ══════════════════════════════════════════════════════
+
+.page-header {
+    display        : flex;
+    align-items    : center;
+    justify-content: space-between;
+    gap            : 16px;
+    flex-wrap      : wrap;
+}
+
+.ph-left {
+    display    : flex;
+    align-items: center;
+    gap        : 12px;
+}
+
+.page-title {
+    font-size  : 1.5rem;
+    font-weight: 800;
+    color      : $text-primary;
+    margin     : 0 0 3px;
+    line-height: 1.2;
+}
+
+.breadcrumb {
+    display    : flex;
+    align-items: center;
+    gap        : 4px;
+    font-size  : 11px;
+    color      : $text-muted;
+
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+    .cur { color: $purple; font-weight: 600; }
+}
+
+.count-badge {
+    display      : inline-flex;
+    align-items  : center;
+    gap          : 5px;
+    padding      : 6px 14px;
+    background   : $purple-light;
+    color        : $purple;
+    border-radius: 20px;
+    font-size    : 12px;
+    font-weight  : 700;
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+// Botón primario (Crear nuevo)
+.ph-btn-primary {
+    height       : 38px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 700 !important;
+    background   : $purple !important;
+    color        : #fff !important;
+    box-shadow   : 0 4px 12px rgba($purple, .25) !important;
+    transition   : all .2s !important;
+
+    &:hover { filter: brightness(1.08) !important; transform: translateY(-1px) !important; }
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+// ══════════════════════════════════════════════════════
+//  WELCOME / INFO CARD
+// ══════════════════════════════════════════════════════
+
+.welcome-card {
+    background   : linear-gradient(135deg, #f5f3ff 0%, $purple-light 55%, #e0e7ff 100%);
+    border       : 1px solid #e9d5ff;
+    border-radius: 20px;
+    padding      : 24px 28px;
+    display      : flex;
+    align-items  : center;
+    justify-content: space-between;
+    position     : relative;
+    overflow     : hidden;
+
+    &::before {
+        content      : '';
+        position     : absolute;
+        right        : -30px; top: -50px;
+        width        : 200px; height: 200px;
+        border-radius: 50%;
+        background   : rgba($purple, .06);
+        pointer-events: none;
+    }
+}
+
+.wc-title {
+    font-size    : 1.35rem;
+    font-weight  : 800;
+    color        : $text-primary;
+    margin-bottom: 6px;
+}
+
+.wc-sub {
+    font-size  : .88rem;
+    color      : $text-muted;
+    line-height: 1.5;
+}
+
+.wc-deco {
+    mat-icon {
+        font-size: 72px !important;
+        width    : 72px !important;
+        height   : 72px !important;
+        color    : rgba($purple, .12);
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  SECTION LABEL
+// ══════════════════════════════════════════════════════
+
+.section-label {
+    display       : flex;
+    align-items   : center;
+    gap           : 6px;
+    font-size     : 12px;
+    font-weight   : 700;
+    color         : $text-muted;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; color: $purple; }
+}
+
+// ══════════════════════════════════════════════════════
+//  TABLE CARD
+// ══════════════════════════════════════════════════════
+
+.table-card {
+    border-radius: 16px !important;
+    border       : 1px solid $border !important;
+    box-shadow   : none !important;
+    overflow     : hidden;
+
+    ::ng-deep .mat-mdc-card-content { padding: 0 !important; }
+}
+
+// ══════════════════════════════════════════════════════
+//  TABLE
+// ══════════════════════════════════════════════════════
+
+.survey-table {
+    width          : 100%;
+    border-collapse: collapse;
+    font-family    : $font;
+    font-size      : 13px;
+}
+
+// Header cells
+::ng-deep .survey-table th.mat-header-cell {
+    background    : $bg;
+    color         : $text-muted;
+    font-family   : $font;
+    font-size     : 10px !important;
+    font-weight   : 700 !important;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    padding       : 12px 16px !important;
+    border-bottom : 1px solid $border !important;
+    white-space   : nowrap;
+}
+
+// Data cells
+::ng-deep .survey-table td.mat-cell {
+    padding      : 14px 16px !important;
+    color        : $text-primary;
+    border-bottom: 1px solid #f8f7ff !important;
+    font-family  : $font;
+    font-size    : 13px;
+    vertical-align: middle;
+}
+
+// Row hover
+.survey-row {
+    transition: background .15s ease;
+
+    &:hover {
+        background: rgba($purple, .025) !important;
+    }
+
+    &:last-child ::ng-deep td.mat-cell {
+        border-bottom: none !important;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  STATUS BADGES
+// ══════════════════════════════════════════════════════
+
+.si-badge {
+    font-size    : 10px;
+    font-weight  : 700;
+    padding      : 3px 10px;
+    border-radius: 20px;
+    display      : inline-flex;
+    align-items  : center;
+    gap          : 5px;
+
+    mat-icon { font-size: 13px; width: 13px; height: 13px; }
+
+    &.on  { background: $green-pale; color: $green; }
+    &.off { background: #f9fafb;     color: $text-muted; }
+}
+
+// ══════════════════════════════════════════════════════
+//  SURVEY TITLE CELL
+// ══════════════════════════════════════════════════════
+
+.survey-title {
+    font-size  : 13px;
+    font-weight: 700;
+    color      : $text-primary;
+    margin     : 0 0 2px;
+    line-height: 1.3;
+}
+
+.survey-desc {
+    font-size : 11px;
+    color     : $text-muted;
+    margin    : 0;
+    white-space: nowrap;
+    overflow  : hidden;
+    text-overflow: ellipsis;
+    max-width : 300px;
+}
+
+// ══════════════════════════════════════════════════════
+//  QUESTIONS COUNT CELL
+// ══════════════════════════════════════════════════════
+
+.questions-count {
+    display    : inline-flex;
+    align-items: center;
+    gap        : 5px;
+    font-size  : 12px;
+    font-weight: 600;
+    color      : $text-muted;
+
+    mat-icon { font-size: 15px; width: 15px; height: 15px; color: $purple; }
+}
+
+// ══════════════════════════════════════════════════════
+//  ACTION BUTTONS
+// ══════════════════════════════════════════════════════
+
+.actions-cell {
+    display    : flex;
+    align-items: center;
+    gap        : 4px;
+}
+
+// Activar
+.btn-activar {
+    color     : $teal !important;
+    background: rgba($teal, .08) !important;
+    transition: all .2s !important;
+
+    mat-icon { color: $teal !important; }
+
+    &:hover {
+        background: rgba($teal, .16) !important;
+        transform : scale(1.1);
+    }
+}
+
+// Desactivar
+.btn-desactivar {
+    color     : $red !important;
+    background: rgba($red, .08) !important;
+    transition: all .2s !important;
+
+    mat-icon { color: $red !important; }
+
+    &:hover {
+        background: rgba($red, .16) !important;
+        transform : scale(1.1);
+    }
+}
+
+// Editar
+.btn-editar {
+    color     : $purple !important;
+    background: rgba($purple, .06) !important;
+    transition: all .2s !important;
+
+    mat-icon { color: $purple !important; }
+
+    &:hover {
+        background: rgba($purple, .14) !important;
+        transform : translateY(-1px);
+    }
+}
+
+// Eliminar
+.btn-eliminar {
+    color     : $red !important;
+    background: rgba($red, .04) !important;
+    transition: all .2s !important;
+
+    mat-icon { color: $red !important; }
+
+    &:hover:not(:disabled) {
+        background: rgba($red, .12) !important;
+        transform : translateY(-1px);
+    }
+
+    &:disabled { opacity: .4; cursor: not-allowed; }
+}
+
+// ══════════════════════════════════════════════════════
+//  EMPTY STATE
+// ══════════════════════════════════════════════════════
+
+.empty-state {
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    justify-content: center;
+    gap            : 10px;
+    padding        : 60px 24px;
+    text-align     : center;
+    color          : $text-muted;
+
+    mat-icon { font-size: 48px !important; width: 48px !important; height: 48px !important; color: #d1d5db; }
+    h3 { font-size: 15px; font-weight: 700; color: $text-primary; margin: 0; }
+    p  { font-size: 13px; margin: 0; }
+}
+
+// ══════════════════════════════════════════════════════
+//  ANIMACIONES
+// ══════════════════════════════════════════════════════
+
+@keyframes fadeInUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+.survey-container { animation: fadeInUp .35s ease both; }
+
+// ══════════════════════════════════════════════════════
+//  RESPONSIVE
+// ══════════════════════════════════════════════════════
+
+@media (max-width: 768px) {
+    .survey-container { padding: 16px 14px 32px; }
+    .welcome-card     { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .wc-deco          { display: none; }
+    .survey-desc      { max-width: 180px; }
+}
+
+@media (max-width: 480px) {
+    .page-header { flex-direction: column; align-items: flex-start; }
+}

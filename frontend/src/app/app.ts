@@ -1,6 +1,5 @@
 import { Component, signal } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { fadeAnimation } from './route-animations';
 
 @Component({
   selector: 'app-root',
@@ -10,13 +9,8 @@ import { fadeAnimation } from './route-animations';
     RouterOutlet
   ],
   templateUrl: './app.html',
-  styleUrl: './app.css',
-  animations: [fadeAnimation]
+  styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('frontend');
-
-  prepareRoute(outlet: RouterOutlet) {
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
-  }
 }

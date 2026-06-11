@@ -18,7 +18,7 @@ public class QuestionZoneDTO {
     @NotNull(message = "El número de pregunta es obligatorio")
     private Integer questionNumber;
 
-    @NotNull(message = "La zona sdasdas es obligatoria")
+    @NotNull(message = "La zona es obligatoria")
     private ViolenceZoneDTO zone;
 
     private Boolean status;

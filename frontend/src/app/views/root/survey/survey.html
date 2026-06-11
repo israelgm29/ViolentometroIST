@@ -1,104 +1,149 @@
-<div class="dashboard-container">
-    <header class="dashboard-header">
-        <div>
-            <h1 class="mat-headline-5">Gestión de Cuestionarios</h1>
-            <p class="text-muted">Administre las versiones y preguntas del sistema</p>
+<div class="survey-container">
+
+    <!-- ═══════════════════════════════════════════════════
+         PAGE HEADER
+    ═══════════════════════════════════════════════════ -->
+    <div class="page-header">
+        <div class="ph-left">
+            <div>
+                <div class="breadcrumb">
+                    <span>Inicio</span>
+                    <mat-icon>chevron_right</mat-icon>
+                    <span class="cur">Cuestionarios</span>
+                </div>
+                <h1 class="page-title">Gestión de Cuestionarios</h1>
+            </div>
         </div>
-        <button mat-flat-button (click)="goToBuilder()" class="btn-crear">
-            <mat-icon>add</mat-icon>
-            CREAR NUEVO
-        </button>
-    </header>
 
-    <mat-card class="chart-card">
-        <mat-card-content>
-            <table mat-table [dataSource]="dataSource" class="full-width-table">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span class="count-badge">
+                <mat-icon>assignment</mat-icon>
+                {{ dataSource.data.length }} cuestionarios
+            </span>
+            <button mat-flat-button class="ph-btn-primary" (click)="goToBuilder()">
+                <mat-icon>add</mat-icon>
+                Crear nuevo
+            </button>
+        </div>
+    </div>
 
-                <!-- Columna de Estado (solo visual) -->
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef> Estado </th>
-                    <td mat-cell *matCellDef="let element">
-                        <mat-chip
-                                [class.status-active]="element.isActive"
-                                [class.status-inactive]="!element.isActive"
-                                [matTooltip]="element.isActive ? 'Cuestionario actualmente activo' : 'Cuestionario inactivo'">
-                            <mat-icon class="status-icon">
-                                {{ element.isActive ? 'check_circle' : 'remove_circle' }}
-                            </mat-icon>
-                            {{ element.isActive ? 'ACTIVO' : 'INACTIVO' }}
-                        </mat-chip>
-                    </td>
-                </ng-container>
+    <!-- ═══════════════════════════════════════════════════
+         WELCOME CARD
+    ═══════════════════════════════════════════════════ -->
+    <div class="welcome-card">
+        <div class="wc-left">
+            <h2 class="wc-title">Administra los cuestionarios 📋</h2>
+            <p class="wc-sub">Crea, edita y activa versiones del cuestionario de riesgo institucional.</p>
+        </div>
+        <div class="wc-deco">
+            <mat-icon>assignment</mat-icon>
+        </div>
+    </div>
 
-                <!-- Columna de Título -->
-                <ng-container matColumnDef="title">
-                    <th mat-header-cell *matHeaderCellDef> Nombre del Cuestionario </th>
-                    <td mat-cell *matCellDef="let element">
-                        <strong>{{element.title}}</strong>
-                        @if (element.description) {
-                            <br>
-                            <small class="text-muted">{{element.description}}</small>
-                        }
-                    </td>
-                </ng-container>
+    <!-- ═══════════════════════════════════════════════════
+         TABLE SECTION
+    ═══════════════════════════════════════════════════ -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="section-label">
+            <mat-icon>list_alt</mat-icon>
+            Versiones disponibles
+        </div>
 
-                <!-- Columna de Preguntas -->
-                <ng-container matColumnDef="questions">
-                    <th mat-header-cell *matHeaderCellDef> Preguntas </th>
-                    <td mat-cell *matCellDef="let element">
-                        <div class="questions-count">
-                            <mat-icon>quiz</mat-icon>
-                            {{ element.questions || 0 }} items
-                        </div>
-                    </td>
-                </ng-container>
+        <mat-card class="table-card">
+            <mat-card-content>
+                <table mat-table [dataSource]="dataSource" class="survey-table">
 
-                <!-- Columna de Fecha -->
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef> Fecha Creación </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.createdAt | date:'dd/MM/yyyy HH:mm'}}
-                    </td>
-                </ng-container>
+                    <!-- Columna Estado -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>Estado</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="si-badge" [class.on]="element.isActive" [class.off]="!element.isActive">
+                                <mat-icon>{{ element.isActive ? 'check_circle' : 'remove_circle' }}</mat-icon>
+                                {{ element.isActive ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </td>
+                    </ng-container>
 
-                <!-- Columna de Acciones -->
-                <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
-                    <td mat-cell *matCellDef="let element">
-                        <!-- Botón ACTIVAR/DESACTIVAR (acción independiente) -->
-                        <button
-                                mat-icon-button
-                                [class.btn-activar]="!element.isActive"
-                                [class.btn-desactivar]="element.isActive"
-                                [matTooltip]="element.isActive ? 'Desactivar cuestionario' : 'Activar cuestionario (desactivará el activo actual)'"
-                                (click)="toggleActive(element)">
-                            <mat-icon>{{ element.isActive ? 'toggle_off' : 'toggle_on' }}</mat-icon>
-                        </button>
+                    <!-- Columna Nombre -->
+                    <ng-container matColumnDef="title">
+                        <th mat-header-cell *matHeaderCellDef>Nombre del Cuestionario</th>
+                        <td mat-cell *matCellDef="let element">
+                            <p class="survey-title">{{ element.title }}</p>
+                            @if (element.description) {
+                                <p class="survey-desc">{{ element.description }}</p>
+                            }
+                        </td>
+                    </ng-container>
 
-                        <!-- Botón EDITAR -->
-                        <button
-                                mat-icon-button
-                                class="btn-editar"
-                                matTooltip="Editar cuestionario"
-                                (click)="goToBuilder(element.id)">
-                            <mat-icon>edit_note</mat-icon>
-                        </button>
+                    <!-- Columna Preguntas -->
+                    <ng-container matColumnDef="questions">
+                        <th mat-header-cell *matHeaderCellDef>Preguntas</th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="questions-count">
+                                <mat-icon>quiz</mat-icon>
+                                {{ element.questions || 0 }} ítems
+                            </span>
+                        </td>
+                    </ng-container>
 
-                        <!-- Botón ELIMINAR -->
-                        <button
-                                mat-icon-button
-                                class="btn-eliminar"
-                                matTooltip="{{ element.isActive ? 'No se puede eliminar el activo' : 'Eliminar cuestionario' }}"
-                                (click)="deleteSurvey(element)"
-                                [disabled]="element.isActive">
-                            <mat-icon>delete_outline</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
+                    <!-- Columna Fecha -->
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>Fecha Creación</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.createdAt | date:'dd MMM yyyy' }}
+                        </td>
+                    </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row"></tr>
-            </table>
-        </mat-card-content>
-    </mat-card>
+                    <!-- Columna Acciones -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="actions-cell">
+                                <!-- Activar / Desactivar -->
+                                <button mat-icon-button
+                                        [class.btn-activar]="!element.isActive"
+                                        [class.btn-desactivar]="element.isActive"
+                                        [matTooltip]="element.isActive ? 'Desactivar cuestionario' : 'Activar cuestionario'"
+                                        (click)="toggleActive(element)">
+                                    <mat-icon>{{ element.isActive ? 'toggle_off' : 'toggle_on' }}</mat-icon>
+                                </button>
+
+                                <!-- Editar -->
+                                <button mat-icon-button
+                                        class="btn-editar"
+                                        matTooltip="Editar cuestionario"
+                                        (click)="goToBuilder(element.id)">
+                                    <mat-icon>edit_note</mat-icon>
+                                </button>
+
+                                <!-- Eliminar -->
+                                <button mat-icon-button
+                                        class="btn-eliminar"
+                                        [matTooltip]="element.isActive ? 'No se puede eliminar el activo' : 'Eliminar cuestionario'"
+                                        (click)="deleteSurvey(element)"
+                                        [disabled]="element.isActive">
+                                    <mat-icon>delete_outline</mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="survey-row"></tr>
+
+                    <!-- Empty state -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td [attr.colspan]="displayedColumns.length">
+                            <div class="empty-state">
+                                <mat-icon>folder_open</mat-icon>
+                                <h3>No hay cuestionarios</h3>
+                                <p>Crea el primer cuestionario con el botón "Crear nuevo".</p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
 </div>

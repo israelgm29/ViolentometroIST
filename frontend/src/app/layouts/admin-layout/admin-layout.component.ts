@@ -13,7 +13,7 @@ import {Navbar} from "../../shared/admin/navbar/navbar";
 @Component({
     selector:    'app-admin-layout',
     standalone:  true,
-    imports:     [RouterOutlet, MatSidenavModule, SidebarAdmin, Navbar],
+    imports:     [RouterOutlet, MatSidenavModule, Navbar],
     templateUrl: './admin-layout.component.html',
     styleUrl:    './admin-layout.component.scss'
 })

@@ -1,99 +1,119 @@
 <div class="dashboard-container">
-    <!-- Loading global -->
+
+    <!-- Loading overlay -->
     @if (isLoadingSurveys() || isLoading()) {
         <div class="loading-overlay">
-            <mat-spinner diameter="48"></mat-spinner>
+            <mat-spinner diameter="40"></mat-spinner>
             <p>Cargando...</p>
         </div>
     }
 
-    <!-- ═══════════════════════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════════
          VISTA 1: SELECTOR DE CUESTIONARIO
-    ════════════════════════════════════════════════════════════════ -->
+    ═══════════════════════════════════════════════════ -->
     @if (view() === 'select') {
-        <header class="page-header" @fadeIn>
-            <div class="header-content">
-                <div class="header-icon">
+        <div class="select-view" @fadeIn>
+
+            <div class="page-header">
+                <div class="ph-left">
+                    <h1 class="page-title">Panel de Control</h1>
+                    <div class="breadcrumb">
+                        <span>Inicio</span>
+                        <mat-icon>chevron_right</mat-icon>
+                        <span class="cur">Dashboard</span>
+                    </div>
+                </div>
+                <span class="count-badge">
+                    <mat-icon>assignment</mat-icon>
+                    {{ surveys().length }} cuestionarios
+                </span>
+            </div>
+
+            <div class="welcome-card">
+                <div class="wc-left">
+                    <div class="wc-online">
+                        <span class="wc-dot"></span>
+                        Sistema operativo
+                    </div>
+                    <h2 class="wc-title">Selecciona un cuestionario 📋</h2>
+                    <p class="wc-sub">Elige un cuestionario para ver el análisis completo de riesgo institucional.</p>
+                </div>
+                <div class="wc-deco">
                     <mat-icon>dashboard</mat-icon>
                 </div>
-                <div>
-                    <h1>Panel de Control</h1>
-                    <p class="header-subtitle">Selecciona un cuestionario para ver el análisis</p>
-                </div>
             </div>
-            <div class="header-badge">
-                <span class="count-badge">{{ surveys().length }} disponibles</span>
-            </div>
-        </header>
 
-        <section class="survey-selector" @fadeIn>
-            @for (survey of surveys(); track survey.id; let i = $index) {
-                <mat-card class="survey-card"
-                          [class.survey-active]="survey.isActive"
-                          [style.animation-delay]="i * 50 + 'ms'"
-                          (click)="selectSurvey(survey)">
-                    <div class="survey-card-icon" [class.active]="survey.isActive">
-                        <mat-icon>{{ survey.isActive ? 'assignment_turned_in' : 'assignment' }}</mat-icon>
-                    </div>
-                    <div class="survey-card-content">
-                        <div class="survey-card-header">
-                            <h3>{{ survey.title }}</h3>
-                            @if (survey.isActive) {
-                                <mat-chip class="status-chip active">Activo</mat-chip>
-                            } @else {
-                                <mat-chip class="status-chip inactive">Inactivo</mat-chip>
-                            }
-                        </div>
-                        <p class="survey-description">{{ survey.description || 'Sin descripción disponible' }}</p>
-                        <div class="survey-meta">
-                            <span>
-                                <mat-icon>quiz</mat-icon>
-                                {{ survey.questions?.length || 0 }} preguntas
-                            </span>
-                            <span>
-                                <mat-icon>calendar_today</mat-icon>
-                                {{ survey.createdAt | date:'dd MMM yyyy' }}
-                            </span>
-                        </div>
-                    </div>
-                    <button mat-icon-button class="survey-action" color="primary">
-                        <mat-icon>arrow_forward</mat-icon>
-                    </button>
-                </mat-card>
-            } @empty {
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <mat-icon>folder_open</mat-icon>
-                    </div>
-                    <h3>No hay cuestionarios</h3>
-                    <p>No se encontraron cuestionarios disponibles en este momento.</p>
+            <!-- Survey list compacta -->
+            <div class="surveys-section">
+                <div class="section-label">
+                    <mat-icon>clipboard_list</mat-icon>
+                    Cuestionarios disponibles
                 </div>
-            }
-        </section>
+
+                <div class="survey-list">
+                    @for (survey of surveys(); track survey.id; let i = $index) {
+                        <div class="survey-item"
+                             [class.survey-active]="survey.isActive"
+                             [style.animation-delay]="i * 60 + 'ms'"
+                             (click)="selectSurvey(survey)">
+
+                            <div class="si-icon" [class.active]="survey.isActive">
+                                <mat-icon>{{ survey.isActive ? 'assignment_turned_in' : 'assignment' }}</mat-icon>
+                            </div>
+
+                            <div class="si-content">
+                                <div class="si-header">
+                                    <h3 class="si-title">{{ survey.title }}</h3>
+                                    @if (survey.isActive) {
+                                        <span class="si-badge on">Activo</span>
+                                    } @else {
+                                        <span class="si-badge off">Inactivo</span>
+                                    }
+                                </div>
+                                <p class="si-desc">{{ survey.description || 'Sin descripción disponible' }}</p>
+                                <div class="si-meta">
+                                    <span><mat-icon>quiz</mat-icon> {{ survey.questions?.length || 0 }} preguntas</span>
+                                    <span><mat-icon>calendar_today</mat-icon> {{ survey.createdAt | date:'dd MMM yyyy' }}</span>
+                                </div>
+                            </div>
+
+                            <mat-icon class="si-arrow">chevron_right</mat-icon>
+                        </div>
+                    } @empty {
+                        <div class="empty-state">
+                            <mat-icon>folder_open</mat-icon>
+                            <h3>No hay cuestionarios</h3>
+                            <p>No se encontraron cuestionarios disponibles en este momento.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
     }
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         VISTA 2: DASHBOARD CON REPORTES INTEGRADOS
-    ════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════════
+         VISTA 2: DASHBOARD CON REPORTES
+    ═══════════════════════════════════════════════════ -->
     @if (view() === 'dashboard') {
-        <!-- Header del Dashboard -->
-        <header class="dashboard-header" @fadeIn>
-            <div class="header-main">
-                <button mat-icon-button (click)="backToSelector()" matTooltip="Volver al selector">
+
+        <!-- Header -->
+        <div class="page-header" @fadeIn>
+            <div class="ph-left">
+                <button mat-icon-button class="back-btn" (click)="backToSelector()" matTooltip="Volver">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
-                <div class="header-info">
+                <div>
                     <div class="breadcrumb">
                         <span>Dashboard</span>
                         <mat-icon>chevron_right</mat-icon>
-                        <span class="current">{{ dataSharedService.selectedSurvey()?.title }}</span>
+                        <span class="cur">{{ dataSharedService.selectedSurvey()?.title }}</span>
                     </div>
-                    <h1>Resumen Ejecutivo</h1>
+                    <h1 class="page-title">Resumen Ejecutivo</h1>
                 </div>
             </div>
 
-            <div class="header-actions">
-                <!-- Filtro de fechas compacto -->
+            <div class="ph-actions">
                 <mat-form-field appearance="outline" class="date-field">
                     <mat-label>Período</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
@@ -106,20 +126,17 @@
                     <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
 
-                <button mat-stroked-button (click)="setToday()">
+                <button mat-stroked-button class="ph-btn" (click)="setToday()">
                     <mat-icon>today</mat-icon>
                     Hoy
                 </button>
 
-                <button mat-stroked-button (click)="setLastMonth()">
+                <button mat-stroked-button class="ph-btn" (click)="setLastMonth()">
                     <mat-icon>date_range</mat-icon>
                     Mes
                 </button>
 
-                <mat-divider vertical class="action-divider"></mat-divider>
-
-                <!-- Botón principal de reportes -->
-                <button mat-flat-button color="primary" class="btn-reports" [matMenuTriggerFor]="reportsMenu">
+                <button mat-flat-button class="ph-btn-primary" [matMenuTriggerFor]="reportsMenu">
                     <mat-icon>summarize</mat-icon>
                     Reportes
                     <mat-icon iconPositionEnd>expand_more</mat-icon>
@@ -135,14 +152,88 @@
                     </button>
                 </mat-menu>
             </div>
-        </header>
+        </div>
 
-        <!-- ═══════════════════════════════════════════════════════════
-             NAVEGACIÓN POR TABS (Dashboard vs Reportes Detallados)
-        ═══════════════════════════════════════════════════════════ -->
-        <nav class="dashboard-tabs" @fadeIn>
-            <mat-tab-group [selectedIndex]="activeTabIndex()" animationDuration="300ms"
-                           (selectedIndexChange)="onTabChange($event)">
+        <!-- KPIs compactos siempre visibles -->
+        <div class="kpi-grid" @fadeIn>
+
+            <div class="kpi-card c-red" [class.has-alerts]="criticalRiskCount() > 0">
+                <div class="kc-top">
+                    <div class="kc-ico" style="background:#fef2f2;">
+                        <mat-icon style="color:#ef4444;">warning</mat-icon>
+                    </div>
+                    @if (criticalRiskCount() > 0) {
+                        <span class="kc-delta up">Urgente</span>
+                    } @else {
+                        <span class="kc-delta ok">Sin alertas</span>
+                    }
+                </div>
+                <div class="kc-num">{{ criticalRiskCount() }}</div>
+                <div class="kc-lbl">Alertas críticas</div>
+                <div class="kc-spark">
+                    <svg viewBox="0 0 100 30" preserveAspectRatio="none">
+                        <polyline points="0,26 18,22 35,24 52,16 68,18 82,8 100,6" fill="none" stroke="#ef4444" stroke-width="2" opacity=".6"/>
+                        <polyline points="0,26 18,22 35,24 52,16 68,18 82,8 100,6 100,30 0,30" fill="#ef4444" opacity=".07"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="kpi-card c-teal">
+                <div class="kc-top">
+                    <div class="kc-ico" style="background:#f0fdfa;">
+                        <mat-icon style="color:#0d9488;">people</mat-icon>
+                    </div>
+                </div>
+                <div class="kc-num">{{ totalVictimas() }}</div>
+                <div class="kc-lbl">Participantes totales</div>
+                <div class="kc-spark">
+                    <svg viewBox="0 0 100 30" preserveAspectRatio="none">
+                        <polyline points="0,24 18,20 35,18 52,20 68,14 82,10 100,8" fill="none" stroke="#0d9488" stroke-width="2" opacity=".6"/>
+                        <polyline points="0,24 18,20 35,18 52,20 68,14 82,10 100,8 100,30 0,30" fill="#0d9488" opacity=".07"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="kpi-card c-purple">
+                <div class="kc-top">
+                    <div class="kc-ico" style="background:#faf5ff;">
+                        <mat-icon style="color:#7c3aed;">location_on</mat-icon>
+                    </div>
+                </div>
+                <div class="kc-num zone-num">{{ zonaMasFrecuente() }}</div>
+                <div class="kc-lbl">Mayor concentración</div>
+                <div class="kc-spark">
+                    <svg viewBox="0 0 100 30" preserveAspectRatio="none">
+                        <polyline points="0,20 18,18 35,22 52,14 68,16 82,10 100,8" fill="none" stroke="#7c3aed" stroke-width="2" opacity=".6"/>
+                        <polyline points="0,20 18,18 35,22 52,14 68,16 82,10 100,8 100,30 0,30" fill="#7c3aed" opacity=".07"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="kpi-card c-blue">
+                <div class="kc-top">
+                    <div class="kc-ico" style="background:#eff6ff;">
+                        <mat-icon style="color:#3b82f6;">notifications</mat-icon>
+                    </div>
+                </div>
+                <div class="kc-num">{{ totalRespuestas() }}</div>
+                <div class="kc-lbl">Total alertas</div>
+                <div class="kc-spark">
+                    <svg viewBox="0 0 100 30" preserveAspectRatio="none">
+                        <polyline points="0,22 18,20 35,18 52,18 68,14 82,14 100,12" fill="none" stroke="#3b82f6" stroke-width="2" opacity=".6"/>
+                        <polyline points="0,22 18,20 35,18 52,18 68,14 82,14 100,12 100,30 0,30" fill="#3b82f6" opacity=".07"/>
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tabs de navegación -->
+        <div class="dash-tabs" @fadeIn>
+            <mat-tab-group [selectedIndex]="activeTabIndex()"
+                           animationDuration="300ms"
+                           (selectedIndexChange)="onTabChange($event)"
+                           class="custom-tabs">
                 <mat-tab>
                     <ng-template mat-tab-label>
                         <mat-icon>dashboard</mat-icon>
@@ -169,330 +260,233 @@
                 </mat-tab>
                 <mat-tab>
                     <ng-template mat-tab-label>
-                        <mat-icon style="color: #dc2626;">warning</mat-icon>
-                        <span style="color: #dc2626; font-weight: bold;">Casos Críticos</span>
+                        <mat-icon class="tab-icon-critical">warning</mat-icon>
+                        <span class="tab-label-critical">Casos Críticos</span>
                     </ng-template>
                 </mat-tab>
             </mat-tab-group>
-        </nav>
+        </div>
 
-        <!-- ═══════════════════════════════════════════════════════════
-             CONTENIDO TAB 1: RESUMEN EJECUTIVO
-        ═══════════════════════════════════════════════════════════ -->
+        <!-- ─── TAB 1: RESUMEN ─── -->
         @if (activeTabIndex() === 0) {
             <div class="tab-content" @fadeIn>
+                <div class="chart-layout">
+                    <mat-card class="chart-card primary">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <mat-icon>donut_large</mat-icon>
+                                Distribución por Zona
+                            </mat-card-title>
+                            <button mat-icon-button [matMenuTriggerFor]="zoneMenu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #zoneMenu="matMenu">
+                                <button mat-menu-item (click)="downloadChart('zone')">
+                                    <mat-icon>download</mat-icon>
+                                    Descargar
+                                </button>
+                                <button mat-menu-item [routerLink]="['/admin/report/zonas']">
+                                    <mat-icon>open_in_new</mat-icon>
+                                    Ver detalle
+                                </button>
+                            </mat-menu>
+                        </mat-card-header>
+                        <mat-card-content class="chart-content">
+                            @if (zoneChartOptions()) {
+                                <apx-chart
+                                        [series]="zoneChartOptions()!.series"
+                                        [chart]="zoneChartOptions()!.chart"
+                                        [labels]="zoneChartOptions()!.labels || []"
+                                        [colors]="zoneChartOptions()!.colors || []"
+                                        [plotOptions]="zoneChartOptions()!.plotOptions || {}"
+                                        [legend]="zoneChartOptions()!.legend || { position: 'right', fontSize: '12px' }">
+                                </apx-chart>
+                            }
+                        </mat-card-content>
+                    </mat-card>
 
-                <!-- KPIs Principales -->
-                <section class="kpi-section">
-                    <div class="kpi-grid">
-                        <!-- Riesgo Crítico -->
-                        <mat-card class="kpi-card critical" [class.has-alerts]="criticalRiskCount() > 0">
-                            <div class="kpi-visual">
-                                <div class="kpi-icon"
-                                     [style.background]="criticalRiskCount() > 0 ? '#ffebee' : '#e8f5e9'">
-                                    <mat-icon [style.color]="getAlertColor()">warning</mat-icon>
+                    <div class="side-panel">
+                        <mat-card class="summary-card">
+                            <mat-card-header>
+                                <mat-card-title>Resumen del Período</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="summary-item">
+                                    <span class="summary-label">Nivel de Alerta</span>
+                                    <mat-chip [class]="'alert-' + alertLevel().toLowerCase()">{{ alertLevel() }}</mat-chip>
                                 </div>
-                                @if (criticalRiskCount() > 0) {
-                                    <span class="alert-pulse"></span>
+                                <div class="summary-item">
+                                    <span class="summary-label">Etnia más afectada</span>
+                                    <span class="summary-value">{{ etniasMasAfectadas() }}</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Genero mas afectado</span>
+                                    <span class="summary-value">{{ etniasMasAfectadas() }}</span>
+                                </div>
+                                <mat-divider></mat-divider>
+                                <div class="quick-actions">
+                                    <button mat-stroked-button class="ph-btn" [routerLink]="['/admin/report/general']">
+                                        <mat-icon>open_in_new</mat-icon>
+                                        Ver reporte completo
+                                    </button>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card class="mini-trend-card">
+                            <mat-card-header>
+                                <mat-card-title>Evolución</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                @if (trendChartOptions()) {
+                                    <apx-chart
+                                            [series]="trendChartOptions()!.series"
+                                            [chart]="trendChartOptions()!.chart"
+                                            [stroke]="trendChartOptions()!.stroke || {}"
+                                            [fill]="trendChartOptions()!.fill || {}"
+                                            [xaxis]="trendChartOptions()!.xaxis || {}"
+                                            [colors]="trendChartOptions()!.colors || []">
+                                    </apx-chart>
                                 }
-                            </div>
-                            <div class="kpi-content">
-                                <span class="kpi-value" [class.critical-text]="criticalRiskCount() > 0">
-                                    {{ criticalRiskCount() }}
-                                </span>
-                                <span class="kpi-label">Alertas Críticas</span>
-                                @if (criticalRiskCount() > 0) {
-                                    <span class="kpi-trend urgent">Requiere atención inmediata</span>
-                                } @else {
-                                    <span class="kpi-trend stable">Sin alertas críticas</span>
-                                }
-                            </div>
-                        </mat-card>
-
-                        <!-- Participantes -->
-                        <mat-card class="kpi-card">
-                            <div class="kpi-icon" style="background: #e6faf0">
-                                <mat-icon style="color: #0066cc">people</mat-icon>
-                            </div>
-                            <div class="kpi-content">
-                                <span class="kpi-value">{{ totalVictimas() }}</span>
-                                <span class="kpi-label">Participantes</span>
-                                <span class="kpi-trend">Total registrado</span>
-                            </div>
-                        </mat-card>
-
-                        <!-- Zona Principal -->
-                        <mat-card class="kpi-card">
-                            <div class="kpi-icon" style="background: #fef3c7">
-                                <mat-icon style="color: #d97706">location_on</mat-icon>
-                            </div>
-                            <div class="kpi-content">
-                                <span class="kpi-value zone">{{ zonaMasFrecuente() }}</span>
-                                <span class="kpi-label">Zona Principal</span>
-                                <span class="kpi-trend">Mayor concentración</span>
-                            </div>
-                        </mat-card>
-
-                        <!-- Total Alertas -->
-                        <mat-card class="kpi-card">
-                            <div class="kpi-icon" style="background: #e6f7ff">
-                                <mat-icon style="color: #00bfff">notifications</mat-icon>
-                            </div>
-                            <div class="kpi-content">
-                                <span class="kpi-value">{{ totalRespuestas() }}</span>
-                                <span class="kpi-label">Total Alertas</span>
-                                <span class="kpi-trend">En el período seleccionado</span>
-                            </div>
+                            </mat-card-content>
                         </mat-card>
                     </div>
-                </section>
+                </div>
+            </div>
+        }
 
-                <!-- Gráficos Principales -->
-                <section class="main-charts">
-                    <div class="chart-layout">
-                        <!-- Gráfico grande: Distribución por Zona -->
-                        <mat-card class="chart-card primary">
+        <!-- ─── TAB 2: DEMOGRÁFICO ─── -->
+        @if (activeTabIndex() === 1) {
+            <div class="tab-content" @fadeIn>
+                @if (!hasData()) {
+                    <div class="empty-tab">
+                        <mat-icon>pie_chart</mat-icon>
+                        <p>Sin datos demográficos para el período seleccionado</p>
+                    </div>
+                } @else {
+                    <div class="demo-grid">
+                        <mat-card class="chart-card">
                             <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>donut_large</mat-icon>
-                                    Distribución por Zona
-                                </mat-card-title>
-                                <button mat-icon-button [matMenuTriggerFor]="zoneMenu">
-                                    <mat-icon>more_vert</mat-icon>
-                                </button>
-                                <mat-menu #zoneMenu="matMenu">
-                                    <button mat-menu-item (click)="downloadChart('zone')">
-                                        <mat-icon>download</mat-icon>
-                                        Descargar
-                                    </button>
-                                    <button mat-menu-item [routerLink]="['/admin/report/zonas']">
-                                        <mat-icon>open_in_new</mat-icon>
-                                        Ver detalle
-                                    </button>
-                                </mat-menu>
+                                <mat-card-title><mat-icon>wc</mat-icon> Por Género</mat-card-title>
                             </mat-card-header>
-                            <mat-card-content class="chart-content">
-                                @if (zoneChartOptions()) {
+                            <mat-card-content>
+                                @if (genderChartOptions()) {
                                     <apx-chart
-                                            [series]="zoneChartOptions()!.series"
-                                            [chart]="zoneChartOptions()!.chart"
-                                            [labels]="zoneChartOptions()!.labels || []"
-                                            [colors]="zoneChartOptions()!.colors || []"
-                                            [plotOptions]="zoneChartOptions()!.plotOptions || {}"
-                                            [legend]="zoneChartOptions()!.legend || { position: 'right', fontSize: '12px' }">
+                                            [series]="genderChartOptions()!.series"
+                                            [chart]="genderChartOptions()!.chart"
+                                            [labels]="genderChartOptions()!.labels || []"
+                                            [colors]="genderChartOptions()!.colors || []"
+                                            [plotOptions]="genderChartOptions()!.plotOptions || {}"
+                                            [legend]="genderChartOptions()!.legend || {}">
                                     </apx-chart>
                                 }
                             </mat-card-content>
                         </mat-card>
 
-                        <!-- Panel lateral: Resumen y acciones rápidas -->
-                        <div class="side-panel">
-                            <mat-card class="summary-card">
-                                <mat-card-header>
-                                    <mat-card-title>Resumen del Período</mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content>
-                                    <div class="summary-item">
-                                        <span class="summary-label">Nivel de Alerta</span>
-                                        <mat-chip [class]="'alert-' + alertLevel().toLowerCase()">
-                                            {{ alertLevel() }}
-                                        </mat-chip>
-                                    </div>
-                                    <div class="summary-item">
-                                        <span class="summary-label">Etnia más afectada</span>
-                                        <span class="summary-value">{{ etniasMasAfectadas() }}</span>
-                                    </div>
-                                    <mat-divider></mat-divider>
-                                    <div class="quick-actions">
-                                        <button mat-stroked-button color="primary"
-                                                [routerLink]="['/admin/report/general']">
-                                            <mat-icon>open_in_new</mat-icon>
-                                            Ver reporte completo
-                                        </button>
-                                    </div>
-                                </mat-card-content>
-                            </mat-card>
+                        <mat-card class="chart-card">
+                            <mat-card-header>
+                                <mat-card-title><mat-icon>groups</mat-icon> Por Etnia</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                @if (etniaChartOptions()) {
+                                    <apx-chart
+                                            [series]="etniaChartOptions()!.series"
+                                            [chart]="etniaChartOptions()!.chart"
+                                            [xaxis]="etniaChartOptions()!.xaxis || {}"
+                                            [colors]="etniaChartOptions()!.colors || []"
+                                            [plotOptions]="etniaChartOptions()!.plotOptions || {}"
+                                            [legend]="etniaChartOptions()!.legend || {}">
+                                    </apx-chart>
+                                }
+                            </mat-card-content>
+                        </mat-card>
 
-                            <!-- Mini gráfico: Tendencia -->
-                            <mat-card class="mini-trend-card">
-                                <mat-card-header>
-                                    <mat-card-title>Evolución</mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content>
-                                    @if (trendChartOptions()) {
-                                        <apx-chart
-                                                [series]="trendChartOptions()!.series"
-                                                [chart]="trendChartOptions()!.chart"
-                                                [stroke]="trendChartOptions()!.stroke || { curve: 'smooth', width: 3 }"
-                                                [colors]="trendChartOptions()!.colors || ['#0066cc']">
-                                        </apx-chart>
-                                    }
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
+                        <mat-card class="chart-card">
+                            <mat-card-header>
+                                <mat-card-title><mat-icon>accessibility</mat-icon> Discapacidad</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                @if (disabilityChartOptions()) {
+                                    <apx-chart
+                                            [series]="disabilityChartOptions()!.series"
+                                            [chart]="disabilityChartOptions()!.chart"
+                                            [labels]="disabilityChartOptions()!.labels || []"
+                                            [colors]="disabilityChartOptions()!.colors || []"
+                                            [plotOptions]="disabilityChartOptions()!.plotOptions || {}"
+                                            [legend]="disabilityChartOptions()!.legend || {}">
+                                    </apx-chart>
+                                }
+                            </mat-card-content>
+                        </mat-card>
+
+                        <mat-card class="chart-card">
+                            <mat-card-header>
+                                <mat-card-title><mat-icon>quiz</mat-icon> Top Preguntas</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                @if (topQuestionsOptions()) {
+                                    <apx-chart
+                                            [series]="topQuestionsOptions()!.series"
+                                            [chart]="topQuestionsOptions()!.chart"
+                                            [xaxis]="topQuestionsOptions()!.xaxis || {}"
+                                            [colors]="topQuestionsOptions()!.colors || []"
+                                            [plotOptions]="topQuestionsOptions()!.plotOptions || {}">
+                                    </apx-chart>
+                                }
+                            </mat-card-content>
+                        </mat-card>
                     </div>
-                </section>
-
-                <!-- Sección inferior: Top Alertas -->
-                <section class="bottom-section">
-                    <mat-card class="full-width-card">
-                        <mat-card-header>
-                            <mat-card-title>
-                                <mat-icon>priority_high</mat-icon>
-                                Señales de Alerta más Frecuentes
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            @if (topQuestionsOptions()) {
-                                <apx-chart
-                                        [series]="topQuestionsOptions()!.series"
-                                        [chart]="topQuestionsOptions()!.chart"
-                                        [plotOptions]="topQuestionsOptions()!.plotOptions || {}"
-                                        [xaxis]="topQuestionsOptions()!.xaxis || {}"
-                                        [colors]="topQuestionsOptions()!.colors || ['#dc2626']">
-                                </apx-chart>
-                            }
-                        </mat-card-content>
-                    </mat-card>
-                </section>
+                }
             </div>
         }
 
-        <!-- ═══════════════════════════════════════════════════════════
-             CONTENIDO TAB 2: ANÁLISIS DEMOGRÁFICO
-        ═══════════════════════════════════════════════════════════ -->
-        @if (activeTabIndex() === 1) {
-            <div class="tab-content" @fadeIn>
-                <section class="demo-grid">
-                    <mat-card class="demo-card">
-                        <mat-card-header>
-                            <mat-card-title>
-                                <mat-icon>face</mat-icon>
-                                Distribución por Género
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            @if (genderChartOptions()) {
-                                <apx-chart
-                                        [series]="genderChartOptions()!.series"
-                                        [chart]="genderChartOptions()!.chart"
-                                        [labels]="genderChartOptions()!.labels || []"
-                                        [colors]="genderChartOptions()!.colors || []"
-                                        [legend]="genderChartOptions()!.legend || { position: 'bottom' }">
-                                </apx-chart>
-                            }
-                        </mat-card-content>
-                    </mat-card>
-
-                    <mat-card class="demo-card">
-                        <mat-card-header>
-                            <mat-card-title>
-                                <mat-icon>accessible</mat-icon>
-                                Condición de Discapacidad
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            @if (disabilityChartOptions()) {
-                                <apx-chart
-                                        [series]="disabilityChartOptions()!.series"
-                                        [chart]="disabilityChartOptions()!.chart"
-                                        [labels]="disabilityChartOptions()!.labels || []"
-                                        [colors]="disabilityChartOptions()!.colors || []"
-                                        [legend]="disabilityChartOptions()!.legend || { position: 'bottom' }">
-                                </apx-chart>
-                            }
-                        </mat-card-content>
-                    </mat-card>
-
-                    <mat-card class="demo-card wide">
-                        <mat-card-header>
-                            <mat-card-title>
-                                <mat-icon>groups</mat-icon>
-                                Distribución por Etnia
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            @if (etniaChartOptions()) {
-                                <apx-chart
-                                        [series]="etniaChartOptions()!.series"
-                                        [chart]="etniaChartOptions()!.chart"
-                                        [plotOptions]="etniaChartOptions()!.plotOptions || {}"
-                                        [xaxis]="etniaChartOptions()!.xaxis || {}"
-                                        [colors]="etniaChartOptions()!.colors || ['#0066cc', '#00cc66', '#ffb300', '#00bfff', '#ff3333']">
-                                </apx-chart>
-                            }
-                        </mat-card-content>
-                    </mat-card>
-                </section>
-            </div>
-        }
-
-        <!-- ═══════════════════════════════════════════════════════════
-             CONTENIDO TAB 3: ANÁLISIS GEOGRÁFICO (Placeholder)
-        ═══════════════════════════════════════════════════════════ -->
-
+        <!-- ─── TAB 3: GEOGRÁFICO ─── -->
         @if (activeTabIndex() === 2) {
             <div class="tab-content" @fadeIn>
-
-                @if (!regionChartOptions()) {
+                @if (!regionsData().length) {
                     <div class="empty-tab">
                         <mat-icon>map</mat-icon>
                         <p>Sin datos geográficos para el período seleccionado</p>
                     </div>
                 } @else {
-                    <div class="geo-layout">
-
-                        <!-- Gráfico de barras horizontales -->
+                    <div class="geo-grid">
                         <mat-card class="chart-card primary">
                             <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>map</mat-icon>
-                                    Distribución por Provincia de Origen
-                                </mat-card-title>
-                                <span class="header-chip">{{ getTotalRegions() }} estudiantes</span>
+                                <mat-card-title><mat-icon>bar_chart</mat-icon> Por Región</mat-card-title>
                             </mat-card-header>
-                            <mat-card-content class="chart-content">
-                                <apx-chart
-                                        [series]="regionChartOptions()!.series"
-                                        [chart]="regionChartOptions()!.chart"
-                                        [plotOptions]="regionChartOptions()!.plotOptions || {}"
-                                        [xaxis]="regionChartOptions()!.xaxis || {}"
-                                        [colors]="regionChartOptions()!.colors || []"
-                                        [dataLabels]="regionChartOptions()!.dataLabels || {}"
-                                        [tooltip]="regionChartOptions()!.tooltip || {}">
-                                </apx-chart>
+                            <mat-card-content>
+                                @if (regionChartOptions()) {
+                                    <apx-chart
+                                            [series]="regionChartOptions()!.series"
+                                            [chart]="regionChartOptions()!.chart"
+                                            [xaxis]="regionChartOptions()!.xaxis || {}"
+                                            [colors]="regionChartOptions()!.colors || []"
+                                            [plotOptions]="regionChartOptions()!.plotOptions || {}"
+                                            [dataLabels]="regionChartOptions()!.dataLabels || {}"
+                                            [tooltip]="regionChartOptions()!.tooltip || {}">
+                                    </apx-chart>
+                                }
                             </mat-card-content>
                         </mat-card>
 
-                        <!-- Tabla resumen -->
-                        <mat-card class="geo-table-card">
+                        <mat-card class="chart-card">
                             <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>table_chart</mat-icon>
-                                    Resumen por Provincia
-                                </mat-card-title>
+                                <mat-card-title><mat-icon>table_chart</mat-icon> Ranking de Regiones</mat-card-title>
                             </mat-card-header>
-                            <mat-card-content class="table-content">
+                            <mat-card-content>
                                 <table class="geo-table">
                                     <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Provincia</th>
-                                        <th>Estudiantes</th>
-                                        <th>%</th>
-                                    </tr>
+                                    <tr><th>#</th><th>Región</th><th>Distribución</th><th>Total</th><th>%</th></tr>
                                     </thead>
                                     <tbody>
                                         @for (region of regionsData(); track region.label; let i = $index) {
                                             <tr>
                                                 <td class="rank">{{ i + 1 }}</td>
-                                                <td class="province-name">
-                                                    <div class="province-bar-wrap">
-                                                        <span>{{ region.label }}</span>
-                                                        <div class="province-bar">
-                                                            <div class="province-bar-fill"
-                                                                 [style.width.%]="getRegionPercentage(region.count)">
-                                                            </div>
+                                                <td class="region-name">{{ region.label }}</td>
+                                                <td class="bar-cell">
+                                                    <div class="mini-bar-track">
+                                                        <div class="mini-bar-fill"
+                                                             [style.width.%]="getRegionPercentage(region.count)">
                                                         </div>
                                                     </div>
                                                 </td>
@@ -504,6 +498,7 @@
                                     <tfoot>
                                     <tr>
                                         <td colspan="2">Total</td>
+                                        <td></td>
                                         <td class="count">{{ getTotalRegions() }}</td>
                                         <td class="pct">100%</td>
                                     </tr>
@@ -511,27 +506,20 @@
                                 </table>
                             </mat-card-content>
                         </mat-card>
-
                     </div>
                 }
-
             </div>
         }
 
-        <!-- ═══════════════════════════════════════════════════════════
-              CONTENIDO TAB 4: TENDENCIAS TEMPORALES
-         ═══════════════════════════════════════════════════════════ -->
+        <!-- ─── TAB 4: TENDENCIAS ─── -->
         @if (activeTabIndex() === 3) {
             <div class="tab-content" @fadeIn>
-
                 @if (!trendsData()) {
                     <div class="empty-tab">
                         <mat-icon>trending_up</mat-icon>
                         <p>Sin datos de tendencias para el período seleccionado</p>
                     </div>
                 } @else {
-
-                    <!-- KPIs rápidos de tendencias -->
                     <div class="trend-kpis">
                         <div class="trend-kpi">
                             <span class="trend-kpi-num">{{ trendsData()!.totalParticipants }}</span>
@@ -547,23 +535,17 @@
                         </div>
                         <div class="trend-kpi warning">
                             <span class="trend-kpi-num">
-                                {{
-                                    trendsData()!.totalParticipants > 0
-                                        ? ((trendsData()!.totalCritical / trendsData()!.totalParticipants) * 100 | number:'1.0-0') + '%'
-                                        : '0%'
-                                }}
+                                {{ trendsData()!.totalParticipants > 0
+                                ? ((trendsData()!.totalCritical / trendsData()!.totalParticipants) * 100 | number:'1.0-0') + '%'
+                                : '0%' }}
                             </span>
                             <span class="trend-kpi-lbl">Tasa de criticidad</span>
                         </div>
                     </div>
 
-                    <!-- Gráfico 1: Participaciones vs Críticos -->
                     <mat-card class="chart-card">
                         <mat-card-header>
-                            <mat-card-title>
-                                <mat-icon>show_chart</mat-icon>
-                                Participaciones vs Casos Críticos
-                            </mat-card-title>
+                            <mat-card-title><mat-icon>show_chart</mat-icon> Participaciones vs Casos Críticos</mat-card-title>
                             <span class="header-hint">Evolución diaria en el período</span>
                         </mat-card-header>
                         <mat-card-content>
@@ -581,16 +563,10 @@
                         </mat-card-content>
                     </mat-card>
 
-                    <!-- Gráficos 2 y 3 en grid -->
                     <div class="trend-bottom-grid">
-
-                        <!-- Gráfico 2: Distribución de niveles de riesgo por día -->
                         <mat-card class="chart-card">
                             <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>stacked_bar_chart</mat-icon>
-                                    Niveles de Riesgo por Día
-                                </mat-card-title>
+                                <mat-card-title><mat-icon>stacked_bar_chart</mat-icon> Niveles de Riesgo por Día</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
                                 @if (riskLevelChart()) {
@@ -608,13 +584,9 @@
                             </mat-card-content>
                         </mat-card>
 
-                        <!-- Gráfico 3: Puntaje promedio diario -->
                         <mat-card class="chart-card">
                             <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>insights</mat-icon>
-                                    Puntaje Promedio Diario
-                                </mat-card-title>
+                                <mat-card-title><mat-icon>insights</mat-icon> Puntaje Promedio Diario</mat-card-title>
                                 <span class="header-hint">Índice de riesgo institucional</span>
                             </mat-card-header>
                             <mat-card-content>
@@ -630,17 +602,12 @@
                                 }
                             </mat-card-content>
                         </mat-card>
-
                     </div>
                 }
-
             </div>
         }
 
-
-        <!-- ═══════════════════════════════════════════════════════════
-             CONTENIDO TAB 5: CASOS CRÍTICOS (Placeholder)
-        ═══════════════════════════════════════════════════════════ -->
+        <!-- ─── TAB 5: CASOS CRÍTICOS ─── -->
         @if (activeTabIndex() === 4) {
             <div class="tab-content" @fadeIn>
                 <app-critical-report></app-critical-report>

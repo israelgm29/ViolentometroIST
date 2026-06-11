@@ -1,18 +1,20 @@
-<h2 mat-dialog-title class="dialog-header">
-    <mat-icon color="primary">{{ isEdit ? 'edit' : 'add_business' }}</mat-icon>
-    {{ isEdit ? 'Editar' : 'Registrar Nuevo' }} Instituto
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon [style.color]="isEdit ? '#f59e0b' : '#10b981'">
+        {{ isEdit ? 'edit' : 'add_business' }}
+    </mat-icon>
+    {{ isEdit ? 'Editar Instituto' : 'Nuevo Instituto' }}
 </h2>
 
-<mat-dialog-content [formGroup]="form" class="form-container">
+<mat-dialog-content [formGroup]="form" class="dialog-content">
     <div class="form-grid">
 
-        <!-- ── LOGO ────────────────────────────────────────── -->
-        <div class="col-12 logo-section">
-            <div class="section-title">
-                <mat-icon inline>image</mat-icon>
-                Logo Institucional
-            </div>
+        <!-- ── Sección 1: Logo ────────────────────────────────────────── -->
+        <div class="section-divider full-width">
+            <mat-icon>image</mat-icon>
+            <span>Logo Institucional</span>
+        </div>
 
+        <div class="input-wrapper full-width">
             <div class="logo-uploader">
                 <!-- Preview -->
                 <div class="logo-preview" [class.has-logo]="logoPreview">
@@ -46,93 +48,136 @@
             </div>
         </div>
 
-        <!-- ── DATOS BÁSICOS ────────────────────────────────── -->
-        <mat-form-field appearance="outline" class="col-6">
-            <mat-label>Código</mat-label>
-            <mat-icon matPrefix>qr_code</mat-icon>
-            <input matInput formControlName="code" placeholder="Ej: INST001">
-            <mat-error *ngIf="form.get('code')?.invalid">Requerido</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="col-6">
-            <mat-label>Nombre Corto / Siglas</mat-label>
-            <mat-icon matPrefix>label</mat-icon>
-            <input matInput formControlName="shortName" placeholder="Ej: ITSM">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="col-12">
-            <mat-label>Nombre Completo del Instituto</mat-label>
-            <mat-icon matPrefix>business</mat-icon>
-            <input matInput formControlName="name">
-            <mat-error *ngIf="form.get('name')?.invalid">El nombre es obligatorio</mat-error>
-        </mat-form-field>
-
-        <!-- ── UBICACIÓN ────────────────────────────────────── -->
-        <div class="section-title col-12">
-            <mat-icon inline>location_on</mat-icon>
-            Ubicación Geográfica
+        <!-- ── Sección 2: Datos Básicos ────────────────────────────────── -->
+        <div class="section-divider full-width">
+            <mat-icon>business</mat-icon>
+            <span>Datos Básicos</span>
         </div>
 
-        <mat-form-field appearance="outline" class="col-12">
-            <mat-label>Dirección Exacta</mat-label>
-            <input matInput formControlName="address">
-            <mat-error *ngIf="form.get('address')?.invalid">Requerido</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="col-4">
-            <mat-label>País</mat-label>
-            <input matInput formControlName="country">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="col-4">
-            <mat-label>Provincia</mat-label>
-            <input matInput formControlName="province">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="col-4">
-            <mat-label>Ciudad</mat-label>
-            <input matInput formControlName="city">
-        </mat-form-field>
-
-        <!-- ── CONTACTO ─────────────────────────────────────── -->
-        <div class="section-title col-12">
-            <mat-icon inline>contact_mail</mat-icon>
-            Información de Contacto
+        <div class="input-wrapper">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>Código</mat-label>
+                <input matInput formControlName="code" placeholder="Ej: INST001">
+                <mat-icon matSuffix>qr_code</mat-icon>
+                @if (form.get('code')?.hasError('required') && form.get('code')?.touched) {
+                    <mat-error>El código es obligatorio</mat-error>
+                }
+            </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline" class="col-6">
-            <mat-label>Teléfono</mat-label>
-            <mat-icon matPrefix>phone</mat-icon>
-            <input matInput formControlName="phone">
-        </mat-form-field>
+        <div class="input-wrapper">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>Nombre Corto / Siglas</mat-label>
+                <input matInput formControlName="shortName" placeholder="Ej: ITSM">
+                <mat-icon matSuffix>label</mat-icon>
+            </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="col-6">
-            <mat-label>Email Institucional</mat-label>
-            <mat-icon matPrefix>alternate_email</mat-icon>
-            <input matInput formControlName="email" type="email">
-            <mat-error *ngIf="form.get('email')?.hasError('email')">Formato inválido</mat-error>
-        </mat-form-field>
+        <div class="input-wrapper full-width">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>Nombre Completo del Instituto</mat-label>
+                <input matInput formControlName="name">
+                <mat-icon matSuffix>business</mat-icon>
+                @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+                    <mat-error>El nombre es obligatorio</mat-error>
+                }
+            </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="col-12">
-            <mat-label>Sitio Web (URL)</mat-label>
-            <mat-icon matPrefix>language</mat-icon>
-            <input matInput formControlName="webUrl" placeholder="https://www.ejemplo.edu.ec">
-        </mat-form-field>
+        <!-- ── Sección 3: Ubicación ────────────────────────────────────── -->
+        <div class="section-divider full-width">
+            <mat-icon>location_on</mat-icon>
+            <span>Ubicación Geográfica</span>
+        </div>
 
+        <div class="input-wrapper full-width">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>Dirección Exacta</mat-label>
+                <input matInput formControlName="address">
+                <mat-icon matSuffix>place</mat-icon>
+                @if (form.get('address')?.hasError('required') && form.get('address')?.touched) {
+                    <mat-error>La dirección es obligatoria</mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <div class="input-wrapper">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>País</mat-label>
+                <input matInput formControlName="country">
+                <mat-icon matSuffix>public</mat-icon>
+            </mat-form-field>
+        </div>
+
+        <div class="input-wrapper">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>Provincia</mat-label>
+                <input matInput formControlName="province">
+                <mat-icon matSuffix>map</mat-icon>
+            </mat-form-field>
+        </div>
+
+        <div class="input-wrapper">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>Ciudad</mat-label>
+                <input matInput formControlName="city">
+                <mat-icon matSuffix>location_city</mat-icon>
+            </mat-form-field>
+        </div>
+
+        <!-- ── Sección 4: Contacto ─────────────────────────────────────── -->
+        <div class="section-divider full-width">
+            <mat-icon>contact_mail</mat-icon>
+            <span>Información de Contacto</span>
+        </div>
+
+        <div class="input-wrapper">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>Teléfono</mat-label>
+                <input matInput formControlName="phone">
+                <mat-icon matSuffix>phone</mat-icon>
+            </mat-form-field>
+        </div>
+
+        <div class="input-wrapper">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>Email Institucional</mat-label>
+                <input matInput formControlName="email" type="email">
+                <mat-icon matSuffix>alternate_email</mat-icon>
+                @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+                    <mat-error>Formato de email inválido</mat-error>
+                }
+            </mat-form-field>
+        </div>
+
+        <div class="input-wrapper full-width">
+            <mat-form-field appearance="outline" class="full-width form-field">
+                <mat-label>Sitio Web (URL)</mat-label>
+                <input matInput formControlName="webUrl" placeholder="https://www.ejemplo.edu.ec">
+                <mat-icon matSuffix>language</mat-icon>
+            </mat-form-field>
+        </div>
     </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="dialog-actions">
-    <button mat-button (click)="close()">Cancelar</button>
-    <button mat-flat-button color="primary"
+    <button mat-button class="cancel-btn" (click)="close()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+    </button>
+    <button mat-flat-button
+            class="save-btn"
             [disabled]="form.invalid || uploadingLogo"
-            (click)="save()">
+            (click)="save()"
+            [style.background-color]="isEdit ? '#f59e0b' : '#10b981'">
         @if (uploadingLogo) {
             <mat-spinner diameter="18" style="margin-right:8px"></mat-spinner>
             Guardando...
         } @else {
-            <mat-icon>{{ isEdit ? 'save' : 'add_circle' }}</mat-icon>
-            {{ isEdit ? 'Actualizar Instituto' : 'Guardar Instituto' }}
+            <ng-container>
+                <mat-icon>{{ isEdit ? 'save' : 'check_circle' }}</mat-icon>
+                {{ isEdit ? 'Actualizar Instituto' : 'Guardar Instituto' }}
+            </ng-container>
         }
     </button>
 </mat-dialog-actions>

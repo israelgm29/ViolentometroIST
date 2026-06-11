@@ -22,7 +22,7 @@ import { finalize }                 from 'rxjs';
     MatButtonModule, MatIconModule, MatProgressSpinnerModule,
   ],
   templateUrl: './login.html',
-  styleUrls:   ['./login.css']
+  styleUrls:   ['./login.scss']
 })
 export class Login {
 
@@ -56,7 +56,13 @@ export class Login {
     this.auth.login(this.loginForm.value)
         .pipe(finalize(() => this.loading.set(false)))
         .subscribe({
-          next: () => this.router.navigate(['/admin/dashboard']),
+          next: () => {
+            // Cargar sesión completa para obtener datos del usuario
+            this.auth.loadSession().subscribe({
+              next: () => this.router.navigate(['/admin/dashboard']),
+              error: () => this.router.navigate(['/admin/dashboard'])
+            });
+          },
           error: (err) => {
             if (err.status === 401 || err.status === 403) {
               this.errorMessage.set('Credenciales incorrectas. Verifica tu email y contraseña.');

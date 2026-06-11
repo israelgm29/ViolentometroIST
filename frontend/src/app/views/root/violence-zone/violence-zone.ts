@@ -1,25 +1,25 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatCard, MatCardContent} from "@angular/material/card";
-import {MatIconModule} from "@angular/material/icon";
-import {MatDialog} from "@angular/material/dialog";
-import {ZoneService} from "../../../services/zone.service";
-import {ToastrService} from "ngx-toastr";
-import {ViolenceZoneInterface} from "../../../models/zone";
-import {MatButtonModule} from "@angular/material/button";
-import {MatTooltipModule} from "@angular/material/tooltip";
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatCard, MatCardContent } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatDialog } from "@angular/material/dialog";
+import { ZoneService } from "../../../services/zone.service";
+import { ToastrService } from "ngx-toastr";
+import { ViolenceZoneInterface } from "../../../models/zone";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import {
     MatTableDataSource,
     MatTableModule
 } from "@angular/material/table";
-import {MatMenu, MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
+import { MatMenu, MatMenuModule, MatMenuTrigger } from "@angular/material/menu";
 import * as XLSX from "xlsx";
-import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {ZoneFormDialog} from "../../../components/zone-form-dialog/zone-form-dialog";
-import {ZoneDetailDialog} from "../../../components/zone-detail-dialog/zone-detail-dialog";
-import {ConfirmDialog} from "../../../components/confirm-dialog/confirm-dialog";
-import {MatProgressBar} from "@angular/material/progress-bar";
+import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { ZoneFormDialog } from "../../../components/zone-form-dialog/zone-form-dialog";
+import { ZoneDetailDialog } from "../../../components/zone-detail-dialog/zone-detail-dialog";
+import { ConfirmDialog } from "../../../components/confirm-dialog/confirm-dialog";
+import { MatProgressBar } from "@angular/material/progress-bar";
 
 @Component({
     selector: 'app-violence-zone',
@@ -38,7 +38,7 @@ import {MatProgressBar} from "@angular/material/progress-bar";
         MatMenuTrigger, MatProgressBar
     ],
     templateUrl: './violence-zone.html',
-    styleUrl: './violence-zone.css',
+    styleUrl: './violence-zone.scss',
 })
 export class ViolenceZone implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -142,7 +142,7 @@ export class ViolenceZone implements OnInit, AfterViewInit {
     deleteZone(id: number) {
         const dialogRef = this.dialog.open(ConfirmDialog, {
             width: '350px',
-            data: {message: '¿Estás seguro de que deseas eliminar esta Zona? Esta acción no se puede deshacer.'}
+            data: { message: '¿Estás seguro de que deseas eliminar esta Zona? Esta acción no se puede deshacer.' }
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {

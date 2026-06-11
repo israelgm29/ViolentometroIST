@@ -99,11 +99,16 @@ import {BulkUploadResult} from "../../services/bulk-upload.service";
     </div>
   `,
   styles: [`
-    .result-dialog { min-width: 540px; font-family: 'Segoe UI', system-ui, sans-serif; }
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    .result-dialog {
+      min-width: 540px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
 
     .result-header {
       padding: 20px 24px;
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 1px solid #e5e7eb;
 
       .header-left { display: flex; align-items: center; gap: 14px; }
 
@@ -115,12 +120,12 @@ import {BulkUploadResult} from "../../services/bulk-upload.service";
         mat-icon { font-size: 26px; width: 26px; height: 26px; }
       }
 
-      h2 { margin: 0; font-size: 1.05rem; font-weight: 700; }
-      p  { margin: 3px 0 0; font-size: 0.8rem; opacity: 0.75; }
+      h2 { margin: 0; font-size: 1.05rem; font-weight: 700; color: #111827; }
+      p  { margin: 3px 0 0; font-size: 0.8rem; color: #4b5563; }
 
-      &.all-ok  { background: #f0fdf4; .status-icon { background: #dcfce7; mat-icon { color: #16a34a; } } h2, p { color: #14532d; } }
-      &.partial { background: #fffbeb; .status-icon { background: #fef3c7; mat-icon { color: #d97706; } } h2, p { color: #78350f; } }
-      &.all-fail{ background: #fef2f2; .status-icon { background: #fee2e2; mat-icon { color: #dc2626; } } h2, p { color: #7f1d1d; } }
+      &.all-ok  { background: #f0fdfa; .status-icon { background: #ccfbf1; mat-icon { color: #0d9488; } } h2, p { color: #0f766e; } }
+      &.partial { background: #faf5ff; .status-icon { background: #ede9fe; mat-icon { color: #7c3aed; } } h2, p { color: #6d28d9; } }
+      &.all-fail{ background: #fff1f2; .status-icon { background: #fee2e2; mat-icon { color: #ef4444; } } h2, p { color: #b91c1c; } }
     }
 
     .metrics-row {
@@ -133,14 +138,14 @@ import {BulkUploadResult} from "../../services/bulk-upload.service";
 
       .metric-value {
         font-size: 2.4rem; font-weight: 800; line-height: 1; letter-spacing: -1px;
-        &.created { color: #16a34a; }
-        &.updated { color: #2563eb; }
-        &.errors  { color: #dc2626; }
+        &.created { color: #0d9488; }
+        &.updated { color: #7c3aed; }
+        &.errors  { color: #ef4444; }
       }
 
       .metric-label {
         display: flex; align-items: center; gap: 4px;
-        font-size: 0.75rem; font-weight: 600; color: #6b7280;
+        font-size: 0.75rem; font-weight: 600; color: #4b5563;
         text-transform: uppercase; letter-spacing: 0.5px;
         mat-icon { font-size: 14px; width: 14px; height: 14px; }
       }
@@ -155,24 +160,24 @@ import {BulkUploadResult} from "../../services/bulk-upload.service";
 
     .progress-segment {
       height: 100%; transition: width 0.6s ease;
-      &.success { background: #16a34a; }
-      &.fail    { background: #dc2626; }
+      &.success { background: #0d9488; }
+      &.fail    { background: #ef4444; }
     }
 
     .progress-labels {
       display: flex; justify-content: space-between;
       font-size: 0.72rem; color: #9ca3af; margin-bottom: 20px;
-      .label-ok   { color: #16a34a; font-weight: 600; }
-      .label-fail { color: #dc2626; font-weight: 600; }
+      .label-ok   { color: #0d9488; font-weight: 600; }
+      .label-fail { color: #ef4444; font-weight: 600; }
     }
 
     .errors-section { border: 1px solid #fecaca; border-radius: 10px; overflow: hidden; }
 
     .errors-header {
       display: flex; align-items: center; gap: 8px;
-      padding: 10px 16px; background: #fef2f2;
-      font-size: 0.85rem; font-weight: 600; color: #991b1b;
-      mat-icon { font-size: 18px; width: 18px; height: 18px; color: #dc2626; }
+      padding: 10px 16px; background: #fff1f2;
+      font-size: 0.85rem; font-weight: 600; color: #b91c1c;
+      mat-icon { font-size: 18px; width: 18px; height: 18px; color: #ef4444; }
     }
 
     .errors-table { font-size: 0.82rem; }
@@ -180,9 +185,9 @@ import {BulkUploadResult} from "../../services/bulk-upload.service";
     .errors-table-head {
       display: grid; grid-template-columns: 60px 120px 1fr;
       padding: 8px 16px; background: #f9fafb;
-      color: #6b7280; font-weight: 700; font-size: 0.72rem;
+      color: #4b5563; font-weight: 700; font-size: 0.72rem;
       text-transform: uppercase; letter-spacing: 0.5px;
-      border-bottom: 1px solid #f3f4f6;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .errors-table-body {
@@ -195,19 +200,22 @@ import {BulkUploadResult} from "../../services/bulk-upload.service";
       display: grid; grid-template-columns: 60px 120px 1fr;
       padding: 9px 16px; border-bottom: 1px solid #f9fafb; align-items: center;
       &:last-child { border-bottom: none; }
-      &:hover { background: #fef9f9; }
-      .col-row    { font-weight: 700; color: #374151; }
-      .col-dni    { font-weight: 600; color: #374151; font-family: monospace; }
-      .col-reason { color: #dc2626; font-size: 0.8rem; }
+      &:hover { background: #faf5ff; }
+      .col-row    { font-weight: 700; color: #111827; }
+      .col-dni    { font-weight: 600; color: #111827; font-family: monospace; }
+      .col-reason { color: #ef4444; font-size: 0.8rem; }
     }
 
-    mat-dialog-actions { padding: 16px 24px !important; border-top: 1px solid #f3f4f6; }
+    mat-dialog-actions { padding: 16px 24px !important; border-top: 1px solid #e5e7eb; }
 
     .btn-close {
-      background: #1e3a5f !important;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
       color: white !important;
       padding: 0 24px !important;
-      font-weight: 600 !important;
+      font-weight: 700 !important;
+      border-radius: 12px !important;
+      height: 48px !important;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.28) !important;
     }
   `]
 })

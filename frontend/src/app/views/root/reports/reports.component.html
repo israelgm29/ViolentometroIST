@@ -1,85 +1,125 @@
-<div class="reports-page">
+<div class="reports-container">
 
-    <!-- HEADER -->
-    <header class="reports-header">
-        <div class="header-left">
-            <div class="header-icon">
-                <mat-icon>summarize</mat-icon>
-            </div>
+    <!-- ═══════════════════════════════════════════════════
+         PAGE HEADER
+    ═══════════════════════════════════════════════════ -->
+    <div class="page-header">
+        <div class="ph-left">
             <div>
-                <h1>Módulo de Reportes</h1>
-                <p class="header-sub">Genera y descarga reportes institucionales en PDF</p>
+                <div class="breadcrumb">
+                    <span>Inicio</span>
+                    <mat-icon>chevron_right</mat-icon>
+                    <span class="cur">Centro de Reportes</span>
+                </div>
+                <h1 class="page-title">Centro de Reportes 📊</h1>
             </div>
         </div>
-    </header>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <span class="count-badge">
+                <mat-icon>description</mat-icon>
+                {{ reports.length }} reportes
+            </span>
+        </div>
+    </div>
 
-    <!-- CONFIGURACIÓN GLOBAL -->
-    <section class="config-bar">
-        <div class="config-group">
-            <label class="config-label">
-                <mat-icon>assignment</mat-icon> Cuestionario
-            </label>
-            <mat-form-field appearance="outline" class="config-field">
-                <mat-select [ngModel]="selectedSurvey()"
-                            (ngModelChange)="selectedSurvey.set($event)">
-                    @for (s of surveys(); track s.id) {
-                        <mat-option [value]="s">{{ s.title }}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
+    <!-- ═══════════════════════════════════════════════════
+         WELCOME CARD
+    ═══════════════════════════════════════════════════ -->
+    <div class="welcome-card">
+        <div class="wc-left">
+            <h2 class="wc-title">Genera Reportes Institucionales</h2>
+            <p class="wc-sub">Descarga análisis detallados en PDF y Excel para toma de decisiones.</p>
+        </div>
+        <div class="wc-deco">
+            <mat-icon>summarize</mat-icon>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         CONFIGURATION BAR
+    ═══════════════════════════════════════════════════ -->
+    <mat-card class="config-card">
+        <div class="config-header">
+            <mat-icon>tune</mat-icon>
+            <span>Configuración del Reporte</span>
         </div>
 
-        <div class="config-group">
-            <label class="config-label">
-                <mat-icon>date_range</mat-icon> Período
-            </label>
-            <mat-form-field appearance="outline" class="config-field wide">
-                <mat-date-range-input [rangePicker]="picker">
-                    <input matStartDate [ngModel]="startDate()"
-                           (ngModelChange)="startDate.set($event)">
-                    <input matEndDate [ngModel]="endDate()"
-                           (ngModelChange)="endDate.set($event)">
-                </mat-date-range-input>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
-            </mat-form-field>
-        </div>
+        <div class="config-grid">
+            <div class="config-item">
+                <label class="config-label">
+                    <mat-icon>assignment</mat-icon>
+                    Cuestionario
+                </label>
+                <mat-form-field appearance="outline" class="config-field">
+                    <mat-select [ngModel]="selectedSurvey()"
+                                (ngModelChange)="selectedSurvey.set($event)">
+                        @for (s of surveys(); track s.id) {
+                            <mat-option [value]="s">{{ s.title }}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-icon matSuffix>arrow_drop_down</mat-icon>
+                </mat-form-field>
+            </div>
 
-        <div class="config-actions">
-            <button mat-stroked-button (click)="setToday()">
-                <mat-icon>today</mat-icon> Hoy
-            </button>
-            <button mat-stroked-button (click)="setLastMonth()">
-                <mat-icon>date_range</mat-icon> Último mes
-            </button>
+            <div class="config-item">
+                <label class="config-label">
+                    <mat-icon>date_range</mat-icon>
+                    Período
+                </label>
+                <mat-form-field appearance="outline" class="config-field">
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate [ngModel]="startDate()"
+                               (ngModelChange)="startDate.set($event)">
+                        <input matEndDate [ngModel]="endDate()"
+                               (ngModelChange)="endDate.set($event)">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+
+            <div class="config-actions">
+                <button mat-stroked-button class="quick-btn" (click)="setToday()">
+                    <mat-icon>today</mat-icon>
+                    Hoy
+                </button>
+                <button mat-stroked-button class="quick-btn" (click)="setLastMonth()">
+                    <mat-icon>date_range</mat-icon>
+                    Mes
+                </button>
+            </div>
         </div>
 
         @if (selectedSurvey()) {
             <div class="active-config">
-                <mat-icon>info_outline</mat-icon>
+                <mat-icon>info</mat-icon>
                 <span>
                     <strong>{{ selectedSurvey()!.title }}</strong>
                     · {{ startDate() | date:'dd MMM yyyy' }} — {{ endDate() | date:'dd MMM yyyy' }}
                 </span>
             </div>
         }
-    </section>
+    </mat-card>
 
-    <!-- ADVERTENCIA -->
+    <!-- ═══════════════════════════════════════════════════
+         WARNING
+    ═══════════════════════════════════════════════════ -->
     @if (!canDownload()) {
-        <div class="no-survey-warning">
+        <div class="warning-banner">
             <mat-icon>warning_amber</mat-icon>
             <span>Selecciona un cuestionario para habilitar la descarga de reportes</span>
         </div>
     }
 
-    <!-- REPORTES POR CATEGORÍA -->
+    <!-- ═══════════════════════════════════════════════════
+         REPORTS BY CATEGORY
+    ═══════════════════════════════════════════════════ -->
     @for (category of categories; track category) {
-        <section class="report-category">
-            <h2 class="category-title">
-                <span class="category-dot"></span>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="section-label">
+                <mat-icon>folder</mat-icon>
                 {{ category }}
-            </h2>
+            </div>
 
             <div class="reports-grid">
                 @for (report of reportsByCategory(category); track report.id) {
@@ -113,7 +153,7 @@
                                 <div class="tracking-input">
                                     <input type="text"
                                            class="dni-input"
-                                           placeholder="Ingresa el DNI del estudiante"
+                                           placeholder="DNI del estudiante"
                                            [value]="trackingDni()"
                                            (input)="trackingDni.set($any($event.target).value)"
                                            maxlength="10">
@@ -125,8 +165,10 @@
                                             <mat-spinner diameter="16"></mat-spinner>
                                             <span>Generando...</span>
                                         } @else {
-                                            <mat-icon>table_view</mat-icon>
-                                            <span>Descargar Excel</span>
+                                            <ng-container>
+                                                <mat-icon>table_view</mat-icon>
+                                                <span>Descargar</span>
+                                            </ng-container>
                                         }
                                     </button>
                                 </div>
@@ -169,8 +211,10 @@
                                             <mat-spinner diameter="16"></mat-spinner>
                                             <span>Generando...</span>
                                         } @else {
-                                            <mat-icon>table_view</mat-icon>
-                                            <span>Descargar Excel</span>
+                                            <ng-container>
+                                                <mat-icon>table_view</mat-icon>
+                                                <span>Descargar</span>
+                                            </ng-container>
                                         }
                                     </button>
                                 </div>
@@ -185,11 +229,15 @@
                                         <mat-spinner diameter="16"></mat-spinner>
                                         <span>Generando...</span>
                                     } @else if (report.id === 'critical-excel') {
-                                        <mat-icon>table_view</mat-icon>
-                                        <span>Descargar Excel</span>
+                                        <ng-container>
+                                            <mat-icon>table_view</mat-icon>
+                                            <span>Descargar</span>
+                                        </ng-container>
                                     } @else {
-                                        <mat-icon>picture_as_pdf</mat-icon>
-                                        <span>Descargar PDF</span>
+                                        <ng-container>
+                                            <mat-icon>picture_as_pdf</mat-icon>
+                                            <span>Descargar</span>
+                                        </ng-container>
                                     }
                                 </button>
                             }
@@ -198,7 +246,7 @@
                     </div>
                 }
             </div>
-        </section>
+        </div>
     }
 
 </div>

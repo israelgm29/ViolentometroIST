@@ -34,7 +34,7 @@ import {MatIcon} from "@angular/material/icon";
     MatIcon,
   ],
   templateUrl: './user-form-dialog.html',
-  styleUrl: './user-form-dialog.css',
+  styleUrl: './user-form-dialog.scss',
 })
 export class UserFormDialog {
   userForm: FormGroup;

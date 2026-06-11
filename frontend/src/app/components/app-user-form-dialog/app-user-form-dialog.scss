@@ -1,0 +1,168 @@
+// ══════════════════════════════════════════════════════
+//  APP USER FORM DIALOG — Estilo Panelix
+//  Paleta: Morado (#7c3aed) + Teal (#0d9488)
+//  Misma base que zone-form-dialog.scss
+// ══════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+$purple      : #7c3aed;
+$purple-dark : #6d28d9;
+$purple-pale : #faf5ff;
+$purple-light: #ede9fe;
+$teal        : #0d9488;
+$teal-pale   : #f0fdfa;
+$red         : #ef4444;
+$amber       : #f59e0b;
+$green       : #10b981;
+$green-pale  : #f0fdf4;
+$text-primary: #111827;
+$text-muted  : #6b7280;
+$border      : #f1f0fb;
+$bg          : #f8f7ff;
+$font        : 'Plus Jakarta Sans', sans-serif;
+
+// ── Host ─────────────────────────────────────────────
+:host { font-family: $font; }
+
+// ══════════════════════════════════════════════════════
+//  DIALOG TITLE
+// ══════════════════════════════════════════════════════
+
+.dialog-title {
+    display    : flex;
+    align-items: center;
+    gap        : 10px;
+    font-family: $font !important;
+    font-size  : 1.1rem !important;
+    font-weight: 800 !important;
+    color      : $text-primary;
+    padding    : 20px 24px 12px !important;
+    margin     : 0 !important;
+    border-bottom: 1px solid $border;
+
+    mat-icon {
+        font-size: 22px !important;
+        width    : 22px !important;
+        height   : 22px !important;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  DIALOG CONTENT
+// ══════════════════════════════════════════════════════
+
+.dialog-content {
+    padding   : 20px 24px !important;
+    max-height: 68vh !important;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar       { width: 4px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 2px; }
+}
+
+// ══════════════════════════════════════════════════════
+//  FORM GRID
+// ══════════════════════════════════════════════════════
+
+.form-grid {
+    display              : grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap                  : 14px;
+}
+
+// ══════════════════════════════════════════════════════
+//  SECTION DIVIDER
+// ══════════════════════════════════════════════════════
+
+.section-divider {
+    display       : flex;
+    align-items   : center;
+    gap           : 8px;
+    padding       : 10px 0 6px;
+    font-size     : 11px;
+    font-weight   : 700;
+    color         : $text-muted;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    border-bottom : 1px solid $border;
+    margin-bottom : 14px;
+
+    mat-icon { font-size: 15px; width: 15px; height: 15px; color: $purple; }
+}
+
+.full-width { grid-column: span 2; }
+
+// ══════════════════════════════════════════════════════
+//  FORM FIELDS
+// ══════════════════════════════════════════════════════
+
+.input-wrapper { margin-bottom: 0; }
+
+.form-field {
+    width: 100% !important;
+
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper { min-height: 18px; }
+    ::ng-deep .mat-mdc-text-field-wrapper           { border-radius: 10px !important; }
+    ::ng-deep .mdc-notched-outline__leading,
+    ::ng-deep .mdc-notched-outline__notch,
+    ::ng-deep .mdc-notched-outline__trailing        { border-color: $border !important; }
+
+    &:focus-within ::ng-deep {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing { border-color: $purple !important; }
+    }
+
+    ::ng-deep input,
+    ::ng-deep textarea { font-family: $font; font-size: 13px; }
+}
+
+// ══════════════════════════════════════════════════════
+//  DIALOG ACTIONS
+// ══════════════════════════════════════════════════════
+
+.dialog-actions {
+    padding      : 14px 24px !important;
+    border-top   : 1px solid $border;
+    gap          : 8px;
+}
+
+.cancel-btn {
+    height       : 36px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 600 !important;
+    color        : $text-muted !important;
+    border-color : $border !important;
+    transition   : all .2s !important;
+
+    &:hover { border-color: $red !important; color: $red !important; }
+}
+
+.save-btn {
+    height       : 36px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 700 !important;
+    color        : #fff !important;
+    box-shadow   : 0 4px 12px rgba($purple, .25) !important;
+    transition   : all .2s !important;
+
+    &:hover:not([disabled]) { filter: brightness(1.08) !important; transform: translateY(-1px) !important; }
+    &[disabled] { opacity: .55 !important; transform: none !important; box-shadow: none !important; }
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+// ══════════════════════════════════════════════════════
+//  RESPONSIVE
+// ══════════════════════════════════════════════════════
+
+@media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .full-width { grid-column: span 1; }
+}

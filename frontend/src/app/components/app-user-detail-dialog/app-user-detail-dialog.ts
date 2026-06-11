@@ -23,14 +23,13 @@ interface InfoItem {
         MatDividerModule,
         MatIcon,
         MatListModule,
-        MatListItem,
         MatDialogActions,
         MatButtonModule,
         MatDialogClose
     ],
     providers: [DatePipe],
     templateUrl: './app-user-detail-dialog.html',
-    styleUrl: './app-user-detail-dialog.css',
+    styleUrl: './app-user-detail-dialog.scss',
 })
 export class AppUserDetailDialog implements OnInit {
 
@@ -45,18 +44,17 @@ export class AppUserDetailDialog implements OnInit {
 
     private loadDataArrays() {
         this.personalInfo = [
-            { label: 'Cédula', value: this.appUser.dni, color: '#3f51b5', isBold: true },
-            { label: 'Género', value: this.appUser.gender.name || '---' },
-            { label: 'Fecha de Nacimiento', value: this.datePipe.transform(this.appUser.birthdate, 'dd/MM/yyyy') },
-            { label: 'Edad', value: `${this.getAge()} años` },
-
+            { label: 'Cédula', value: this.appUser.dni || 'No especificado', color: '#3f51b5', isBold: true },
+            { label: 'Género', value: this.appUser.gender?.name || 'No especificado' },
+            { label: 'Fecha de Nacimiento', value: this.appUser.birthdate ? this.datePipe.transform(this.appUser.birthdate, 'dd/MM/yyyy') : 'No especificado' },
+            { label: 'Edad', value: this.appUser.birthdate ? `${this.getAge()} años` : 'No especificado' },
         ];
 
         this.institutionalInfo = [
-            { label: 'Instituto', value: this.appUser.institute.name, color: '#1976d2', isBold: true },
-            { label: 'Región', value: this.appUser.region.name || '---' },
-            { label: 'Discapacidad', value: this.appUser.disability.name || 'Ninguna' },
-            { label: 'Etnia', value: this.appUser.ethnicity.name || 'No especificado' }
+            { label: 'Instituto', value: this.appUser.institute?.name || 'No especificado', color: '#1976d2', isBold: true },
+            { label: 'Región', value: this.appUser.region?.name || 'No especificado' },
+            { label: 'Discapacidad', value: this.appUser.disability?.name || 'Ninguna' },
+            { label: 'Etnia', value: this.appUser.ethnicity?.name || 'No especificado' }
         ];
     }
 

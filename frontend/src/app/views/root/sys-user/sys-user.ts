@@ -34,7 +34,7 @@ import {ResetPasswordDialog} from "../../../shared/admin/reset-password-dialog/r
         MatMenuModule, MatDialogModule
     ],
     templateUrl: './sys-user.html',
-    styleUrl: './sys-user.css',
+    styleUrl: './sys-user.scss',
 })
 export class SysUser {
     @ViewChild(MatPaginator) paginator!: MatPaginator;

@@ -1,63 +1,100 @@
-<div class="dashboard-container">
+<div class="institutes-container">
 
-    <header class="dashboard-header">
-        <h1 class="mat-headline-5">Gestión de Institutos</h1>
-        <p class="text-muted">Análisis estadístico institucional</p>
-    </header>
+    <!-- ═══════════════════════════════════════════════════
+         PAGE HEADER
+    ═══════════════════════════════════════════════════ -->
+    <div class="page-header">
+        <div class="ph-left">
+            <div>
+                <div class="breadcrumb">
+                    <span>Inicio</span>
+                    <mat-icon>chevron_right</mat-icon>
+                    <span class="cur">Institutos</span>
+                </div>
+                <h1 class="page-title">Gestión de Institutos</h1>
+            </div>
+        </div>
 
-    <div class="widgets-grid">
-        <mat-card class="widget-card">
-            <mat-card-content>
-                <div class="widget-icon bg-light-blue">
-                    <mat-icon color="primary">business</mat-icon>
-                </div>
-                <div class="widget-info">
-                    <span class="widget-value">{{ dataSource.data.length }}</span>
-                    <span class="widget-info">Institutos Registrados</span>
-                </div>
-            </mat-card-content>
-
-        </mat-card>
-
-        <mat-card class="widget-card">
-            <mat-card-content>
-                <div class="widget-icon bg-light-red">
-                    <mat-icon>check_circle</mat-icon>
-                </div>
-                <div class="widget-info">
-                    <span class="widget-value">{{ getActiveCount() }}</span>
-                    <span class="stat-label">Sedes Activas</span>
-                </div>
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="widget-card">
-            <mat-card-content>
-                <div class="widget-icon bg-orange">
-                    <mat-icon>update</mat-icon>
-                </div>
-                <div class="widget-info">
-                    <span class="widget-value">{{ getLatestInstituteName() }}</span>
-                    <span class="stat-label">Último Registro</span>
-                </div>
-            </mat-card-content>
-        </mat-card>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span class="count-badge">
+                <mat-icon>business</mat-icon>
+                {{ dataSource.data.length }} institutos
+            </span>
+            <button mat-flat-button class="ph-btn-primary" (click)="openDialog()">
+                <mat-icon>add</mat-icon>
+                Nuevo Instituto
+            </button>
+        </div>
     </div>
 
+    <!-- ═══════════════════════════════════════════════════
+         WELCOME CARD
+    ═══════════════════════════════════════════════════ -->
+    <div class="welcome-card">
+        <div class="wc-left">
+            <h2 class="wc-title">Administra los Institutos 🏫</h2>
+            <p class="wc-sub">Gestiona la información de las instituciones educativas del sistema.</p>
+        </div>
+        <div class="wc-deco">
+            <mat-icon>business</mat-icon>
+        </div>
+    </div>
 
-    <mat-card class="table-card mat-elevation-z2">
+    <!-- ═══════════════════════════════════════════════════
+         KPI GRID
+    ═══════════════════════════════════════════════════ -->
+    <div class="kpi-grid">
+        <div class="kpi-card c-purple">
+            <div class="kpi-icon bg-purple">
+                <mat-icon>business</mat-icon>
+            </div>
+            <div class="kpi-info">
+                <div class="kpi-value">{{ dataSource.data.length }}</div>
+                <div class="kpi-label">Total registrados</div>
+            </div>
+        </div>
+
+        <div class="kpi-card c-teal">
+            <div class="kpi-icon bg-teal">
+                <mat-icon>check_circle</mat-icon>
+            </div>
+            <div class="kpi-info">
+                <div class="kpi-value">{{ getActiveCount() }}</div>
+                <div class="kpi-label">Sedes Activas</div>
+            </div>
+        </div>
+
+        <div class="kpi-card c-red">
+            <div class="kpi-icon bg-red">
+                <mat-icon>block</mat-icon>
+            </div>
+            <div class="kpi-info">
+                <div class="kpi-value">{{ dataSource.data.length - getActiveCount() }}</div>
+                <div class="kpi-label">Sedes Inactivas</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         TABLE SECTION
+    ═══════════════════════════════════════════════════ -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="section-label">
+            <mat-icon>list_alt</mat-icon>
+            Lista de institutos
+        </div>
+
+        <mat-card class="table-card">
         <div class="table-toolbar">
             <div class="search-box">
                 <mat-icon>search</mat-icon>
-                <input type="text" (keyup)="applyFilter($event)" placeholder="Buscar institutos..." #input>
+                <input type="text" (keyup)="applyFilter($event)"
+                       placeholder="Buscar por código, nombre..."
+                       #input>
             </div>
 
-            <div class="toolbar-actions">
-                <button mat-icon-button (click)="openDialog()" matTooltip="Nuevo Instituto" color="primary">
-                    <mat-icon>add_circle</mat-icon>
-                </button>
-
-                <button mat-icon-button [matMenuTriggerFor]="filterMenu" matTooltip="Filtrar por estado">
+            <div class="toolbar-right">
+                <button mat-icon-button [matMenuTriggerFor]="filterMenu" class="tool-btn" matTooltip="Filtrar por estado">
                     <mat-icon>filter_list</mat-icon>
                 </button>
 
@@ -67,31 +104,31 @@
                         <span>Mostrar todos</span>
                     </button>
                     <button mat-menu-item (click)="filterByStatus('active')">
-                        <mat-icon color="primary">check_circle</mat-icon>
+                        <mat-icon>check_circle</mat-icon>
                         <span>Solo Activos</span>
                     </button>
                     <button mat-menu-item (click)="filterByStatus('inactive')">
-                        <mat-icon color="warn">block</mat-icon>
+                        <mat-icon>block</mat-icon>
                         <span>Solo Inactivos</span>
                     </button>
                 </mat-menu>
 
                 <button mat-icon-button
                         (click)="exportToExcel()"
+                        class="tool-btn"
                         matTooltip="Exportar a Excel"
                         [disabled]="isExporting">
-
                     @if (!isExporting) {
-                        <mat-icon style="color: #2e7d32;">grid_on</mat-icon>
+                        <mat-icon>grid_on</mat-icon>
                     } @else {
                         <mat-icon class="spin-animation">sync</mat-icon>
                     }
                 </button>
             </div>
         </div>
-        <mat-card-content class="p-0 d-flex flex-column h-100">
+        <mat-card-content class="p-0">
             <div class="table-container">
-                <table mat-table [dataSource]="dataSource" class="full-width-table">
+                <table mat-table [dataSource]="dataSource" class="institutes-table">
 
                     <ng-container matColumnDef="code">
                         <th mat-header-cell *matHeaderCellDef> Código</th>
@@ -126,25 +163,27 @@
                     <ng-container matColumnDef="status">
                         <th mat-header-cell *matHeaderCellDef> Estado</th>
                         <td mat-cell *matCellDef="let element">
-                            <span [class]="element.status ? 'status-active' : 'status-inactive'">
+                            <span class="si-badge" [class.on]="element.status" [class.off]="!element.status">
+                                <mat-icon>{{ element.status ? 'check_circle' : 'remove_circle' }}</mat-icon>
                                 {{ element.status ? 'Activo' : 'Inactivo' }}
                             </span>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef> Acciones</th>
+                        <th mat-header-cell *matHeaderCellDef></th>
                         <td mat-cell *matCellDef="let element">
-                            <button mat-icon-button color="primary" (click)="openDialog(element)" matTooltip="Editar">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button color="warn" (click)="deleteInstitute(element.id)"
-                                    matTooltip="Borrar">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                            <button mat-icon-button (click)="viewDetail(element)" matTooltip="Ver Detalles">
-                                <mat-icon>info_outline</mat-icon>
-                            </button>
+                            <div class="actions-cell">
+                                <button mat-icon-button class="btn-view" matTooltip="Ver Detalles" (click)="viewDetail(element)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-editar" matTooltip="Editar" (click)="openDialog(element)">
+                                    <mat-icon>edit_note</mat-icon>
+                                </button>
+                                <button mat-icon-button class="btn-eliminar" matTooltip="Eliminar" (click)="deleteInstitute(element.id)">
+                                    <mat-icon>delete_outline</mat-icon>
+                                </button>
+                            </div>
                         </td>
                     </ng-container>
 
@@ -152,8 +191,10 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
             </div>
-
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </mat-card-content>
-    </mat-card>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+        </mat-card>
+    </div>
 </div>

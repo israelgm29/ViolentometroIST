@@ -61,7 +61,12 @@ export interface BulkUploadConfirmData {
     </div>
     `,
   styles: [`
-        .confirm-dialog { min-width: 480px; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        .confirm-dialog {
+            min-width: 480px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
 
         .confirm-header {
             display: flex;
@@ -73,14 +78,15 @@ export interface BulkUploadConfirmData {
                 width: 48px;
                 height: 48px;
                 border-radius: 12px;
-                background: #f0f4ff;
+                background: linear-gradient(135deg, #ede9fe, #faf5ff);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 flex-shrink: 0;
+                box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15);
 
                 mat-icon {
-                    color: #3b5bdb;
+                    color: #7c3aed;
                     font-size: 26px;
                     width: 26px;
                     height: 26px;
@@ -88,8 +94,8 @@ export interface BulkUploadConfirmData {
             }
 
             .header-text {
-                h2 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #1a1a2e; }
-                p  { margin: 4px 0 0; font-size: 0.85rem; color: #6b7280; }
+                h2 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #111827; }
+                p  { margin: 4px 0 0; font-size: 0.85rem; color: #4b5563; }
             }
         }
 
@@ -98,21 +104,21 @@ export interface BulkUploadConfirmData {
             align-items: center;
             gap: 14px;
             padding: 16px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
+            background: #faf5ff;
+            border: 1px solid #ede9fe;
+            border-radius: 12px;
             margin-bottom: 16px;
 
             .file-icon {
                 width: 40px;
                 height: 40px;
-                background: #e8f0fe;
+                background: #ede9fe;
                 border-radius: 8px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
 
-                mat-icon { color: #3b5bdb; font-size: 22px; width: 22px; height: 22px; }
+                mat-icon { color: #7c3aed; font-size: 22px; width: 22px; height: 22px; }
             }
 
             .file-info {
@@ -120,8 +126,8 @@ export interface BulkUploadConfirmData {
                 flex-direction: column;
                 gap: 2px;
 
-                .file-name { font-weight: 600; font-size: 0.9rem; color: #1a1a2e; }
-                .file-size { font-size: 0.78rem; color: #6b7280; }
+                .file-name { font-weight: 600; font-size: 0.9rem; color: #111827; }
+                .file-size { font-size: 0.78rem; color: #4b5563; }
             }
         }
 
@@ -129,15 +135,15 @@ export interface BulkUploadConfirmData {
             display: flex;
             gap: 12px;
             padding: 14px 16px;
-            background: #fffbeb;
-            border: 1px solid #fcd34d;
-            border-radius: 10px;
+            background: #faf5ff;
+            border: 1px solid #ede9fe;
+            border-radius: 12px;
             font-size: 0.85rem;
-            color: #78350f;
+            color: #6d28d9;
 
-            mat-icon { color: #d97706; flex-shrink: 0; margin-top: 2px; }
+            mat-icon { color: #7c3aed; flex-shrink: 0; margin-top: 2px; }
 
-            strong { display: block; margin-bottom: 6px; font-size: 0.875rem; }
+            strong { display: block; margin-bottom: 6px; font-size: 0.875rem; color: #6d28d9; }
 
             ul {
                 margin: 0;
@@ -145,6 +151,7 @@ export interface BulkUploadConfirmData {
                 display: flex;
                 flex-direction: column;
                 gap: 4px;
+                color: #4b5563;
             }
         }
 
@@ -154,8 +161,12 @@ export interface BulkUploadConfirmData {
         }
 
         .btn-confirm {
-            background: #1e3a5f !important;
+            background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
             color: white !important;
+            font-weight: 700 !important;
+            border-radius: 12px !important;
+            height: 48px !important;
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.28) !important;
         }
     `]
 })

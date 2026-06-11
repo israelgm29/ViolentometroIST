@@ -1,74 +1,111 @@
-<div class="dashboard-container">
-    <header class="dashboard-header">
-        <h1 class="mat-headline-5">Zonas de Violencia</h1>
-        <span class="text-muted">Gestiona los niveles de gravedad y colores del test</span>
-    </header>
+<div class="zone-container">
 
-    <div class="widgets-grid">
-        <mat-card class="widget-card border-left-blue">
-            <mat-card-content >
-                <div class="widget-icon bg-light-blue">
-                    <mat-icon color="primary">layers</mat-icon>
+    <!-- ── PAGE HEADER ── -->
+    <div class="page-header">
+        <div class="ph-left">
+            <div>
+                <div class="breadcrumb">
+                    <span>Inicio</span>
+                    <mat-icon>chevron_right</mat-icon>
+                    <span class="cur">Zonas de Violencia</span>
                 </div>
-                <div class="widget-info">
-                    <span class="stat-label">Niveles Definidos</span>
-                    <div class="stat-row">
-                        <span class="widget-value">{{ zones.length }}</span>
-                        <span class="widget-label">Total</span>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
+                <h1 class="page-title">Gestión de Zonas</h1>
+            </div>
+        </div>
 
-        <mat-card class="widget-card border-left-green">
-            <mat-card-content>
-                <div class="widget-icon bg-light-green">
-                    <mat-icon style="color: #2e7d32;">task_alt</mat-icon>
-                </div>
-                <div class="widget-info">
-                    <span class="stat-label">Disponibilidad</span>
-                    <div class="stat-row">
-                        <span class="widget-value">{{ getActivationRate() }}%</span>
-                        <span class="widget-label">{{ getActiveZoneCount() }} / {{ zones.length }} Activas</span>
-                    </div>
-                    <div class="progress-container mt-2">
-                        <mat-progress-bar mode="determinate" [value]="getActivationRate()"></mat-progress-bar>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span class="count-badge">
+                <mat-icon>layers</mat-icon>
+                {{ zones.length }} zonas
+            </span>
+            <button mat-flat-button class="ph-btn-primary" (click)="openDialog()">
+                <mat-icon>add</mat-icon>
+                Nueva Zona
+            </button>
+        </div>
+    </div>
 
-        <mat-card class="widget-card border-left-red">
-            <mat-card-content>
-                <div class="widget-icon bg-light-red">
-                    <mat-icon style="color: #d32f2f;">warning</mat-icon>
+    <!-- ═══════════════════════════════════════════════════
+         WELCOME CARD
+    ═══════════════════════════════════════════════════ -->
+    <div class="welcome-card">
+        <div class="wc-left">
+            <h2 class="wc-title">Administra las zonas de violencia 🚨</h2>
+            <p class="wc-sub">Define niveles de riesgo, colores identificadores y protocolos de actuación.</p>
+        </div>
+        <div class="wc-deco">
+            <mat-icon>warning</mat-icon>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         KPI GRID
+    ═══════════════════════════════════════════════════ -->
+    <div class="kpi-grid">
+
+        <div class="kpi-card c-purple">
+            <div class="kpi-icon bg-purple">
+                <mat-icon>layers</mat-icon>
+            </div>
+            <div class="kpi-info">
+                <div class="kpi-value">{{ zones.length }}</div>
+                <div class="kpi-label">Niveles definidos</div>
+            </div>
+        </div>
+
+        <div class="kpi-card c-teal">
+            <div class="kpi-icon bg-teal">
+                <mat-icon>task_alt</mat-icon>
+            </div>
+            <div class="kpi-info">
+                <div class="kpi-value">{{ getActivationRate() }}%</div>
+                <div class="kpi-label">{{ getActiveZoneCount() }} / {{ zones.length }} activas</div>
+                <mat-progress-bar class="kpi-progress"
+                                  mode="determinate"
+                                  [value]="getActivationRate()">
+                </mat-progress-bar>
+            </div>
+        </div>
+
+        <div class="kpi-card c-red">
+            <div class="kpi-icon bg-red">
+                <mat-icon>warning</mat-icon>
+            </div>
+            <div class="kpi-info">
+                <div class="kpi-value" style="font-size:14px; margin-top:4px;">
+                    {{ getMaxSeverityZone() }}
                 </div>
-                <div class="widget-info">
-                    <span class="stat-label">Nivel Crítico</span>
-                    <div class="widget-label">
-          <span [matTooltip]="getMaxSeverityZone()">
-            {{ getMaxSeverityZone() }}
-          </span>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
+                <div class="kpi-label">Nivel crítico</div>
+            </div>
+        </div>
 
     </div>
 
-    <mat-card class="table-card mat-elevation-z2">
+    <!-- ═══════════════════════════════════════════════════
+         TABLE SECTION
+    ═══════════════════════════════════════════════════ -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="section-label">
+            <mat-icon>list_alt</mat-icon>
+            Zonas configuradas
+        </div>
+
+        <mat-card class="table-card">
+
         <div class="table-toolbar">
             <div class="search-box">
                 <mat-icon>search</mat-icon>
-                <input type="text" (keyup)="applyFilter($event)" placeholder="Buscar zonas..." #input>
+                <input type="text"
+                       (keyup)="applyFilter($event)"
+                       placeholder="Buscar zonas..."
+                       #input>
             </div>
 
-            <div class="toolbar-actions">
-                <button mat-icon-button matTooltip="Nueva Zona" color="primary" (click)="openDialog()">
-                    <mat-icon>add_circle</mat-icon>
-                </button>
-
-                <button mat-icon-button [matMenuTriggerFor]="statusMenu" matTooltip="Filtrar por estado">
+            <div class="toolbar-right">
+                <button mat-icon-button
+                        class="tool-btn"
+                        [matMenuTriggerFor]="statusMenu"
+                        matTooltip="Filtrar por estado">
                     <mat-icon>filter_list</mat-icon>
                 </button>
 
@@ -78,105 +115,136 @@
                         <span>Mostrar todas</span>
                     </button>
                     <button mat-menu-item (click)="filterByStatus('true')">
-                        <mat-icon class="text-success">check_circle</mat-icon>
-                        <span>Solo Activas</span>
+                        <mat-icon>check_circle</mat-icon>
+                        <span>Solo activas</span>
                     </button>
                     <button mat-menu-item (click)="filterByStatus('false')">
-                        <mat-icon class="text-danger">cancel</mat-icon>
-                        <span>Solo Inactivas</span>
+                        <mat-icon>cancel</mat-icon>
+                        <span>Solo inactivas</span>
                     </button>
                 </mat-menu>
 
-                <button mat-icon-button (click)="exportToExcel()" matTooltip="Exportar a Excel">
+                <button mat-icon-button
+                        class="tool-btn"
+                        (click)="exportToExcel()"
+                        matTooltip="Exportar a Excel">
                     @if (!isExporting) {
-                        <mat-icon style="color: #2e7d32;">grid_on</mat-icon>
+                        <mat-icon>grid_on</mat-icon>
                     } @else {
                         <mat-icon class="spin-animation">sync</mat-icon>
                     }
-
                 </button>
             </div>
         </div>
-        <mat-card-content class="p-0 d-flex flex-column h-100">
-            <table mat-table [dataSource]="dataSource" class="w-100">
 
+        <mat-card-content class="p-0">
+            <table mat-table [dataSource]="dataSource" class="zone-table w-100">
+
+                <!-- Indicador de color -->
                 <ng-container matColumnDef="indicator">
-                    <th mat-header-cell *matHeaderCellDef ></th>
+                    <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let zone">
-                        <div class="color-pillar" [style.background-color]="zone.color"></div>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="info">
-                    <th mat-header-cell *matHeaderCellDef>Definición de Nivel</th>
-                    <td mat-cell *matCellDef="let zone">
-                        <div class="zone-info-cell">
-                            <p class="zone-name">{{ zone.name }}</p>
-                            <p class="zone-description">{{ zone.description }}</p>
+                        <div class="color-pillar"
+                             [style.background-color]="zone.color">
                         </div>
                     </td>
                 </ng-container>
 
+                <!-- Nombre y descripción -->
+                <ng-container matColumnDef="info">
+                    <th mat-header-cell *matHeaderCellDef>Definición de nivel</th>
+                    <td mat-cell *matCellDef="let zone">
+                        <p class="zone-name">{{ zone.name }}</p>
+                        <p class="zone-desc">{{ zone.description }}</p>
+                    </td>
+                </ng-container>
+
+                <!-- Severidad -->
                 <ng-container matColumnDef="severity">
                     <th mat-header-cell *matHeaderCellDef class="text-center">Gravedad</th>
                     <td mat-cell *matCellDef="let zone" class="text-center">
-                        <span class="severity-tag">Nivel {{ zone.severity }}</span>
+                        <span class="severity-badge">
+                            <mat-icon style="font-size:13px;width:13px;height:13px;">bolt</mat-icon>
+                            Nivel {{ zone.severity }}
+                        </span>
                     </td>
                 </ng-container>
 
+                <!-- Estado -->
                 <ng-container matColumnDef="status">
                     <th mat-header-cell *matHeaderCellDef class="text-center">Estado</th>
                     <td mat-cell *matCellDef="let zone" class="text-center">
-                        <span class="severity-tag">{{ zone.status === true ? 'Activo':'Inactivo' }}</span>
+                        @if (zone.status) {
+                            <span class="si-badge on">
+                                <mat-icon>check_circle</mat-icon>
+                                Activo
+                            </span>
+                        } @else {
+                            <span class="si-badge off">
+                                <mat-icon>cancel</mat-icon>
+                                Inactivo
+                            </span>
+                        }
                     </td>
                 </ng-container>
 
+                <!-- Acciones -->
                 <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef >Acciones</th>
-                    <td mat-cell *matCellDef="let zone" class="text-end">
-                        <button mat-icon-button
-                                style="color: #0d47a1;"
-                                matTooltip="Ver detalles de la zona"
-                                (click)="viewDetail(zone)">
-                            <mat-icon>visibility</mat-icon>
-                        </button>
-
-                        <button mat-icon-button
-                                style="color: #ff8f00;"
-                                matTooltip="Editar configuración"
-                                (click)="openDialog(zone)">
-                            <mat-icon>edit_note</mat-icon>
-                        </button>
-
-                        <button mat-icon-button
-                                style="color: #b71c1c;"
-                                matTooltip="Eliminar zona"
-                                (click)="deleteZone(zone.id)">
-                            <mat-icon>delete_forever</mat-icon>
-                        </button>
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let zone">
+                        <div class="actions-cell">
+                            <button mat-icon-button
+                                    class="btn-view"
+                                    matTooltip="Ver detalles"
+                                    (click)="viewDetail(zone)">
+                                <mat-icon>visibility</mat-icon>
+                            </button>
+                            <button mat-icon-button
+                                    class="btn-editar"
+                                    matTooltip="Editar zona"
+                                    (click)="openDialog(zone)">
+                                <mat-icon>edit_note</mat-icon>
+                            </button>
+                            <button mat-icon-button
+                                    class="btn-eliminar"
+                                    matTooltip="Eliminar zona"
+                                    (click)="deleteZone(zone.id)">
+                                <mat-icon>delete_outline</mat-icon>
+                            </button>
+                        </div>
                     </td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="['indicator', 'info', 'severity', 'status', 'actions']"></tr>
-                <tr mat-row *matRowDef="let row; columns: ['indicator', 'info', 'severity', 'status', 'actions'];"
-                    class="settings-row"></tr>
+
+                <tr mat-header-row
+                    *matHeaderRowDef="['indicator','info','severity','status','actions']">
+                </tr>
+                <tr mat-row
+                    *matRowDef="let row; columns: ['indicator','info','severity','status','actions']"
+                    class="zone-row">
+                </tr>
+
+                <!-- Sin resultados -->
                 <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell text-center p-5" colspan="5">
-                        <div class="no-results-container">
+                    <td colspan="5">
+                        <div class="empty-state">
                             <mat-icon>search_off</mat-icon>
-                            <p>No se encontraron resultados para los filtros aplicados.</p>
-                            <button mat-stroked-button color="warn" (click)="resetFilters()">
-                                Limpiar Filtros
+                            <h3>Sin resultados</h3>
+                            <p>No se encontraron zonas con los filtros aplicados.</p>
+                            <button mat-stroked-button class="btn-reset" (click)="resetFilters()">
+                                Limpiar filtros
                             </button>
                         </div>
                     </td>
                 </tr>
-            </table>
 
+            </table>
         </mat-card-content>
 
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                       showFirstLastButtons>
+        </mat-paginator>
 
-    </mat-card>
-
+        </mat-card>
+    </div>
 
 </div>

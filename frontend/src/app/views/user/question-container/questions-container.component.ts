@@ -20,7 +20,7 @@ import {ZoneService} from "../../../services/zone.service";
 @Component({
     selector: 'app-questions-container',
     standalone: true,
-    imports: [MatIconModule, MatButtonModule, QuestionDisplay, NgClass],
+    imports: [MatIconModule, MatButtonModule, QuestionDisplay],
     templateUrl: './questions-container.component.html',
     styleUrls: ['./questions-container.component.scss']
 })

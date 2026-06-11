@@ -33,7 +33,7 @@ import {MatMenu, MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
         MatMenuTrigger
     ],
     templateUrl: './institutes.html',
-    styleUrl: './institutes.css',
+    styleUrl: './institutes.scss',
 })
 export class Institutes implements OnInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;

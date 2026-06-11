@@ -1,0 +1,512 @@
+// ══════════════════════════════════════════════════════
+//  SYS USER VIEW — Estilo Panelix
+//  Paleta: Morado (#7c3aed) + Teal (#0d9488)
+//  Misma base que institutes.scss
+// ══════════════════════════════════════════════════════
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+$purple      : #7c3aed;
+$purple-dark : #6d28d9;
+$purple-pale : #faf5ff;
+$purple-light: #ede9fe;
+$teal        : #0d9488;
+$teal-pale   : #f0fdfa;
+$red         : #ef4444;
+$amber       : #f59e0b;
+$green       : #10b981;
+$green-pale  : #f0fdf4;
+$text-primary: #111827;
+$text-muted  : #6b7280;
+$border      : #f1f0fb;
+$bg          : #f8f7ff;
+$font        : 'Plus Jakarta Sans', sans-serif;
+
+// ── Host ─────────────────────────────────────────────
+:host { font-family: $font; }
+
+// ══════════════════════════════════════════════════════
+//  CONTAINER
+// ══════════════════════════════════════════════════════
+
+.sys-user-container {
+    padding: 20px 24px;
+    background: linear-gradient(180deg, #f8f7ff 0%, #fff 100%);
+    min-height: 100vh;
+}
+
+// ══════════════════════════════════════════════════════
+//  PAGE HEADER
+// ══════════════════════════════════════════════════════
+
+.page-header {
+    display    : flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding    : 8px 0;
+}
+
+.ph-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.breadcrumb {
+    display    : flex;
+    align-items: center;
+    gap        : 6px;
+    font-size  : 11px;
+    color      : $text-muted;
+    font-weight: 600;
+
+    mat-icon {
+        font-size: 14px;
+        width    : 14px;
+        height   : 14px;
+    }
+
+    .cur { color: $purple; }
+}
+
+.page-title {
+    margin     : 0;
+    font-size  : 1.4rem;
+    font-weight: 800;
+    color      : $text-primary;
+}
+
+.count-badge {
+    display        : inline-flex;
+    align-items    : center;
+    gap           : 6px;
+    padding       : 6px 14px;
+    background    : #fff;
+    border        : 1px solid $border;
+    border-radius : 20px;
+    font-size     : 12px;
+    font-weight   : 700;
+    color         : $text-primary;
+
+    mat-icon {
+        font-size: 16px;
+        width    : 16px;
+        height   : 16px;
+        color    : $purple;
+    }
+}
+
+.ph-btn-primary {
+    height       : 38px !important;
+    border-radius: 10px !important;
+    font-family  : $font !important;
+    font-size    : 12px !important;
+    font-weight  : 700 !important;
+    background   : $purple !important;
+    color        : #fff !important;
+    box-shadow   : 0 4px 12px rgba($purple, .25) !important;
+    transition   : all .2s !important;
+
+    &:hover { filter: brightness(1.08) !important; transform: translateY(-1px) !important; }
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+// ══════════════════════════════════════════════════════
+//  WELCOME CARD
+// ══════════════════════════════════════════════════════
+
+.welcome-card {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+    padding       : 20px 24px;
+    background    : linear-gradient(135deg, $purple-pale 0%, #fff 100%);
+    border        : 1px solid $purple-light;
+    border-radius : 16px;
+    margin-bottom : 20px;
+}
+
+.wc-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.wc-title {
+    margin     : 0;
+    font-size  : 1.1rem;
+    font-weight: 700;
+    color      : $text-primary;
+}
+
+.wc-sub {
+    margin     : 0;
+    font-size  : 13px;
+    color      : $text-muted;
+    font-weight: 500;
+}
+
+.wc-deco {
+    width       : 50px;
+    height      : 50px;
+    background  : $purple;
+    border-radius: 12px;
+    display     : flex;
+    align-items : center;
+    justify-content: center;
+
+    mat-icon {
+        font-size: 28px;
+        color    : #fff;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  KPI GRID
+// ══════════════════════════════════════════════════════
+
+.kpi-grid {
+    display              : grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap                  : 14px;
+    margin-bottom        : 20px;
+}
+
+.kpi-card {
+    display        : flex;
+    align-items    : center;
+    gap           : 14px;
+    padding       : 16px 18px;
+    background    : #fff;
+    border        : 1px solid $border;
+    border-radius : 14px;
+    transition    : all .2s ease;
+
+    &:hover {
+        transform : translateY(-2px);
+        box-shadow: 0 6px 16px rgba($purple, .08);
+    }
+}
+
+.kpi-icon {
+    width       : 44px;
+    height      : 44px;
+    border-radius: 10px;
+    display     : flex;
+    align-items : center;
+    justify-content: center;
+
+    mat-icon {
+        font-size: 22px;
+        color    : #fff;
+    }
+}
+
+.bg-purple { background: linear-gradient(135deg, $purple 0%, $purple-dark 100%); }
+.bg-teal   { background: linear-gradient(135deg, $teal 0%, #0f766e 100%); }
+
+.kpi-info {
+    display       : flex;
+    flex-direction: column;
+    gap           : 2px;
+}
+
+.kpi-value {
+    font-size  : 1.5rem;
+    font-weight: 800;
+    color      : $text-primary;
+    line-height: 1;
+}
+
+.kpi-label {
+    font-size  : 11px;
+    color      : $text-muted;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+// ══════════════════════════════════════════════════════
+//  SECTION LABEL
+// ══════════════════════════════════════════════════════
+
+.section-label {
+    display       : flex;
+    align-items   : center;
+    gap           : 8px;
+    padding       : 8px 0;
+    font-size     : 12px;
+    font-weight   : 700;
+    color         : $text-muted;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+
+    mat-icon {
+        font-size: 16px;
+        width    : 16px;
+        height   : 16px;
+        color    : $purple;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  TABLE CARD
+// ══════════════════════════════════════════════════════
+
+.table-card {
+    border-radius: 16px !important;
+    overflow    : hidden;
+    border      : 1px solid $border;
+}
+
+.table-toolbar {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+    padding       : 14px 20px;
+    background    : #fff;
+    border-bottom : 1px solid $border;
+}
+
+.search-box {
+    display        : flex;
+    align-items    : center;
+    gap           : 8px;
+    padding       : 8px 14px;
+    background    : #f5f5f5;
+    border-radius : 10px;
+    width         : 100%;
+    max-width     : 320px;
+
+    mat-icon {
+        font-size: 18px;
+        color    : $text-muted;
+    }
+
+    input {
+        border     : none;
+        background : transparent;
+        outline    : none;
+        width      : 100%;
+        font-family: $font;
+        font-size  : 13px;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  TABLE
+// ══════════════════════════════════════════════════════
+
+.table-container {
+    overflow-x: auto;
+}
+
+.sys-user-table {
+    width: 100%;
+
+    ::ng-deep th {
+        background: #fafafa;
+        font-size  : 11px;
+        font-weight: 700;
+        color      : $text-muted;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        padding    : 12px 16px;
+    }
+
+    ::ng-deep td {
+        padding   : 12px 16px;
+        font-size : 13px;
+        color     : $text-primary;
+        font-weight: 500;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    ::ng-deep tr:hover td {
+        background: $purple-pale;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  USER CELL
+// ══════════════════════════════════════════════════════
+
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap   : 12px;
+    padding: 8px 0;
+}
+
+.user-avatar {
+    width       : 35px;
+    height      : 35px;
+    background  : $purple;
+    color       : #fff;
+    border-radius: 50%;
+    display     : flex;
+    align-items : center;
+    justify-content: center;
+    font-weight : 800;
+    font-size   : 13px;
+    flex-shrink : 0;
+}
+
+.user-names {
+    display       : flex;
+    flex-direction: column;
+    gap           : 2px;
+}
+
+.full-name {
+    font-weight: 600;
+    color      : $text-primary;
+}
+
+.user-dni {
+    font-size: 11px;
+    color    : $text-muted;
+}
+
+// ══════════════════════════════════════════════════════
+//  ROLE BADGE
+// ══════════════════════════════════════════════════════
+
+.role-badge {
+    background: $purple-pale;
+    color     : $purple;
+    padding   : 4px 12px;
+    border-radius: 15px;
+    font-size : 11px;
+    font-weight: 700;
+}
+
+// ══════════════════════════════════════════════════════
+//  INSTITUTE CELL
+// ══════════════════════════════════════════════════════
+
+.institute-cell {
+    display: flex;
+    align-items: center;
+    gap   : 5px;
+    font-size: 13px;
+}
+
+.mini-icon {
+    font-size: 16px;
+    width    : 16px;
+    height   : 16px;
+    color    : $text-muted;
+}
+
+// ══════════════════════════════════════════════════════
+//  CONTACT INFO
+// ══════════════════════════════════════════════════════
+
+.contact-info {
+    display: flex;
+    gap   : 4px;
+}
+
+.contact-info mat-icon {
+    font-size: 16px;
+    color    : $text-muted;
+}
+
+// ══════════════════════════════════════════════════════
+//  ACTION BUTTONS
+// ══════════════════════════════════════════════════════
+
+.actions-cell {
+    display: flex;
+    gap   : 4px;
+}
+
+.btn-view {
+    width       : 32px !important;
+    height      : 32px !important;
+    border-radius: 8px !important;
+    color       : $teal !important;
+
+    &:hover { background: $teal-pale !important; }
+
+    mat-icon { font-size: 16px; }
+}
+
+.btn-editar {
+    width       : 32px !important;
+    height      : 32px !important;
+    border-radius: 8px !important;
+    color       : $amber !important;
+
+    &:hover { background: #fef3c7 !important; }
+
+    mat-icon { font-size: 16px; }
+}
+
+.btn-menu {
+    width       : 32px !important;
+    height      : 32px !important;
+    border-radius: 8px !important;
+    color       : $text-muted !important;
+
+    &:hover { background: #f5f5f5 !important; }
+
+    mat-icon { font-size: 16px; }
+}
+
+// ══════════════════════════════════════════════════════
+//  NO RESULTS
+// ══════════════════════════════════════════════════════
+
+.no-results-container {
+    display       : flex;
+    flex-direction: column;
+    align-items   : center;
+    gap           : 12px;
+    padding       : 40px 20px;
+
+    mat-icon {
+        font-size: 48px;
+        color    : $text-muted;
+    }
+
+    p {
+        margin     : 0;
+        font-size  : 14px;
+        color      : $text-muted;
+        text-align : center;
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//  PAGINATOR
+// ══════════════════════════════════════════════════════
+
+mat-paginator {
+    padding: 12px 20px !important;
+}
+
+// ══════════════════════════════════════════════════════
+//  RESPONSIVE
+// ══════════════════════════════════════════════════════
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items   : flex-start;
+        gap          : 12px;
+    }
+
+    .kpi-grid { grid-template-columns: 1fr; }
+
+    .table-toolbar {
+        flex-direction: column;
+        gap          : 12px;
+        align-items   : stretch;
+    }
+
+    .search-box { max-width: 100%; }
+}

@@ -1,80 +1,97 @@
-<div class="header-detail">
-    <div class="avatar-circle">
-        {{ user.firstname.charAt(0) }}{{ user.firstLastname.charAt(0) }}
-    </div>
-    <div class="header-text" style="padding: 10px;">
-        <h3>{{ user.firstname }} {{ user.firstLastname }}</h3>
-        <span class="role-badge">{{ user.role.name }}</span>
-        <p>Ultima modificacion: {{ user.updatedAt | date:'dd/MM/yyyy' }}</p>
-    </div>
-</div>
-<mat-dialog-content class="mat-typography">
+<h2 mat-dialog-title class="dialog-title">
+    <mat-icon>account_circle</mat-icon>
+    Detalles del Usuario
+</h2>
 
-    <mat-divider></mat-divider>
+<mat-dialog-content class="dialog-content">
+    <!-- ══════════════════════════════════════════════════════
+         USER HEADER
+    ══════════════════════════════════════════════════════ -->
+    <div class="user-header">
+        <div class="user-avatar">
+            {{ user.firstname.charAt(0) }}{{ user.firstLastname.charAt(0) }}
+        </div>
+        <div class="user-info">
+            <h3 class="user-name">{{ user.firstname }} {{ user.firstLastname }}</h3>
+            <span class="role-badge">{{ user.role.name }}</span>
+            <p class="user-meta">Última modificación: {{ user.updatedAt | date:'dd/MM/yyyy' }}</p>
+        </div>
+    </div>
 
-    <div class="detail-grid">
-        <div class="detail-column">
-            <h4>
-                <mat-icon inline>person</mat-icon>
-                Datos Personales
-            </h4>
-            <mat-list>
-                <mat-list-item>
-                    <span matListItemTitle>Nombre Segundo</span>
-                    <span matListItemLine>{{ user.secondname || '---' }}</span>
-                </mat-list-item>
-                <mat-list-item>
-                    <span matListItemTitle>Apellido Segundo</span>
-                    <span matListItemLine>{{ user.secondLastname || '---' }}</span>
-                </mat-list-item>
-                <mat-list-item>
-                    <span matListItemTitle>DNI / Cédula</span>
-                    <span matListItemLine>{{ user.dni }}</span>
-                </mat-list-item>
-                <mat-list-item>
-                    <span matListItemTitle>Direccion Domiciliaria</span>
-                    <span matListItemLine>{{ user.address }}</span>
-                </mat-list-item>
-                <mat-list-item>
-                    <span matListItemTitle>Correo Electrónico</span>
-                    <span matListItemLine style="color: #3f51b5; font-weight: 500;">
-                {{ user.email || 'Sin correo registrado' }}
-            </span>
-                </mat-list-item>
-            </mat-list>
+    <div class="section-divider full-width">
+        <mat-icon>person</mat-icon>
+        <span>Datos Personales</span>
+    </div>
+
+    <div class="info-list">
+        <div class="info-item">
+            <span class="info-label">Nombre Segundo</span>
+            <span class="info-value">{{ user.secondname || 'No especificado' }}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Apellido Segundo</span>
+            <span class="info-value">{{ user.secondLastname || 'No especificado' }}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">DNI / Cédula</span>
+            <span class="info-value">{{ user.dni }}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Dirección Domiciliaria</span>
+            <span class="info-value">{{ user.address || 'No especificado' }}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Correo Electrónico</span>
+            <span class="info-value">{{ user.email || 'Sin correo registrado' }}</span>
+        </div>
+    </div>
+
+    <div class="section-divider full-width">
+        <mat-icon>contact_mail</mat-icon>
+        <span>Contacto y Sistema</span>
+    </div>
+
+    <div class="info-cards">
+        <div class="info-card">
+            <mat-icon>phone</mat-icon>
+            <div class="info-content">
+                <span class="info-label">Teléfono</span>
+                <span class="info-value">{{ user.phone || 'No registrado' }}</span>
+            </div>
         </div>
 
-        <div class="detail-column">
-            <h4>
-                <mat-icon inline>contact_mail</mat-icon>
-                Contacto y Sistema
-            </h4>
-            <mat-list>
-                <mat-list-item>
-                    <span matListItemTitle>Teléfono</span>
-                    <span matListItemLine>{{ user.phone || 'No registrado' }}</span>
-                </mat-list-item>
-                <mat-list-item>
-                    <span matListItemTitle>Instituto</span>
-                    <span matListItemLine>{{ user.institute.name }}</span>
-                </mat-list-item>
-                <mat-list-item>
-                    <span matListItemTitle>Estado</span>
-                    <span matListItemLine [style.color]="user.status ? 'green' : 'red'">
-                        {{ user.status ? 'Cuenta Activa' : 'Cuenta Inactiva' }}
-                    </span>
-                </mat-list-item>
-                <mat-list-item>
-                    <span matListItemTitle>Fecha de Registro</span>
-                    <span matListItemLine>{{ user.createdAt | date:'shortDate' }}</span>
-                </mat-list-item>
-            </mat-list>
+        <div class="info-card">
+            <mat-icon>business</mat-icon>
+            <div class="info-content">
+                <span class="info-label">Instituto</span>
+                <span class="info-value">{{ user.institute.name || 'No especificado' }}</span>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <mat-icon>verified_user</mat-icon>
+            <div class="info-content">
+                <span class="info-label">Estado</span>
+                <span class="si-badge" [class.on]="user.status" [class.off]="!user.status">
+                    <mat-icon>{{ user.status ? 'check_circle' : 'remove_circle' }}</mat-icon>
+                    {{ user.status ? 'Cuenta Activa' : 'Cuenta Inactiva' }}
+                </span>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <mat-icon>event</mat-icon>
+            <div class="info-content">
+                <span class="info-label">Fecha de Registro</span>
+                <span class="info-value">{{ user.createdAt | date:'shortDate' }}</span>
+            </div>
         </div>
     </div>
 </mat-dialog-content>
 
-<mat-divider></mat-divider>
-
-<mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cerrar</button>
+<mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-flat-button class="save-btn" mat-dialog-close>
+        <mat-icon>check_circle</mat-icon>
+        Cerrar Detalle
+    </button>
 </mat-dialog-actions>
