@@ -140,25 +140,30 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of(
-                "http://localhost:4200",
-                "http://localhost",
-                "http://localhost:80",
-                "http://181.211.10.246",
-                "http://violentometroistr.duckdns.org"
+        // 1. Permitir cualquier origen para Apps Móviles (no tienen dominio fijo)
+        config.setAllowedOriginPatterns(List.of("*"));
+
+        // 2. Permitir los métodos necesarios
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+
+        // 3. ¡IMPORTANTE! Añade "X-Client-Type" a las cabeceras permitidas
+        config.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "Accept",
+                "X-Requested-With",
+                "X-Client-Type" // <-- Añade esta
         ));
 
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
         config.setAllowCredentials(true);
-        config.setMaxAge(1800L);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 }
